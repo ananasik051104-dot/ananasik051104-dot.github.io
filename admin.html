@@ -43,34 +43,45 @@
 </div>
 
 <script>
-// Получение данных
+// ==================== ФУНКЦИИ ДЛЯ РАБОТЫ С ДАННЫМИ ====================
 function getUsers() {
-    let data = localStorage.getItem('estetica_users');
-    return data ? JSON.parse(data) : [];
+    try {
+        const data = localStorage.getItem('estetica_users');
+        console.log('📦 Данные из localStorage (estetica_users):', data);
+        return data ? JSON.parse(data) : [];
+    } catch(e) {
+        console.error('Ошибка парсинга estetica_users:', e);
+        return [];
+    }
 }
 
 function getCurrentUser() {
-    let data = localStorage.getItem('estetica_current_user');
-    return data ? JSON.parse(data) : null;
+    try {
+        const data = localStorage.getItem('estetica_current_user');
+        return data ? JSON.parse(data) : null;
+    } catch(e) {
+        console.error('Ошибка парсинга estetica_current_user:', e);
+        return null;
+    }
 }
 
 function getGuestOrders() {
-    let data = localStorage.getItem('estetica_guest_orders');
-    return data ? JSON.parse(data) : [];
-}
-
-function isAdmin() {
-    let u = getCurrentUser();
-    return u && u.isAdmin === true;
+    try {
+        const data = localStorage.getItem('estetica_guest_orders');
+        return data ? JSON.parse(data) : [];
+    } catch(e) {
+        return [];
+    }
 }
 
 function getAllOrders() {
-    let users = getUsers();
-    let guestOrders = getGuestOrders();
+    const users = getUsers();
+    const guestOrders = getGuestOrders();
     let orders = [];
     
+    // Заказы зарегистрированных пользователей
     users.forEach(user => {
-        if (user.orders && user.orders.length) {
+        if (user.orders && Array.isArray(user.orders) && user.orders.length > 0) {
             user.orders.forEach(order => {
                 orders.push({
                     ...order,
@@ -82,71 +93,130 @@ function getAllOrders() {
         }
     });
     
-    guestOrders.forEach(order => {
-        orders.push({
-            ...order,
-            userEmail: 'Гость',
-            userName: order.customerName || 'Гость',
-            userType: '👋 Гость'
+    // Гостевые заказы
+    if (guestOrders.length > 0) {
+        guestOrders.forEach(order => {
+            orders.push({
+                ...order,
+                userEmail: 'Гость',
+                userName: order.customerName || 'Гость',
+                userType: '👋 Гость'
+            });
         });
-    });
+    }
     
     return orders.sort((a,b) => (b.id || 0) - (a.id || 0));
 }
 
 function getStats() {
-    let orders = getAllOrders();
-    let users = getUsers();
+    const users = getUsers();
+    const orders = getAllOrders();
     return {
-        total: orders.length,
-        revenue: orders.reduce((s,o) => s + (o.total || 0), 0),
+        totalOrders: orders.length,
+        totalRevenue: orders.reduce((sum, order) => sum + (order.total || 0), 0),
         newOrders: orders.filter(o => o.status === '🟢 Новый' || o.status === 'Новый').length,
-        usersCount: users.length,
-        adminsCount: users.filter(u => u.isAdmin).length
+        totalUsers: users.length,
+        totalAdmins: users.filter(u => u.isAdmin === true).length
     };
 }
 
-function renderAdmin() {
-    let container = document.getElementById('adminContent');
+function isAdmin() {
+    const user = getCurrentUser();
+    return user && user.isAdmin === true;
+}
+
+// ==================== ОТОБРАЖЕНИЕ ====================
+function renderAdminPanel() {
+    const container = document.getElementById('adminContent');
     
+    // Проверка прав доступа
     if (!isAdmin()) {
-        container.innerHTML = `<div class="access-denied"><h2>🚫 Доступ запрещён</h2><p><a href="index4.html" style="color:#C2DC80;">← Вернуться в кабинет</a></p></div>`;
+        container.innerHTML = `
+            <div class="access-denied">
+                <h2>🚫 Доступ запрещён</h2>
+                <p>У вас нет прав администратора для доступа к этой странице.</p>
+                <p><a href="index4.html" style="color:#C2DC80;">← Вернуться в личный кабинет</a></p>
+            </div>
+        `;
         return;
     }
     
-    let cu = getCurrentUser();
-    let stats = getStats();
-    let orders = getAllOrders();
-    let users = getUsers();
+    const currentAdmin = getCurrentUser();
+    const stats = getStats();
+    const allOrders = getAllOrders();
+    const users = getUsers();
     
-    container.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-            <span style="color:#D56989;">👑 ${cu.name} (${cu.email}) <span class="badge-admin">Администратор</span></span>
-            <button onclick="location.href='index4.html'" style="background:#D56989;color:white;border:none;padding:8px 20px;cursor:pointer;">🚪 Выйти</button>
-        </div>
+    console.log('👥 Найдено пользователей:', users.length, users);
+    console.log('📦 Найдено заказов:', allOrders.length);
+    
+    // Статистика
+    const statsHtml = `
         <div class="stats-grid">
-            <div class="stat-card"><div class="stat-number">${stats.total}</div><div class="stat-label">📦 Заказов</div></div>
-            <div class="stat-card"><div class="stat-number">${stats.newOrders}</div><div class="stat-label">🟢 Новых</div></div>
-            <div class="stat-card"><div class="stat-number">${stats.revenue} ₽</div><div class="stat-label">💰 Выручка</div></div>
-            <div class="stat-card"><div class="stat-number">${stats.usersCount}</div><div class="stat-label">👥 Пользователей</div></div>
-            <div class="stat-card"><div class="stat-number">${stats.adminsCount}</div><div class="stat-label">👑 Админов</div></div>
+            <div class="stat-card"><div class="stat-number">${stats.totalOrders}</div><div class="stat-label">📦 Всего заказов</div></div>
+            <div class="stat-card"><div class="stat-number">${stats.newOrders}</div><div class="stat-label">🟢 Новых заказов</div></div>
+            <div class="stat-card"><div class="stat-number">${stats.totalRevenue} ₽</div><div class="stat-label">💰 Общая выручка</div></div>
+            <div class="stat-card"><div class="stat-number">${stats.totalUsers}</div><div class="stat-label">👥 Пользователей</div></div>
+            <div class="stat-card"><div class="stat-number">${stats.totalAdmins}</div><div class="stat-label">👑 Администраторов</div></div>
         </div>
-        <div class="section-title">👥 Зарегистрированные пользователи (${users.length})</div>
-        ${users.length === 0 ? '<div style="text-align:center;padding:20px;">Пока нет зарегистрированных пользователей</div>' : `
-        <div class="table-wrapper"><table class="data-table">
+    `;
+    
+    // Таблица пользователей
+    let usersHtml = `<div class="section-title">👥 Зарегистрированные пользователи (${users.length})</div>`;
+    if (users.length === 0) {
+        usersHtml += `<div class="empty-data" style="text-align:center; padding:30px; color:#D56989;">Пользователей пока нет</div>`;
+    } else {
+        usersHtml += `<div class="table-wrapper"><table class="data-table">
             <thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Заказов</th><th>Статус</th></tr></thead>
-            <tbody>${users.map(u => `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.email}</td><td>${u.phone || '-'}</td><td>${u.orders?.length || 0}</td><td>${u.isAdmin ? '<span class="badge-admin">Админ</span>' : 'Пользователь'}</td></tr>`).join('')}</tbody>
-        </table></div>`}
-        <div class="section-title">📋 Все заказы (${orders.length})</div>
-        ${orders.length === 0 ? '<div style="text-align:center;padding:20px;">Заказов пока нет</div>' : `
-        <div class="table-wrapper"><table class="data-table">
+            <tbody>`;
+        for (const user of users) {
+            usersHtml += `<tr>
+                <td>${user.id}</td>
+                <td>${user.name || '—'}</td>
+                <td>${user.email || '—'}</td>
+                <td>${user.phone || '—'}</td>
+                <td>${user.orders ? user.orders.length : 0}</td>
+                <td>${user.isAdmin ? '<span class="badge-admin">👑 Админ</span>' : '👤 Пользователь'}</td>
+            </tr>`;
+        }
+        usersHtml += `</tbody></table></div>`;
+    }
+    
+    // Таблица заказов
+    let ordersHtml = `<div class="section-title">📋 Все заказы (${allOrders.length})</div>`;
+    if (allOrders.length === 0) {
+        ordersHtml += `<div class="empty-data" style="text-align:center; padding:30px; color:#D56989;">Заказов пока нет</div>`;
+    } else {
+        ordersHtml += `<div class="table-wrapper"><table class="data-table">
             <thead><tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th></tr></thead>
-            <tbody>${orders.map(o => `<tr><td>${o.id}</td><td>${o.date}</td><td>${o.customerName || o.userName}<br><small>${o.userEmail}</small></td><td>${o.items?.map(i => `${i.name} x${i.quantity}`).join('<br>') || '-'}</td><td>${o.total} ₽</td><td><span style="background:#ff6b6b;color:white;padding:3px 10px;">${o.status || '🟢 Новый'}</span></td><td>${o.address || '-'}</td></tr>`).join('')}</tbody>
-        </table></div>`}
+            <tbody>`;
+        for (const order of allOrders) {
+            ordersHtml += `</tr>
+                <td>${order.id}</td>
+                <td>${order.date || '—'}</td>
+                <td>${order.customerName || order.userName || '—'}<br><small>${order.userEmail || '—'}</small></td>
+                <td>${order.items ? order.items.map(i => `${i.name} x${i.quantity}`).join('<br>') : '—'}</td>
+                <td>${order.total || 0} ₽</td>
+                <td><span style="background:#ff6b6b; color:white; padding:3px 10px; display:inline-block;">${order.status || '🟢 Новый'}</span></td>
+                <td>${order.address || '—'}</td>
+            </tr>`;
+        }
+        ordersHtml += `</tbody></table></div>`;
+    }
+    
+    // Собираем всё вместе
+    container.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <span style="color: #D56989;">👑 ${currentAdmin.name} (${currentAdmin.email}) <span class="badge-admin">Администратор</span></span>
+            <button onclick="location.href='index4.html'" style="background: #D56989; color: white; border: none; padding: 8px 20px; cursor: pointer;">🚪 Выйти</button>
+        </div>
+        ${statsHtml}
+        ${usersHtml}
+        ${ordersHtml}
     `;
 }
 
-renderAdmin();
+// Запуск
+renderAdminPanel();
 </script>
 </body>
 </html>
