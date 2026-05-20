@@ -22,7 +22,7 @@
         .profile-name{font-size:28px;font-weight:600;color:#D56989}
         .profile-email,.profile-phone{font-size:18px;color:#5b3b45;margin:8px 0}
         .profile-buttons{display:flex;justify-content:center;gap:15px;margin-top:15px;flex-wrap:wrap}
-        button{background:#D56989;border:none;padding:10px 25px;font-family:inherit;font-size:16px;cursor:pointer;color:#F3EEF1}
+        button{background:#D56989;border:none;padding:10px 25px;font-family:inherit;font-size:16px;cursor:pointer;color:#F3EEF1;transition:0.2s}
         button:hover{background:#b84d6e}
         .logout-btn{background:#b84d6e}
         .admin-btn{background:#1f5437}
@@ -52,6 +52,8 @@
         .social-link{color:#C2DC80;text-decoration:none;font-size:20px;padding:6px 18px}
         .social-link:hover{background:rgba(193,130,146,0.35)}
         .copyright{text-align:center;font-size:15px;color:#C2DC80}
+        .toast{position:fixed;bottom:30px;right:30px;background:#1f5437;color:white;padding:12px 24px;font-family:system-ui;font-size:14px;z-index:1000;animation:slideIn .3s}
+        @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
         @media(max-width:700px){.frame{padding:20px}.header{flex-direction:column;text-align:center}.logo{font-size:28px}.nav a{font-size:16px}.profile-buttons{flex-direction:column;align-items:center}.footer-info{flex-direction:column;gap:15px;text-align:center}}
     </style>
 </head>
@@ -70,138 +72,162 @@
 </div>
 
 <script>
-// ==================== РАБОТА С ПОЛЬЗОВАТЕЛЯМИ ====================
-function getUsers() {
-    const data = localStorage.getItem('estetica_users');
-    return data ? JSON.parse(data) : [];
+const API_URL = 'https://script.google.com/macros/s/AKfycby5kGa2cl2sujFV-LQ0N_F489GiaGbDEMmOkhdjkVqZ2Wt-QlEGM_LUitZvcMUCaDGh7Q/exec';
+
+let currentUser = null;
+
+// ==================== ЗАПРОСЫ К API ====================
+async function apiRequest(action, data = {}) {
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action, ...data })
+        });
+        return await response.json();
+    } catch(e) {
+        console.error('API Error:', e);
+        return { success: false, error: 'Ошибка соединения' };
+    }
 }
 
-function saveUsers(users) {
-    localStorage.setItem('estetica_users', JSON.stringify(users));
-    console.log('✅ Пользователи сохранены:', users);
+async function apiGet(action, params = {}) {
+    try {
+        let url = `${API_URL}?action=${action}`;
+        for (let key in params) {
+            url += `&${key}=${encodeURIComponent(params[key])}`;
+        }
+        const response = await fetch(url);
+        return await response.json();
+    } catch(e) {
+        console.error('API Error:', e);
+        return { success: false, error: 'Ошибка соединения' };
+    }
 }
 
-function getCurrentUser() {
-    const data = localStorage.getItem('estetica_current_user');
-    return data ? JSON.parse(data) : null;
-}
-
-function setCurrentUser(user) {
-    if (user) {
-        localStorage.setItem('estetica_current_user', JSON.stringify(user));
+// ==================== АВТОРИЗАЦИЯ ====================
+async function register(email, password, name) {
+    const result = await apiRequest('register', { email, password, name });
+    if (result.success) {
+        currentUser = result.user;
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        alert('✅ Регистрация успешна!');
+        renderAuthScreen();
+        return true;
     } else {
-        localStorage.removeItem('estetica_current_user');
-    }
-}
-
-// Автоматическое создание админа (если нет ни одного)
-function initAdmin() {
-    let users = getUsers();
-    const hasAdmin = users.some(u => u.isAdmin === true);
-    
-    if (!hasAdmin) {
-        const admin = {
-            id: Date.now(),
-            email: 'ancord51217@gmail.com',
-            password: 'ananasik051217',
-            name: 'Главный администратор',
-            phone: '+7 (999) 000-00-00',
-            addresses: ['Москва, ул. Нансена, 1'],
-            orders: [],
-            cart: [],
-            isAdmin: true
-        };
-        users.push(admin);
-        saveUsers(users);
-        setCurrentUser(admin);
-        console.log('✅ Администратор создан автоматически');
-    }
-}
-
-// Регистрация
-function register(email, password, name) {
-    let users = getUsers();
-    
-    if (users.find(u => u.email === email)) {
-        alert('❌ Пользователь с таким email уже существует!');
+        alert('❌ ' + (result.error || 'Ошибка регистрации'));
         return false;
     }
-    
-    const isAdmin = (email === 'ancord51217@gmail.com' && password === 'ananasik051217');
-    
-    const newUser = {
-        id: Date.now(),
-        email: email,
-        password: password,
-        name: name || email.split('@')[0],
-        phone: 'не указан',
-        addresses: ['Москва, ул. Нансена, 1'],
-        orders: [],
-        cart: [],
-        isAdmin: isAdmin
-    };
-    
-    users.push(newUser);
-    saveUsers(users);
-    setCurrentUser(newUser);
-    
-    console.log('✅ Зарегистрирован новый пользователь:', newUser);
-    alert(isAdmin ? '👑 Вы зарегистрировались как администратор!' : '✅ Регистрация успешна! Добро пожаловать!');
-    return true;
 }
 
-// Вход
-function login(email, password) {
-    const users = getUsers();
-    const user = users.find(u => u.email === email && u.password === password);
-    
-    if (user) {
-        setCurrentUser(user);
-        console.log('✅ Вход выполнен:', user.email);
-        alert(user.isAdmin ? `👑 Добро пожаловать, администратор ${user.name}!` : `🌸 Добро пожаловать, ${user.name}!`);
+async function login(email, password) {
+    const result = await apiRequest('login', { email, password });
+    if (result.success) {
+        currentUser = result.data;
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        alert(`🌸 Добро пожаловать, ${currentUser.name}!`);
+        renderAuthScreen();
         return true;
+    } else {
+        alert('❌ Неверный email или пароль!');
+        return false;
     }
-    
-    alert('❌ Неверный email или пароль!');
-    return false;
 }
 
 function logout() {
-    setCurrentUser(null);
+    currentUser = null;
+    localStorage.removeItem('estetica_current_user');
     renderAuthScreen();
     alert('👋 Вы вышли из аккаунта');
 }
 
-function updateUserData(updates) {
-    const cu = getCurrentUser();
-    if (!cu) return;
-    
-    let users = getUsers();
-    const index = users.findIndex(u => u.id === cu.id);
-    if (index !== -1) {
-        users[index] = { ...users[index], ...updates };
-        saveUsers(users);
-        setCurrentUser(users[index]);
+// ==================== ОБНОВЛЕНИЕ ДАННЫХ ====================
+async function updateUserData(updates) {
+    if (!currentUser) return;
+    const result = await apiRequest('updateUser', { id: currentUser.id, updates });
+    if (result.success) {
+        currentUser = { ...currentUser, ...updates };
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        renderAuthScreen();
+        alert('✅ Профиль обновлён!');
+    } else {
+        alert('❌ Ошибка обновления');
     }
 }
 
 // ==================== ПОКАЗ/СКРЫТИЕ ПАРОЛЯ ====================
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
-    if (input.type === 'password') {
-        input.type = 'text';
-    } else {
-        input.type = 'password';
-    }
+    input.type = input.type === 'password' ? 'text' : 'password';
 }
 
 // ==================== ОТОБРАЖЕНИЕ ====================
+async function loadUserOrders() {
+    if (!currentUser) return [];
+    const result = await apiGet('getUser', { email: currentUser.email });
+    if (result.success && result.data) {
+        currentUser = result.data;
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        return currentUser.orders || [];
+    }
+    return [];
+}
+
+async function loadOrders() {
+    const orders = await loadUserOrders();
+    const container = document.getElementById('ordersList');
+    
+    if (!orders.length) {
+        container.innerHTML = '<div class="empty">📦 Заказов пока нет<br><a href="index2.html" style="color:#D56989;">Перейти в каталог</a></div>';
+        return;
+    }
+    
+    container.innerHTML = orders.map(order => `
+        <div class="order-item">
+            <div class="order-header"><span>📅 ${order.date}</span><span class="order-status">${order.status || '🟢 Новый'}</span></div>
+            <div class="order-details">${order.items?.map(i => `${i.name} x ${i.quantity}`).join(', ') || ''}</div>
+            <div class="order-details">💰 ${order.total} ₽ | 🚚 ${order.address || ''}</div>
+        </div>
+    `).join('');
+}
+
+function loadAddresses() {
+    const container = document.getElementById('addressesList');
+    const addresses = currentUser?.addresses || ['Москва, ул. Нансена, 1'];
+    container.innerHTML = addresses.map((addr, i) => `
+        <div class="address-item">
+            <span>🏠 ${addr}</span>
+            <button class="remove-btn" onclick="deleteAddress(${i})">🗑 Удалить</button>
+        </div>
+    `).join('');
+}
+
+async function addAddress() {
+    const newAddr = prompt('Введите новый адрес:');
+    if (newAddr?.trim()) {
+        const addresses = [...(currentUser?.addresses || []), newAddr.trim()];
+        await updateUserData({ addresses });
+        loadAddresses();
+    }
+}
+
+async function deleteAddress(index) {
+    const addresses = [...(currentUser?.addresses || [])];
+    addresses.splice(index, 1);
+    await updateUserData({ addresses });
+    loadAddresses();
+}
+
 function renderAuthScreen() {
-    const cu = getCurrentUser();
+    const savedUser = localStorage.getItem('estetica_current_user');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+    }
+    
     const authBlock = document.getElementById('authBlock');
     const userPanel = document.getElementById('userPanel');
     
-    if (!cu) {
+    if (!currentUser) {
         authBlock.innerHTML = `
             <div class="auth-card">
                 <div id="authForm">
@@ -215,13 +241,13 @@ function renderAuthScreen() {
         `;
         userPanel.style.display = 'none';
     } else {
-        const adminButton = cu.isAdmin ? `<button class="admin-btn" onclick="location.href='admin.html'">👑 Админ-панель</button>` : '';
+        const adminButton = currentUser.isAdmin ? `<button class="admin-btn" onclick="location.href='admin.html'">👑 Админ-панель</button>` : '';
         authBlock.innerHTML = `
             <div class="profile-card">
                 <div class="avatar">🌸</div>
-                <div class="profile-name">${cu.name}</div>
-                <div class="profile-email">${cu.email}</div>
-                <div class="profile-phone">📞 ${cu.phone || 'не указан'}</div>
+                <div class="profile-name">${currentUser.name}</div>
+                <div class="profile-email">${currentUser.email}</div>
+                <div class="profile-phone">📞 ${currentUser.phone || 'не указан'}</div>
                 <div class="profile-buttons">
                     <button onclick="editProfile()">✎ Редактировать</button>
                     <button class="logout-btn" onclick="logout()">🚪 Выйти</button>
@@ -256,90 +282,36 @@ window.showLoginForm = function() {
     `;
 };
 
-window.doLogin = function() {
+window.doLogin = async function() {
     const email = document.getElementById('loginEmail')?.value;
     const password = document.getElementById('loginPassword')?.value;
-    if (email && password && login(email, password)) {
-        renderAuthScreen();
+    if (email && password) {
+        await login(email, password);
     } else {
         alert('Заполните все поля!');
     }
 };
 
-window.doRegister = function() {
+window.doRegister = async function() {
     const name = document.getElementById('regName')?.value;
     const email = document.getElementById('regEmail')?.value;
     const password = document.getElementById('regPassword')?.value;
-    if (name && email && password && register(email, password, name)) {
-        renderAuthScreen();
+    if (name && email && password) {
+        await register(email, password, name);
     } else {
         alert('Заполните все поля!');
     }
 };
 
 window.editProfile = function() {
-    const cu = getCurrentUser();
-    if (!cu) return;
-    const newName = prompt('Новое имя:', cu.name);
-    const newPhone = prompt('Новый телефон:', cu.phone || '');
+    const newName = prompt('Новое имя:', currentUser.name);
+    const newPhone = prompt('Новый телефон:', currentUser.phone || '');
     const updates = {};
     if (newName) updates.name = newName;
     if (newPhone) updates.phone = newPhone;
     if (Object.keys(updates).length) {
         updateUserData(updates);
-        renderAuthScreen();
-        alert('✅ Профиль обновлён!');
     }
-};
-
-function loadOrders() {
-    const cu = getCurrentUser();
-    const container = document.getElementById('ordersList');
-    
-    if (!cu?.orders?.length) {
-        container.innerHTML = '<div class="empty">📦 Заказов пока нет<br><a href="index2.html" style="color:#D56989;">Перейти в каталог</a></div>';
-        return;
-    }
-    
-    container.innerHTML = cu.orders.map(order => `
-        <div class="order-item">
-            <div class="order-header"><span>📅 ${order.date}</span><span class="order-status">${order.status}</span></div>
-            <div class="order-details">${order.items.map(i => `${i.name} x ${i.quantity}`).join(', ')}</div>
-            <div class="order-details">💰 ${order.total} ₽ | 🚚 ${order.address}</div>
-        </div>
-    `).join('');
-}
-
-function loadAddresses() {
-    const cu = getCurrentUser();
-    const container = document.getElementById('addressesList');
-    const addresses = cu?.addresses || ['Москва, ул. Нансена, 1'];
-    
-    container.innerHTML = addresses.map((addr, i) => `
-        <div class="address-item">
-            <span>🏠 ${addr}</span>
-            <button class="remove-btn" onclick="deleteAddress(${i})">🗑 Удалить</button>
-        </div>
-    `).join('');
-}
-
-window.addAddress = function() {
-    const cu = getCurrentUser();
-    if (!cu) return;
-    const newAddr = prompt('Введите новый адрес:');
-    if (newAddr?.trim()) {
-        updateUserData({ addresses: [...(cu.addresses || []), newAddr.trim()] });
-        loadAddresses();
-    }
-};
-
-window.deleteAddress = function(index) {
-    const cu = getCurrentUser();
-    if (!cu) return;
-    const addresses = [...(cu.addresses || [])];
-    addresses.splice(index, 1);
-    updateUserData({ addresses: addresses });
-    loadAddresses();
 };
 
 window.showTab = function(tabName) {
@@ -351,8 +323,6 @@ window.showTab = function(tabName) {
     if (tabName === 'addresses') loadAddresses();
 };
 
-// ==================== ЗАПУСК ====================
-initAdmin();
 renderAuthScreen();
 </script>
 </body>

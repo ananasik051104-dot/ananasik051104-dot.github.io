@@ -39,11 +39,11 @@
         .footer-info{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;color:#C2DC80;margin:15px 0 30px;font-size:18px}
         .social-links{display:flex;justify-content:center;gap:35px;flex-wrap:wrap;margin-bottom:20px}
         .social-link{color:#C2DC80;text-decoration:none;font-size:20px;padding:6px 18px}
-        .social-link:hover{background:rgba(193,130,146,0.35);transform:translateY(-2px)}
+        .social-link:hover{background:rgba(193,130,146,0.35)}
         .copyright{text-align:center;font-size:15px;color:#C2DC80}
         .toast{position:fixed;bottom:30px;right:30px;background:#1f5437;color:white;padding:12px 24px;font-family:system-ui;font-size:14px;z-index:1000;animation:slideIn .3s}
         @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
-        @media(max-width:700px){.frame{padding:20px}.header{flex-direction:column;text-align:center}.logo{font-size:28px}.nav a{font-size:16px}.form-grid{grid-template-columns:1fr}.footer-info{flex-direction:column;gap:15px;text-align:center}.social-link{font-size:16px}}
+        @media(max-width:700px){.frame{padding:20px}.header{flex-direction:column;text-align:center}.logo{font-size:28px}.nav a{font-size:16px}.form-grid{grid-template-columns:1fr}.footer-info{flex-direction:column;gap:15px;text-align:center}}
     </style>
 </head>
 <body>
@@ -66,49 +66,40 @@
 </div>
 
 <script>
-// ==================== РАБОТА С ПОЛЬЗОВАТЕЛЯМИ ====================
-function getCurrentUser() {
-    let data = localStorage.getItem('estetica_current_user');
-    return data ? JSON.parse(data) : null;
+const API_URL = 'https://script.google.com/macros/s/AKfycbwmnpmahduuUsWK2D8smjEOF_y9et2olDJTVrkWPWILlNoRc4ssAunBk0hX-vSBSVdUGg/exec';
+
+let currentUser = null;
+
+async function getCurrentUser() {
+    const saved = localStorage.getItem('estetica_current_user');
+    if (saved) {
+        currentUser = JSON.parse(saved);
+        try {
+            const response = await fetch(`${API_URL}?action=getUser&email=${encodeURIComponent(currentUser.email)}`);
+            const result = await response.json();
+            if (result.success && result.data) {
+                currentUser = result.data;
+                localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+            }
+        } catch(e) {}
+    }
+    return currentUser;
 }
 
-// ==================== КОРЗИНА (привязана к пользователю) ====================
 function getCart() {
-    const user = getCurrentUser();
-    if (user) {
-        // Авторизованный пользователь — корзина в его данных
-        let users = JSON.parse(localStorage.getItem('estetica_users') || '[]');
-        let currentUser = users.find(u => u.id === user.id);
-        return currentUser?.cart || [];
-    } else {
-        // Гость — корзина в отдельном хранилище
-        return JSON.parse(localStorage.getItem('estetica_guest_cart') || '[]');
-    }
+    return JSON.parse(localStorage.getItem('estetica_cart') || '[]');
 }
 
 function saveCart(cart) {
-    const user = getCurrentUser();
-    if (user) {
-        // Сохраняем корзину в данные пользователя
-        let users = JSON.parse(localStorage.getItem('estetica_users') || '[]');
-        let userIndex = users.findIndex(u => u.id === user.id);
-        if (userIndex !== -1) {
-            users[userIndex].cart = cart;
-            localStorage.setItem('estetica_users', JSON.stringify(users));
-            // Обновляем текущего пользователя
-            localStorage.setItem('estetica_current_user', JSON.stringify(users[userIndex]));
-        }
-    } else {
-        // Гость — сохраняем отдельно
-        localStorage.setItem('estetica_guest_cart', JSON.stringify(cart));
-    }
+    localStorage.setItem('estetica_cart', JSON.stringify(cart));
     updateCartCount();
+    renderCart();
 }
 
 function updateCartCount() {
     const cart = getCart();
-    let total = cart.reduce((s,i) => s + i.quantity, 0);
-    let link = document.querySelector('.nav a[href="index3.html"]');
+    const total = cart.reduce((s,i) => s + i.quantity, 0);
+    const link = document.querySelector('.nav a[href="index3.html"]');
     if (link) link.innerHTML = total > 0 ? `КОРЗИНА 🛒(${total})` : `КОРЗИНА`;
 }
 
@@ -120,6 +111,22 @@ function showToast(m) {
     t.textContent = m;
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 3000);
+}
+
+function updateQuantity(id, delta) {
+    let cart = getCart();
+    const idx = cart.findIndex(i => i.id === id);
+    if (idx !== -1) {
+        cart[idx].quantity += delta;
+        if (cart[idx].quantity <= 0) cart.splice(idx, 1);
+        saveCart(cart);
+    }
+}
+
+function removeItem(id) {
+    let cart = getCart();
+    cart = cart.filter(i => i.id !== id);
+    saveCart(cart);
 }
 
 function renderCart() {
@@ -142,77 +149,15 @@ function renderCart() {
         rows += `<tr>
             <td><img src="${item.img}" class="cart-product-img"></td>
             <td>${item.name}</td>
-            <td>${item.price} ₽</td>
-            <td><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">−</button><span style="margin:0 15px">${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></td>
-            <td>${itemTotal} ₽</td>
-            <td><button class="remove-btn" onclick="removeItem(${item.id})">✕</button></td>
+            <td>${item.price} ₽</td><td><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">−</button><span style="margin:0 15px">${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></td>
+            <td>${itemTotal} ₽</td><td><button class="remove-btn" onclick="removeItem(${item.id})">✕</button></td>
         </tr>`;
     });
     
     container.innerHTML = `<table class="cart-table"><thead><tr><th>Товар</th><th>Название</th><th>Цена</th><th>Кол-во</th><th>Сумма</th><th></th></tr></thead><tbody>${rows}</tbody></table><div class="cart-summary">💐 Итого: ${total} ₽</div>`;
 }
 
-function updateQuantity(id, delta) {
-    let cart = getCart();
-    let idx = cart.findIndex(i => i.id === id);
-    if (idx !== -1) {
-        cart[idx].quantity += delta;
-        if (cart[idx].quantity <= 0) cart.splice(idx, 1);
-        saveCart(cart);
-        renderCart();
-    }
-}
-
-function removeItem(id) {
-    let cart = getCart();
-    cart = cart.filter(i => i.id !== id);
-    saveCart(cart);
-    renderCart();
-}
-
-// ==================== ДОБАВЛЕНИЕ ТОВАРА (вызывается из каталога) ====================
-window.addToCart = function(product) {
-    let cart = getCart();
-    let existing = cart.find(i => i.id === product.id);
-    if (existing) {
-        existing.quantity += 1;
-    } else {
-        cart.push({ ...product, quantity: 1 });
-    }
-    saveCart(cart);
-    showToast(`${product.name} добавлен в корзину!`);
-    renderCart();
-};
-
-// ==================== ОФОРМЛЕНИЕ ЗАКАЗА ====================
-function getUsers() { return JSON.parse(localStorage.getItem('estetica_users') || '[]'); }
-function saveUsers(u) { localStorage.setItem('estetica_users', JSON.stringify(u)); }
-
-function saveOrderToAccount(orderData) {
-    const currentUser = getCurrentUser();
-    
-    if (!currentUser) {
-        // Гость — сохраняем в guestOrders
-        let guestOrders = JSON.parse(localStorage.getItem('estetica_guest_orders') || '[]');
-        guestOrders.unshift(orderData);
-        localStorage.setItem('estetica_guest_orders', JSON.stringify(guestOrders));
-        return false;
-    }
-    
-    // Авторизованный пользователь
-    let users = getUsers();
-    const userIndex = users.findIndex(u => u.id === currentUser.id);
-    if (userIndex !== -1) {
-        users[userIndex].orders = users[userIndex].orders || [];
-        users[userIndex].orders.unshift(orderData);
-        saveUsers(users);
-        localStorage.setItem('estetica_current_user', JSON.stringify(users[userIndex]));
-        return true;
-    }
-    return false;
-}
-
-function submitOrder() {
+async function submitOrder() {
     const cart = getCart();
     if (cart.length === 0) return alert('Корзина пуста');
     
@@ -222,36 +167,44 @@ function submitOrder() {
     
     if (!name || !phone || !address) return alert('Заполните имя, телефон и адрес!');
     
+    await getCurrentUser();
+    
     const total = cart.reduce((s,i) => s + i.price * i.quantity, 0);
     
-    const newOrder = {
-        id: Date.now(),
-        date: new Date().toLocaleString(),
-        items: cart.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price, img: i.img })),
+    const orderData = {
+        action: 'createOrder',
+        userId: currentUser?.id || 0,
+        userEmail: currentUser?.email || 'Гость',
+        items: cart,
         total: total,
-        status: '🟢 Новый',
-        customerName: name,
-        customerPhone: phone,
         address: address,
         deliveryTime: document.getElementById('deliveryTime')?.value || '',
-        deliveryDate: document.getElementById('deliveryDate')?.value || '',
         comment: document.getElementById('comment')?.value || ''
     };
     
-    const saved = saveOrderToAccount(newOrder);
-    
-    // Очищаем корзину
-    saveCart([]);
-    renderCart();
-    
-    // Очищаем форму
-    document.querySelectorAll('#orderSection input').forEach(i => i.value = '');
-    
-    alert(`🌿 Заказ оформлен!\nСумма: ${total} ₽\n${saved ? '✅ Заказ сохранён в личном кабинете!' : '📦 Заказ сохранён. Зарегистрируйтесь для истории!'}`);
-    showToast(`Заказ на ${total} ₽ оформлен!`);
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            localStorage.removeItem('estetica_cart');
+            renderCart();
+            updateCartCount();
+            document.querySelectorAll('#orderSection input').forEach(i => i.value = '');
+            alert(`🌿 Заказ оформлен!\nСумма: ${total} ₽\nСкоро с вами свяжутся!`);
+            showToast(`Заказ на ${total} ₽ оформлен!`);
+        } else {
+            alert('❌ Ошибка оформления заказа');
+        }
+    } catch(e) {
+        alert('❌ Ошибка соединения');
+    }
 }
 
-// ==================== ЗАПУСК ====================
 document.addEventListener('DOMContentLoaded', () => {
     renderCart();
     document.getElementById('submitOrderBtn')?.addEventListener('click', submitOrder);
