@@ -43,124 +43,52 @@
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbzEgNhCcdxpvta4IuQCO1nQ5SsJGK9dtOLD5UpRIzi_EpLmuvLROvzsov6acMbuKyilig/exec';
+const BIN_ID = '6a0e46146877513b27a708ce';
+const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 let currentUser = null;
 
-async function apiGet(action, params = {}) {
-    try {
-        let url = `${API_URL}?action=${action}`;
-        for (let key in params) {
-            url += `&${key}=${encodeURIComponent(params[key])}`;
-        }
-        const response = await fetch(url);
-        return await response.json();
-    } catch(e) {
-        console.error('API Error:', e);
-        return { success: false, error: 'Ошибка соединения' };
-    }
-}
-
-async function apiPost(action, data = {}) {
-    try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action, ...data })
-        });
-        return await response.json();
-    } catch(e) {
-        console.error('API Error:', e);
-        return { success: false, error: 'Ошибка соединения' };
-    }
+async function getData() {
+    const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+    const data = await res.json();
+    return data.record || { users: [], orders: [], messages: [] };
 }
 
 async function getCurrentUser() {
     const saved = localStorage.getItem('estetica_current_user');
     if (saved) {
         currentUser = JSON.parse(saved);
-        if (currentUser.email) {
-            const result = await apiGet('getUser', { email: currentUser.email });
-            if (result.success && result.data) {
-                currentUser = result.data;
-                localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
-            }
-        }
+        const data = await getData();
+        const freshUser = (data.users || []).find(u => u.id === currentUser.id);
+        if (freshUser) currentUser = freshUser;
     }
     return currentUser;
 }
 
-async function loadData() {
+async function renderAdmin() {
     await getCurrentUser();
+    const container = document.getElementById('adminContent');
     
     if (!currentUser || !currentUser.isAdmin) {
-        document.getElementById('adminContent').innerHTML = `
-            <div class="access-denied">
-                <h2>🚫 Доступ запрещён</h2>
-                <p>У вас нет прав администратора для доступа к этой странице.</p>
-                <p><a href="index4.html" style="color:#C2DC80;">← Вернуться в личный кабинет</a></p>
-            </div>
-        `;
+        container.innerHTML = `<div class="access-denied"><h2>🚫 Доступ запрещён</h2><p><a href="index4.html" style="color:#C2DC80;">← Вернуться в кабинет</a></p></div>`;
         return;
     }
     
-    // Загружаем данные
-    const [usersRes, ordersRes, messagesRes] = await Promise.all([
-        apiGet('getUsers'),
-        apiGet('getOrders'),
-        apiGet('getMessages')
-    ]);
+    const data = await getData();
+    const users = data.users || [];
+    const orders = data.orders || [];
+    const messages = data.messages || [];
     
-    const users = usersRes.success ? usersRes.data : [];
-    const orders = ordersRes.success ? ordersRes.data : [];
-    const messages = messagesRes.success ? messagesRes.data : [];
-    
-    // Статистика
     const stats = {
         totalOrders: orders.length,
         totalRevenue: orders.reduce((s,o) => s + (o.total || 0), 0),
-        newOrders: orders.filter(o => o.status === '🟢 Новый').length,
+        newOrders: orders.filter(o => o.status === 'Новый').length,
         totalUsers: users.length,
-        totalAdmins: users.filter(u => u.isAdmin === true).length
+        totalAdmins: users.filter(u => u.isAdmin).length
     };
     
-    // Пользователи
-    let usersHtml = `<div class="section-title">👥 Зарегистрированные пользователи (${users.length})</div>`;
-    if (users.length === 0) {
-        usersHtml += `<div style="text-align:center;padding:20px;color:#D56989;">Пока нет зарегистрированных пользователей</div>`;
-    } else {
-        usersHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Заказов</th><th>Статус</th></tr></thead><tbody>`;
-        for (let user of users) {
-            usersHtml += `<tr><td>${user.id}</td><td>${user.name}</td><td>${user.email}</td><td>${user.phone || '—'}</td><td>${user.orders ? user.orders.length : 0}</td><td>${user.isAdmin ? '<span class="badge-admin">Админ</span>' : 'Пользователь'}</td></tr>`;
-        }
-        usersHtml += `</tbody></table></div>`;
-    }
-    
-    // Заказы
-    let ordersHtml = `<div class="section-title">📋 Все заказы (${orders.length})</div>`;
-    if (orders.length === 0) {
-        ordersHtml += `<div style="text-align:center;padding:20px;color:#D56989;">Заказов пока нет</div>`;
-    } else {
-        ordersHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th></tr></thead><tbody>`;
-        for (let order of orders) {
-            ordersHtml += `<tr><td>${order.id}</td><td>${order.date}</td><td>${order.userEmail || 'Гость'}</td><td>${order.items?.map(i => `${i.name} x${i.quantity}`).join('<br>') || '—'}</td><td>${order.total} ₽</td><td><span style="background:#ff6b6b;color:white;padding:3px 10px;">${order.status || '🟢 Новый'}</span></td><td>${order.address || '—'}</td></tr>`;
-        }
-        ordersHtml += `</tbody></table></div>`;
-    }
-    
-    // Сообщения
-    let messagesHtml = `<div class="section-title">✉️ Сообщения из формы контактов (${messages.length})</div>`;
-    if (messages.length === 0) {
-        messagesHtml += `<div style="text-align:center;padding:20px;color:#D56989;">Сообщений пока нет</div>`;
-    } else {
-        messagesHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>Дата</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Сообщение</th></tr></thead><tbody>`;
-        for (let msg of messages) {
-            messagesHtml += `<tr><td>${msg.date}</td><td>${msg.name}</td><td>${msg.email}</td><td>${msg.phone || '—'}</td><td style="max-width:300px;">${msg.message}</td></tr>`;
-        }
-        messagesHtml += `</tbody></table></div>`;
-    }
-    
-    document.getElementById('adminContent').innerHTML = `
+    container.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
             <span style="color:#D56989;">👑 ${currentUser.name} (${currentUser.email}) <span class="badge-admin">Администратор</span></span>
             <button onclick="location.href='index4.html'" style="background:#D56989;color:white;border:none;padding:8px 20px;cursor:pointer;">🚪 Выйти</button>
@@ -172,13 +100,25 @@ async function loadData() {
             <div class="stat-card"><div class="stat-number">${stats.totalUsers}</div><div class="stat-label">👥 Пользователей</div></div>
             <div class="stat-card"><div class="stat-number">${stats.totalAdmins}</div><div class="stat-label">👑 Админов</div></div>
         </div>
-        ${usersHtml}
-        ${ordersHtml}
-        ${messagesHtml}
+        <div class="section-title">👥 Пользователи (${users.length})</div>
+        ${users.length === 0 ? '<div style="text-align:center;padding:20px;">Пока нет пользователей</div>' : `
+        <div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Заказов</th><th>Статус</th></tr></thead><tbody>
+            ${users.map(u => `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.email}</td><td>${u.phone || '-'}</td><td>${u.orders?.length || 0}</td><td>${u.isAdmin ? '<span class="badge-admin">Админ</span>' : 'Пользователь'}</tr>`).join('')}
+        </tbody></table></div>`}
+        <div class="section-title">📋 Заказы (${orders.length})</div>
+        ${orders.length === 0 ? '<div style="text-align:center;padding:20px;">Заказов пока нет</div>' : `
+        <div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th></tr></thead><tbody>
+            ${orders.map(o => `<tr><td>${o.id}</td><td>${o.date}</td><td>${o.userEmail || 'Гость'}</td><td>${o.items?.map(i => `${i.name} x${i.quantity}`).join('<br>') || '-'}</td><td>${o.total} ₽</td><td>${o.status || 'Новый'}</td><td>${o.address || '-'}</tr>`).join('')}
+        </tbody></table></div>`}
+        <div class="section-title">✉️ Сообщения (${messages.length})</div>
+        ${messages.length === 0 ? '<div style="text-align:center;padding:20px;">Сообщений пока нет</div>' : `
+        <div class="table-wrapper"><table class="data-table"><thead><tr><th>Дата</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Сообщение</th></tr></thead><tbody>
+            ${messages.map(m => `<tr><td>${m.date}</td><td>${m.name}</td><td>${m.email}</td><td>${m.phone || '-'}</td><td style="max-width:300px;">${m.message}</td></tr>`).join('')}
+        </tbody></table></div>`}
     `;
 }
 
-loadData();
+renderAdmin();
 </script>
 </body>
 </html>

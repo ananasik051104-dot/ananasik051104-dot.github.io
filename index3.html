@@ -66,26 +66,39 @@
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbzEgNhCcdxpvta4IuQCO1nQ5SsJGK9dtOLD5UpRIzi_EpLmuvLROvzsov6acMbuKyilig/exec';
+// ==================== НАСТРОЙКИ JSONBIN.IO ====================
+const BIN_ID = '6a0e46146877513b27a708ce';
+const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 let currentUser = null;
+
+async function getData() {
+    const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+    const data = await res.json();
+    return data.record || { users: [], orders: [], messages: [] };
+}
+
+async function saveData(data) {
+    await fetch(API_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+        body: JSON.stringify(data)
+    });
+}
 
 async function getCurrentUser() {
     const saved = localStorage.getItem('estetica_current_user');
     if (saved) {
         currentUser = JSON.parse(saved);
-        try {
-            const response = await fetch(`${API_URL}?action=getUser&email=${encodeURIComponent(currentUser.email)}`);
-            const result = await response.json();
-            if (result.success && result.data) {
-                currentUser = result.data;
-                localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
-            }
-        } catch(e) {}
+        const data = await getData();
+        const freshUser = (data.users || []).find(u => u.id === currentUser.id);
+        if (freshUser) currentUser = freshUser;
     }
     return currentUser;
 }
 
+// ==================== КОРЗИНА ====================
 function getCart() {
     return JSON.parse(localStorage.getItem('estetica_cart') || '[]');
 }
@@ -146,17 +159,20 @@ function renderCart() {
     cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
-        rows += `<tr>
+        rows += `<td>
             <td><img src="${item.img}" class="cart-product-img"></td>
             <td>${item.name}</td>
-            <td>${item.price} ₽</td><td><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">−</button><span style="margin:0 15px">${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></td>
-            <td>${itemTotal} ₽</td><td><button class="remove-btn" onclick="removeItem(${item.id})">✕</button></td>
+            <td>${item.price} ₽</td>
+            <td><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">−</button><span style="margin:0 15px">${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></td>
+            <td>${itemTotal} ₽</td>
+            <td><button class="remove-btn" onclick="removeItem(${item.id})">✕</button></td>
         </tr>`;
     });
     
     container.innerHTML = `<table class="cart-table"><thead><tr><th>Товар</th><th>Название</th><th>Цена</th><th>Кол-во</th><th>Сумма</th><th></th></tr></thead><tbody>${rows}</tbody></table><div class="cart-summary">💐 Итого: ${total} ₽</div>`;
 }
 
+// ==================== ОФОРМЛЕНИЕ ЗАКАЗА ====================
 async function submitOrder() {
     const cart = getCart();
     if (cart.length === 0) return alert('Корзина пуста');
@@ -170,39 +186,55 @@ async function submitOrder() {
     await getCurrentUser();
     
     const total = cart.reduce((s,i) => s + i.price * i.quantity, 0);
+    const data = await getData();
     
-    const orderData = {
-        action: 'createOrder',
+    const newOrder = {
+        id: Date.now(),
+        date: new Date().toLocaleString('ru-RU'),
         userId: currentUser?.id || 0,
         userEmail: currentUser?.email || 'Гость',
         items: cart,
         total: total,
+        status: 'Новый',
         address: address,
         deliveryTime: document.getElementById('deliveryTime')?.value || '',
         comment: document.getElementById('comment')?.value || ''
     };
     
-    try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
-        });
-        const result = await response.json();
-        
-        if (result.success) {
-            localStorage.removeItem('estetica_cart');
-            renderCart();
-            updateCartCount();
-            document.querySelectorAll('#orderSection input').forEach(i => i.value = '');
-            alert(`🌿 Заказ оформлен!\nСумма: ${total} ₽\nСкоро с вами свяжутся!`);
-            showToast(`Заказ на ${total} ₽ оформлен!`);
-        } else {
-            alert('❌ Ошибка оформления заказа');
+    // Добавляем заказ в общий список
+    data.orders = data.orders || [];
+    data.orders.unshift(newOrder);
+    
+    // Если пользователь авторизован, добавляем заказ в его личный список
+    if (currentUser) {
+        const users = data.users || [];
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        if (userIndex !== -1) {
+            users[userIndex].orders = users[userIndex].orders || [];
+            users[userIndex].orders.unshift({
+                id: newOrder.id,
+                date: newOrder.date,
+                items: cart,
+                total: total,
+                status: 'Новый',
+                address: address
+            });
+            data.users = users;
         }
-    } catch(e) {
-        alert('❌ Ошибка соединения');
     }
+    
+    await saveData(data);
+    
+    // Очищаем корзину
+    localStorage.removeItem('estetica_cart');
+    renderCart();
+    updateCartCount();
+    
+    // Очищаем форму
+    document.querySelectorAll('#orderSection input').forEach(i => i.value = '');
+    
+    alert(`🌿 Заказ оформлен!\nСумма: ${total} ₽\nСкоро с вами свяжутся!`);
+    showToast(`Заказ на ${total} ₽ оформлен!`);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

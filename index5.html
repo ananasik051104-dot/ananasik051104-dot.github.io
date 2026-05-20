@@ -70,20 +70,22 @@
 </div>
 
 <script>
-const API_URL =  'https://script.google.com/macros/s/AKfycbzEgNhCcdxpvta4IuQCO1nQ5SsJGK9dtOLD5UpRIzi_EpLmuvLROvzsov6acMbuKyilig/exec';
+const BIN_ID = '6a0e46146877513b27a708ce';
+const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-async function sendMessage(data) {
-    try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'createMessage', ...data })
-        });
-        return await response.json();
-    } catch(e) {
-        console.error('Error:', e);
-        return { success: false };
-    }
+async function getData() {
+    const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+    const data = await res.json();
+    return data.record || { users: [], orders: [], messages: [] };
+}
+
+async function saveData(data) {
+    await fetch(API_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+        body: JSON.stringify(data)
+    });
 }
 
 function showToast(m) {
@@ -108,15 +110,22 @@ document.getElementById('contactForm')?.addEventListener('submit', async (e) => 
         return;
     }
     
-    const result = await sendMessage({ name, email, phone, message });
+    const data = await getData();
+    data.messages = data.messages || [];
+    data.messages.unshift({
+        id: Date.now(),
+        date: new Date().toLocaleString('ru-RU'),
+        name: name,
+        email: email,
+        phone: phone,
+        message: message
+    });
     
-    if (result.success) {
-        alert(`🌸 Спасибо, ${name}! Ваше сообщение отправлено.`);
-        showToast('✅ Сообщение отправлено!');
-        document.getElementById('contactForm').reset();
-    } else {
-        alert('❌ Ошибка отправки. Попробуйте позже.');
-    }
+    await saveData(data);
+    
+    alert(`🌸 Спасибо, ${name}! Ваше сообщение отправлено.`);
+    showToast('✅ Сообщение отправлено!');
+    document.getElementById('contactForm').reset();
 });
 </script>
 </body>
