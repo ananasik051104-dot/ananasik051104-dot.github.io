@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет | Estética</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #D56989;
+            font-family: 'Poiret One', cursive;
+            padding: 32px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #F3EEF1;
+            border-radius: 32px;
+            padding: 32px;
+        }
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #C2DC80;
+            margin-bottom: 28px;
+            border-left: 5px solid #C2DC80;
+            padding-left: 18px;
+        }
+        .header-area {
+            background: linear-gradient(rgba(153,86,113,0.5), rgba(153,86,113,0.5)), 
+                        url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');
+            background-size: cover;
+            border-radius: 28px;
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .nav-link {
+            font-family: 'Poiret One', cursive;
+            font-size: 1rem;
+            letter-spacing: 1.5px;
+            color: #C2DC80;
+            text-decoration: none;
+            padding: 0.3rem 0.8rem;
+            text-transform: uppercase;
+        }
+        /* Профиль */
+        .profile-card {
+            background: #D56989;
+            border-radius: 24px;
+            padding: 25px;
+            text-align: center;
+            color: #F3EEF1;
+            margin-bottom: 25px;
+        }
+        .avatar {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+        .profile-name {
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .profile-email {
+            opacity: 0.8;
+            margin: 5px 0;
+        }
+        .edit-btn, .logout-btn {
+            background: #F3EEF1;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 10px;
+            color: #D56989;
+            margin: 10px 5px 0 5px;
+        }
+        .logout-btn {
+            background: #C2DC80;
+            color: #D56989;
+        }
+        /* Формы входа/регистрации */
+        .auth-card {
+            background: #D56989;
+            border-radius: 24px;
+            padding: 30px;
+            color: #F3EEF1;
+            margin-bottom: 25px;
+        }
+        .auth-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 40px;
+            font-family: inherit;
+            font-size: 16px;
+            background: #F3EEF1;
+            color: #D56989;
+        }
+        .auth-btn {
+            background: #C2DC80;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 40px;
+            font-family: inherit;
+            font-size: 18px;
+            cursor: pointer;
+            color: #D56989;
+            margin-top: 10px;
+        }
+        .switch-auth {
+            margin-top: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        /* Вкладки */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 18px;
+            cursor: pointer;
+            color: #D56989;
+            border-bottom: 2px solid transparent;
+        }
+        .tab.active {
+            border-bottom-color: #C2DC80;
+            color: #C2DC80;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Заказы */
+        .order-item {
+            background: #F3EEF1;
+            border: 1px solid #D56989;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .order-status {
+            background: #D56989;
+            color: #F3EEF1;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        .order-details {
+            font-size: 14px;
+            color: #D56989;
+        }
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #D56989;
+        }
+        /* Адреса */
+        .address-item {
+            background: #F3EEF1;
+            border: 1px solid #D56989;
+            border-radius: 16px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .add-addr {
+            background: #D56989;
+            color: #F3EEF1;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .remove-btn {
+            background: #D56989;
+            color: #F3EEF1;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header-area">
+        <a href="index.html" class="nav-link">ГЛАВНАЯ</a>
+        <a href="index2.html" class="nav-link">КАТАЛОГ</a>
+        <a href="index5.html" class="nav-link">КОНТАКТЫ</a>
+        <a href="index3.html" class="nav-link">КОРЗИНА</a>
+        <a href="index4.html" class="nav-link">КАБИНЕТ</a>
+    </div>
+
+    <h1 class="title">Личный кабинет</h1>
+
+    <!-- Блок авторизации / профиля -->
+    <div id="authBlock"></div>
+
+    <!-- Блок с вкладками (показывается только когда пользователь вошёл) -->
+    <div id="userPanel" style="display: none;">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('orders')">📦 Заказы</button>
+            <button class="tab" onclick="showTab('addresses')">🏠 Адреса</button>
+        </div>
+
+        <div id="tab-orders" class="tab-content active">
+            <div id="ordersList"></div>
+        </div>
+        <div id="tab-addresses" class="tab-content">
+            <div id="addressesList"></div>
+            <button class="add-addr" onclick="addAddress()">+ Добавить адрес</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===== РАБОТА С ПОЛЬЗОВАТЕЛЯМИ =====
+    // Получить список всех пользователей
+    function getUsers() {
+        return JSON.parse(localStorage.getItem('estetica_users') || '[]');
+    }
+
+    // Сохранить список пользователей
+    function saveUsers(users) {
+        localStorage.setItem('estetica_users', JSON.stringify(users));
+    }
+
+    // Получить текущего вошедшего пользователя
+    function getCurrentUser() {
+        return JSON.parse(localStorage.getItem('estetica_current_user') || 'null');
+    }
+
+    // Сохранить текущего пользователя
+    function setCurrentUser(user) {
+        if (user) {
+            localStorage.setItem('estetica_current_user', JSON.stringify(user));
+        } else {
+            localStorage.removeItem('estetica_current_user');
+        }
+    }
+
+    // Регистрация
+    function register(email, password, name) {
+        let users = getUsers();
+        // Проверка, существует ли пользователь
+        if (users.find(u => u.email === email)) {
+            alert('❌ Пользователь с таким email уже существует!');
+            return false;
+        }
+        // Создаём нового пользователя
+        const newUser = {
+            id: Date.now(),
+            email: email,
+            password: password,
+            name: name || email.split('@')[0],
+            phone: 'не указан',
+            addresses: ['Москва, ул. Нансена, 1'],
+            orders: []
+        };
+        users.push(newUser);
+        saveUsers(users);
+        
+        // Автоматически входим после регистрации
+        setCurrentUser(newUser);
+        alert('✅ Регистрация успешна! Добро пожаловать!');
+        return true;
+    }
+
+    // Вход
+    function login(email, password) {
+        const users = getUsers();
+        const user = users.find(u => u.email === email && u.password === password);
+        if (user) {
+            setCurrentUser(user);
+            alert(`🌸 Добро пожаловать, ${user.name}!`);
+            return true;
+        } else {
+            alert('❌ Неверный email или пароль!');
+            return false;
+        }
+    }
+
+    // Выход
+    function logout() {
+        setCurrentUser(null);
+        alert('👋 Вы вышли из аккаунта');
+        renderAuthScreen();
+    }
+
+    // Обновление данных пользователя
+    function updateUserData(updates) {
+        const currentUser = getCurrentUser();
+        if (!currentUser) return;
+        
+        let users = getUsers();
+        const index = users.findIndex(u => u.id === currentUser.id);
+        if (index !== -1) {
+            users[index] = { ...users[index], ...updates };
+            saveUsers(users);
+            setCurrentUser(users[index]);
+        }
+    }
+
+    // Добавление заказа пользователю
+    function addOrderToUser(order) {
+        const currentUser = getCurrentUser();
+        if (!currentUser) return;
+        
+        let users = getUsers();
+        const index = users.findIndex(u => u.id === currentUser.id);
+        if (index !== -1) {
+            users[index].orders = users[index].orders || [];
+            users[index].orders.unshift(order);
+            saveUsers(users);
+            setCurrentUser(users[index]);
+        }
+    }
+
+    // ===== ОТОБРАЖЕНИЕ =====
+    function renderAuthScreen() {
+        const currentUser = getCurrentUser();
+        const authBlock = document.getElementById('authBlock');
+        const userPanel = document.getElementById('userPanel');
+        
+        if (!currentUser) {
+            // Показываем форму входа/регистрации
+            authBlock.innerHTML = `
+                <div class="auth-card">
+                    <div id="authForm">
+                        <h3>🌸 Вход</h3>
+                        <input type="email" id="loginEmail" class="auth-input" placeholder="Email">
+                        <input type="password" id="loginPassword" class="auth-input" placeholder="Пароль">
+                        <button class="auth-btn" onclick="doLogin()">Войти</button>
+                        <div class="switch-auth" onclick="showRegisterForm()">Нет аккаунта? Зарегистрироваться</div>
+                    </div>
+                </div>
+            `;
+            userPanel.style.display = 'none';
+        } else {
+            // Показываем профиль пользователя
+            authBlock.innerHTML = `
+                <div class="profile-card">
+                    <div class="avatar">🌸</div>
+                    <div class="profile-name" id="userName">${currentUser.name}</div>
+                    <div class="profile-email" id="userEmail">${currentUser.email}</div>
+                    <div class="profile-email" id="userPhone">📞 ${currentUser.phone || 'не указан'}</div>
+                    <button class="edit-btn" onclick="editProfile()">✎ Редактировать</button>
+                    <button class="logout-btn" onclick="logout()">🚪 Выйти</button>
+                </div>
+            `;
+            userPanel.style.display = 'block';
+            loadOrders();
+            loadAddresses();
+        }
+    }
+
+    function showRegisterForm() {
+        const authForm = document.getElementById('authForm');
+        authForm.innerHTML = `
+            <h3>🌸 Регистрация</h3>
+            <input type="text" id="regName" class="auth-input" placeholder="Ваше имя">
+            <input type="email" id="regEmail" class="auth-input" placeholder="Email">
+            <input type="password" id="regPassword" class="auth-input" placeholder="Пароль">
+            <button class="auth-btn" onclick="doRegister()">Зарегистрироваться</button>
+            <div class="switch-auth" onclick="showLoginForm()">Уже есть аккаунт? Войти</div>
+        `;
+    }
+
+    function showLoginForm() {
+        const authForm = document.getElementById('authForm');
+        authForm.innerHTML = `
+            <h3>🌸 Вход</h3>
+            <input type="email" id="loginEmail" class="auth-input" placeholder="Email">
+            <input type="password" id="loginPassword" class="auth-input" placeholder="Пароль">
+            <button class="auth-btn" onclick="doLogin()">Войти</button>
+            <div class="switch-auth" onclick="showRegisterForm()">Нет аккаунта? Зарегистрироваться</div>
+        `;
+    }
+
+    window.doLogin = function() {
+        const email = document.getElementById('loginEmail')?.value;
+        const password = document.getElementById('loginPassword')?.value;
+        if (email && password) {
+            if (login(email, password)) {
+                renderAuthScreen();
+            }
+        } else {
+            alert('Заполните все поля!');
+        }
+    }
+
+    window.doRegister = function() {
+        const name = document.getElementById('regName')?.value;
+        const email = document.getElementById('regEmail')?.value;
+        const password = document.getElementById('regPassword')?.value;
+        if (name && email && password) {
+            if (register(email, password, name)) {
+                renderAuthScreen();
+            }
+        } else {
+            alert('Заполните все поля!');
+        }
+    }
+
+    // Редактирование профиля
+    window.editProfile = function() {
+        const currentUser = getCurrentUser();
+        if (!currentUser) return;
+        
+        const newName = prompt('Введите ваше имя:', currentUser.name);
+        const newPhone = prompt('Введите ваш телефон:', currentUser.phone || '');
+        
+        if (newName || newPhone) {
+            const updates = {};
+            if (newName) updates.name = newName;
+            if (newPhone) updates.phone = newPhone;
+            updateUserData(updates);
+            renderAuthScreen();
+            alert('✅ Профиль обновлён!');
+        }
+    }
+
+    // Загрузка заказов пользователя
+    function loadOrders() {
+        const currentUser = getCurrentUser();
+        const container = document.getElementById('ordersList');
+        
+        if (!currentUser || !currentUser.orders || currentUser.orders.length === 0) {
+            container.innerHTML = '<div class="empty">📦 У вас пока нет заказов<br><a href="index2.html" style="color:#D56989;">Перейти в каталог</a></div>';
+            return;
+        }
+        
+        container.innerHTML = currentUser.orders.map(order => `
+            <div class="order-item">
+                <div class="order-header">
+                    <span>📅 ${order.date}</span>
+                    <span class="order-status">${order.status}</span>
+                </div>
+                <div class="order-details">
+                    ${order.items.map(i => `${i.name} x ${i.quantity}`).join(', ')}
+                </div>
+                <div class="order-details">💰 ${order.total} р | 🚚 ${order.address}</div>
+            </div>
+        `).join('');
+    }
+
+    // Загрузка адресов пользователя
+    function loadAddresses() {
+        const currentUser = getCurrentUser();
+        const container = document.getElementById('addressesList');
+        
+        const addresses = currentUser?.addresses || ['Москва, ул. Нансена, 1'];
+        container.innerHTML = addresses.map((addr, i) => `
+            <div class="address-item">
+                <span>🏠 ${addr}</span>
+                <button class="remove-btn" onclick="deleteAddress(${i})">🗑 Удалить</button>
+            </div>
+        `).join('');
+    }
+
+    // Добавление адреса
+    window.addAddress = function() {
+        const currentUser = getCurrentUser();
+        if (!currentUser) return;
+        
+        const newAddr = prompt('Введите новый адрес доставки:');
+        if (newAddr && newAddr.trim()) {
+            const addresses = [...(currentUser.addresses || []), newAddr.trim()];
+            updateUserData({ addresses: addresses });
+            loadAddresses();
+        }
+    }
+
+    // Удаление адреса
+    window.deleteAddress = function(index) {
+        const currentUser = getCurrentUser();
+        if (!currentUser) return;
+        
+        const addresses = [...(currentUser.addresses || [])];
+        addresses.splice(index, 1);
+        updateUserData({ addresses: addresses });
+        loadAddresses();
+    }
+
+    // Вкладки
+    window.showTab = function(tabName) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+        if (tabName === 'orders') loadOrders();
+        if (tabName === 'addresses') loadAddresses();
+    }
+
+    // Инициализация
+    renderAuthScreen();
+</script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estética | Цветочная мастерская</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poiret One', cursive;
+            background: #D56989;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Главный блок */
+        .main-frame {
+            max-width: 1300px;
+            width: 100%;
+            background: #F3EEF1;
+            padding: 30px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+        }
+
+        /* Шапка с фоновым изображением */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 25px 30px;
+            background-image: url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            position: relative;
+            border-radius: 12px;
+        }
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(153, 86, 113, 0.502);
+            border-radius: 12px;
+        }
+        .logo, .nav {
+            position: relative;
+            z-index: 1;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: 600;
+            color: #C2DC80;
+            text-decoration: none;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+        .logo:hover { color: #C2DC80; }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .nav a {
+            color: #C2DC80;
+            text-decoration: none;
+            font-size: 20px;
+            transition: 0.2s;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .nav a:hover { color: #C2DC80; }
+
+        /* Герой с фото */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background-image: url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            margin-bottom: 25px;
+            border-radius: 12px;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(153, 86, 113, 0.502);
+            border-radius: 12px;
+        }
+        .hero h1, .hero p { position: relative; z-index: 1; }
+        .hero h1 {
+            font-size: 54px;
+            color: #C2DC80;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        .hero p {
+            font-size: 22px;
+            color: #C2DC80;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+        }
+
+        /* Линия */
+        .line {
+            width: 100%;
+            height: 3px;
+            background: #C2DC80;
+            margin: 30px 0;
+            opacity: 0.5;
+        }
+
+        /* Заголовки секций */
+        .section-title {
+            text-align: center;
+            font-size: 38px;
+            color: #D56989;
+            margin-bottom: 40px;
+        }
+
+        /* Сетка */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        /* Карточки */
+        .card {
+            background: 0;
+            padding: 25px 20px;
+            text-align: center;
+            transition: 0.3s;
+            border-radius: 8px;
+        }
+        .card:hover { transform: translateY(-5px); background: #C2DC80; }
+
+        .card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+        .card h3 {
+            font-size: 24px;
+            color: #D56989;
+            margin: 10px 0;
+        }
+        .price {
+            font-size: 28px;
+            color: #D56989;
+            margin: 15px 0;
+        }
+        /* Кнопка удалена — больше нет */
+
+        /* Блок "О нас" */
+        .about {
+            text-align: center;
+            padding: 20px;
+        }
+        .about h2 {
+            font-size: 46px;
+            color: #D56989;
+            margin-bottom: 15px;
+        }
+        .about p {
+            font-size: 26px;
+            color: #D56989;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Контакты */
+        .contact-item .label { font-size: 18px; color: #D56989; }
+        .contact-item .value { font-size: 20px; color: #D56989; margin-top: 5px; }
+        .contact-item a { color: #D56989; text-decoration: none; border-bottom: 1px dotted #c18292; }
+
+        /* НИЖНИЙ БЛОК С ФОНОМ (философия + соцсети) */
+        .bottom-block {
+            background-image: url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border-radius: 12px;
+            margin-top: 15px;
+            padding: 30px 20px 20px;
+        }
+        .bottom-block::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(153, 86, 113, 0.502);
+            border-radius: 12px;
+        }
+        .bottom-block > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Философия внутри блока с фоном */
+        .footer-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            color: #C2DC80;
+            margin: 15px 0 30px;
+            font-size: 18px;
+        }
+        .footer-info span {
+            transition: 0.2s;
+        }
+        .footer-info span:hover {
+            color: #C2DC80;
+        }
+
+        /* Подвал с соцсетями внутри блока с фоном */
+        .footer {
+            text-align: center;
+            padding: 10px 0 10px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .social-link {
+            color: #C2DC80;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 6px 18px;
+            background: 0;
+            border-radius: 40px;
+            transition: 0.2s;
+        }
+        .social-link:hover {
+            background: rgba(193,130,146,0.35);
+            color: #C2DC80;
+            transform: translateY(-2px);
+        }
+        .copyright {
+            font-size: 15px;
+            color: #C2DC80;
+            letter-spacing: 1px;
+        }
+
+        /* Адаптив */
+        @media (max-width: 700px) {
+            .main-frame { padding: 20px; }
+            .hero h1 { font-size: 38px; }
+            .hero { padding: 60px 15px; }
+            .section-title { font-size: 30px; }
+            .about h2 { font-size: 32px; }
+            .about p { font-size: 18px; }
+            .card img { height: 200px; }
+            .header { padding: 18px 20px; }
+            .logo { font-size: 28px; }
+            .nav a { font-size: 16px; }
+            .footer-info { gap: 20px; font-size: 16px; }
+            .social-link { font-size: 17px; padding: 5px 14px; }
+        }
+        @media (max-width: 550px) {
+            .header { flex-direction: column; text-align: center; }
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 18px; }
+            .footer-info { flex-direction: column; gap: 10px; text-align: center; }
+            .social-links { gap: 15px; }
+            .social-link { font-size: 15px; padding: 4px 12px; }
+            .copyright { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-frame">
+        <!-- Шапка с фоновым изображением -->
+        <div class="header">
+            <a href="index.html" class="logo">Estética</a>
+            <div class="nav">
+                <a href="index.html">ГЛАВНАЯ</a>
+                <a href="index2.html">КАТАЛОГ</a>
+                <a href="index5.html">КОНТАКТЫ</a>
+                <a href="index3.html">КОРЗИНА</a>
+                <a href="index4.html">ЛИЧНЫЙ КАБИНЕТ</a>
+            </div>
+        </div>
+
+        <!-- Герой с фото -->
+        <div class="hero">
+            <h1>Создаём любовь через цветы</h1>
+            <p>Цветы, которые не забываются</p>
+        </div>
+
+        <div class="line"></div>
+
+        <!-- О нас -->
+        <div class="about">
+            <h2>Больше чем просто цветы</h2>
+            <p><strong>Estética</strong> - не просто цветочный магазин<br>Цветочная мастерская поможет реализовать ваши самые смелые флористические пожелания</p>
+        </div>
+
+        <div class="line"></div>
+
+        <!-- Товары (кнопки "Выбрать" удалены) -->
+        <div class="section-title">Наши товары</div>
+        <div class="grid">
+            <div class="card">
+                <img src="https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg" alt="Страсть">
+                <div class="price">2500 р</div>
+            </div>
+            <div class="card">
+                <img src="https://i.pinimg.com/1200x/4e/e6/72/4ee672c55ef157043075a4a79112d337.jpg" alt="Вопреки канонам">
+                <div class="price">3000 р</div>
+            </div>
+            <div class="card">
+                <img src="https://i.pinimg.com/736x/11/3a/01/113a012a6475e2ccdd0146aa0567915b.jpg" alt="Обещание любви">
+                <div class="price">2000 р</div>
+            </div>
+        </div>
+
+        <div class="line"></div>
+
+        <!-- Контакты -->
+        <div class="section-title">Контакты</div>
+        <div class="grid">
+            <div class="card contact-item"><div class="label">📍 Адрес</div><div class="value">Темерницкая ул. 93/33</div></div>
+            <div class="card contact-item"><div class="label">🕒 Часы работы</div><div class="value">Ежедневно, 09:00–21:00</div></div>
+            <div class="card contact-item"><div class="label">📞 Телефон</div><div class="value"><a href="tel:+79381112274">+7 (938) 111-22-74</a></div></div>
+        </div>
+
+        <div class="line"></div>
+
+        <!-- НИЖНИЙ БЛОК С ФОНОВЫМ ИЗОБРАЖЕНИЕМ (философия + соцсети) -->
+        <div class="bottom-block">
+            <div class="footer-info">
+                <span>✦ Цветы, которых нет у других</span>
+                <span>✦ Эксклюзив в каждом стебле</span>
+                <span>✦ Скажут больше, чем слова</span>
+            </div>
+
+            <div class="footer">
+                <div class="social-links">
+                    <a href="https://vk.com" target="_blank" class="social-link">📘 ВКонтакте</a>
+                    <a href="https://instagram.com" target="_blank" class="social-link">📷 Instagram</a>
+                    <a href="https://wa.me/79381112274" target="_blank" class="social-link">💬 WhatsApp</a>
+                </div>
+                <div class="copyright">© 2026 Estética — Цветочная мастерская</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

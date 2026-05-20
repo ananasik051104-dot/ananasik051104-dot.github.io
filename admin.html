@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель | Estética</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #D56989;
+            font-family: 'Poiret One', cursive;
+            padding: 32px 20px;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: #F3EEF1;
+            border-radius: 32px;
+            padding: 32px;
+        }
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #C2DC80;
+            margin-bottom: 28px;
+            border-left: 5px solid #C2DC80;
+            padding-left: 18px;
+        }
+        .header-area {
+            background: linear-gradient(rgba(153,86,113,0.5), rgba(153,86,113,0.5)), 
+                        url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');
+            background-size: cover;
+            border-radius: 28px;
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 600;
+            color: #C2DC80;
+            text-decoration: none;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .nav-link {
+            font-family: 'Poiret One', cursive;
+            font-size: 1rem;
+            letter-spacing: 1.5px;
+            color: #C2DC80;
+            text-decoration: none;
+            padding: 0.3rem 0.8rem;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        .nav-link:hover {
+            background: #C2DC80;
+            color: #D56989;
+            border-radius: 40px;
+        }
+        /* Форма входа в админку */
+        .login-form {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #D56989;
+            padding: 30px;
+            border-radius: 24px;
+            text-align: center;
+            color: #F3EEF1;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 40px;
+            font-family: inherit;
+            font-size: 16px;
+            background: #F3EEF1;
+            color: #D56989;
+        }
+        .login-form button {
+            background: #C2DC80;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 40px;
+            font-family: inherit;
+            font-size: 18px;
+            cursor: pointer;
+            color: #D56989;
+            margin-top: 10px;
+        }
+        /* Статистика */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #D56989;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            color: #F3EEF1;
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        /* Таблица заказов */
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto;
+            display: block;
+        }
+        .orders-table th, .orders-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #C2DC80;
+            text-align: left;
+            vertical-align: top;
+        }
+        .orders-table th {
+            background: #C2DC80;
+            color: #D56989;
+            font-weight: bold;
+        }
+        .status-select {
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .status-new { background: #ff6b6b; color: white; }
+        .status-processing { background: #ffa502; color: white; }
+        .status-delivered { background: #2ed573; color: white; }
+        .status-cancelled { background: #747d8c; color: white; }
+        .delete-order {
+            background: none;
+            border: none;
+            color: #D56989;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .logout-admin {
+            background: #D56989;
+            color: #F3EEF1;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .section-title {
+            font-size: 24px;
+            color: #D56989;
+            margin: 30px 0 15px 0;
+        }
+        @media (max-width: 700px) {
+            .container { padding: 20px; }
+            .header-area { flex-direction: column; text-align: center; }
+            .orders-table { font-size: 12px; }
+            .orders-table th, .orders-table td { padding: 8px 4px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header-area">
+        <a href="index.html" class="logo">Estética Админ</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">ГЛАВНАЯ</a>
+            <a href="index2.html" class="nav-link">КАТАЛОГ</a>
+            <a href="index5.html" class="nav-link">КОНТАКТЫ</a>
+            <a href="index3.html" class="nav-link">КОРЗИНА</a>
+            <a href="index4.html" class="nav-link">КАБИНЕТ</a>
+        </div>
+    </div>
+
+    <h1 class="title">👑 Админ-панель</h1>
+
+    <div id="adminContent">
+        <!-- Здесь будет форма входа или панель управления -->
+    </div>
+</div>
+
+<script>
+    // Пароль для входа (можно изменить)
+    const ADMIN_PASSWORD = "admin123";
+    const ADMIN_KEY = "estetica_admin_logged_in";
+
+    // Функции для работы с данными
+    function getUsers() {
+        return JSON.parse(localStorage.getItem('estetica_users') || '[]');
+    }
+
+    function saveUsers(users) {
+        localStorage.setItem('estetica_users', JSON.stringify(users));
+    }
+
+    function getGuestOrders() {
+        return JSON.parse(localStorage.getItem('estetica_guest_orders') || '[]');
+    }
+
+    function saveGuestOrders(orders) {
+        localStorage.setItem('estetica_guest_orders', JSON.stringify(orders));
+    }
+
+    function getContactMessages() {
+        return JSON.parse(localStorage.getItem('estetica_contact_messages') || '[]');
+    }
+
+    // Проверка авторизации админа
+    function isAdminLoggedIn() {
+        return localStorage.getItem(ADMIN_KEY) === 'true';
+    }
+
+    function adminLogin() {
+        localStorage.setItem(ADMIN_KEY, 'true');
+        renderAdminPanel();
+    }
+
+    function adminLogout() {
+        localStorage.removeItem(ADMIN_KEY);
+        renderAdminPanel();
+    }
+
+    // Получение всех заказов (пользователи + гости)
+    function getAllOrders() {
+        const users = getUsers();
+        const guestOrders = getGuestOrders();
+        
+        let allOrders = [];
+        
+        // Заказы зарегистрированных пользователей
+        users.forEach(user => {
+            if (user.orders && user.orders.length > 0) {
+                user.orders.forEach(order => {
+                    allOrders.push({
+                        ...order,
+                        userEmail: user.email,
+                        userName: user.name,
+                        userType: 'Зарегистрированный'
+                    });
+                });
+            }
+        });
+        
+        // Гостевые заказы
+        guestOrders.forEach(order => {
+            allOrders.push({
+                ...order,
+                userEmail: 'Гость',
+                userName: order.customerName || 'Гость',
+                userType: 'Гость'
+            });
+        });
+        
+        // Сортируем по дате (новые сверху)
+        allOrders.sort((a, b) => b.id - a.id);
+        
+        return allOrders;
+    }
+
+    // Обновление статуса заказа
+    function updateOrderStatus(orderId, newStatus) {
+        let users = getUsers();
+        let updated = false;
+        
+        // Ищем в заказах пользователей
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].orders) {
+                const orderIndex = users[i].orders.findIndex(o => o.id == orderId);
+                if (orderIndex !== -1) {
+                    users[i].orders[orderIndex].status = newStatus;
+                    updated = true;
+                    break;
+                }
+            }
+        }
+        
+        if (updated) {
+            saveUsers(users);
+        } else {
+            // Ищем в гостевых заказах
+            let guestOrders = getGuestOrders();
+            const orderIndex = guestOrders.findIndex(o => o.id == orderId);
+            if (orderIndex !== -1) {
+                guestOrders[orderIndex].status = newStatus;
+                saveGuestOrders(guestOrders);
+            }
+        }
+        
+        renderAdminPanel();
+    }
+
+    // Удаление заказа
+    function deleteOrder(orderId) {
+        if (!confirm('Удалить этот заказ?')) return;
+        
+        let users = getUsers();
+        let deleted = false;
+        
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].orders) {
+                const originalLength = users[i].orders.length;
+                users[i].orders = users[i].orders.filter(o => o.id != orderId);
+                if (users[i].orders.length !== originalLength) {
+                    deleted = true;
+                    break;
+                }
+            }
+        }
+        
+        if (deleted) {
+            saveUsers(users);
+        } else {
+            let guestOrders = getGuestOrders();
+            guestOrders = guestOrders.filter(o => o.id != orderId);
+            saveGuestOrders(guestOrders);
+        }
+        
+        renderAdminPanel();
+    }
+
+    // Статистика
+    function getStats() {
+        const allOrders = getAllOrders();
+        const totalOrders = allOrders.length;
+        const totalRevenue = allOrders.reduce((sum, order) => sum + (order.total || 0), 0);
+        const newOrders = allOrders.filter(o => o.status === '🟢 Новый' || o.status === 'Новый').length;
+        const usersCount = getUsers().length;
+        
+        return { totalOrders, totalRevenue, newOrders, usersCount };
+    }
+
+    // Рендер админ-панели
+    function renderAdminPanel() {
+        const container = document.getElementById('adminContent');
+        
+        if (!isAdminLoggedIn()) {
+            // Форма входа
+            container.innerHTML = `
+                <div class="login-form">
+                    <h3>🔐 Вход в админ-панель</h3>
+                    <input type="password" id="adminPassword" placeholder="Введите пароль">
+                    <button onclick="checkAdminPassword()">Войти</button>
+                </div>
+            `;
+            return;
+        }
+        
+        // Админ-панель
+        const stats = getStats();
+        const allOrders = getAllOrders();
+        const messages = getContactMessages();
+        
+        container.innerHTML = `
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+                <button class="logout-admin" onclick="adminLogout()">🚪 Выйти из админки</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">${stats.totalOrders}</div>
+                    <div class="stat-label">📦 Всего заказов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.newOrders}</div>
+                    <div class="stat-label">🟢 Новых заказов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.totalRevenue} ₽</div>
+                    <div class="stat-label">💰 Общая выручка</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.usersCount}</div>
+                    <div class="stat-label">👥 Пользователей</div>
+                </div>
+            </div>
+            
+            <div class="section-title">📋 Все заказы</div>
+            ${allOrders.length === 0 ? '<p style="text-align:center; color:#D56989;">Заказов пока нет</p>' : `
+                <table class="orders-table">
+                    <thead>
+                        <tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Телефон</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                        ${allOrders.map(order => `
+                            <tr>
+                                <td>${order.id}</td>
+                                <td>${order.date}</td>
+                                <td>${order.customerName || order.userName}<br><small>${order.userEmail}</small></td>
+                                <td>${order.customerPhone || '-'}</td>
+                                <td>${order.items.map(i => `${i.name} x${i.quantity}`).join('<br>')}</td>
+                                <td>${order.total} ₽</td>
+                                <td>
+                                    <select class="status-select" onchange="updateOrderStatus(${order.id}, this.value)" style="background: ${getStatusColor(order.status)}; color:white;">
+                                        <option value="🟢 Новый" ${order.status === '🟢 Новый' ? 'selected' : ''}>🟢 Новый</option>
+                                        <option value="🟡 В обработке" ${order.status === '🟡 В обработке' ? 'selected' : ''}>🟡 В обработке</option>
+                                        <option value="✅ Доставлен" ${order.status === '✅ Доставлен' ? 'selected' : ''}>✅ Доставлен</option>
+                                        <option value="❌ Отменён" ${order.status === '❌ Отменён' ? 'selected' : ''}>❌ Отменён</option>
+                                    </select>
+                                </td>
+                                <td>${order.address || '-'}</td>
+                                <td><button class="delete-order" onclick="deleteOrder(${order.id})">🗑</button></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `}
+            
+            <div class="section-title">✉️ Сообщения из формы контактов</div>
+            ${messages.length === 0 ? '<p style="text-align:center; color:#D56989;">Сообщений пока нет</p>' : `
+                <table class="orders-table">
+                    <thead>
+                        <tr><th>Дата</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Сообщение</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                        ${messages.map(msg => `
+                            <tr>
+                                <td>${msg.date}</td>
+                                <td>${msg.name}</td>
+                                <td>${msg.email}</td>
+                                <td>${msg.phone}</td>
+                                <td style="max-width:300px;">${msg.message}</td>
+                                <td><button class="delete-order" onclick="deleteMessage(${msg.id})">🗑</button></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `}
+        `;
+    }
+
+    function getStatusColor(status) {
+        if (status === '🟢 Новый') return '#ff6b6b';
+        if (status === '🟡 В обработке') return '#ffa502';
+        if (status === '✅ Доставлен') return '#2ed573';
+        return '#747d8c';
+    }
+
+    function deleteMessage(messageId) {
+        if (!confirm('Удалить сообщение?')) return;
+        let messages = getContactMessages();
+        messages = messages.filter(m => m.id != messageId);
+        localStorage.setItem('estetica_contact_messages', JSON.stringify(messages));
+        renderAdminPanel();
+    }
+
+    window.checkAdminPassword = function() {
+        const password = document.getElementById('adminPassword')?.value;
+        if (password === ADMIN_PASSWORD) {
+            adminLogin();
+        } else {
+            alert('❌ Неверный пароль!');
+        }
+    }
+
+    // Обновляем ссылки на функции для глобального доступа
+    window.updateOrderStatus = updateOrderStatus;
+    window.deleteOrder = deleteOrder;
+    window.deleteMessage = deleteMessage;
+
+    // Инициализация
+    renderAdminPanel();
+</script>
+</body>
+</html>
