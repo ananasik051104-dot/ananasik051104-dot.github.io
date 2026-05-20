@@ -43,8 +43,8 @@
         .product-card h3{font-size:1.5rem;color:#D56989;text-transform:uppercase}
         .product-card p{font-family:system-ui;font-size:.8rem;color:#5b3b45;margin:.5rem 0}
         .price{font-size:1.3rem;font-weight:bold;color:#D56989;border-top:1px dashed #D56989;padding-top:.5rem;margin:.5rem auto}
-        .product-card button{font-family:inherit;font-size:1rem;font-weight:bold;color:#F3EEF1;background:#D56989;border:none;padding:.5rem;cursor:pointer;width:80%;margin:0 auto;text-transform:uppercase}
-        .product-card button:hover{background:#b84d6e}
+        .product-card button{font-family:inherit;font-size:1rem;font-weight:bold;color:#F3EEF1;background:#D56989;border:none;padding:.5rem;cursor:pointer;width:80%;margin:0 auto;text-transform:uppercase;transition:.2s}
+        .product-card button:hover{background:#b84d6e;transform:scale(1.02)}
         .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:40px;padding:30px 20px 20px;position:relative}
         .footer-info{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;color:#C2DC80;margin:15px 0 30px;font-size:18px}
         .social-links{display:flex;justify-content:center;gap:35px;flex-wrap:wrap;margin-bottom:20px}
@@ -112,119 +112,69 @@
 </div>
 
 <script>
-// ==================== ТОВАРЫ (40 шт) ====================
-const products = [
-    // Яркие (12)
-    {id:1,name:"Марсала",price:3500,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Роскошные гортензии",cat:"bright"},
-    {id:2,name:"Пламя страсти",price:4200,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Ярко-красные розы",cat:"bright"},
-    {id:3,name:"Солнечный закат",price:3800,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Оранжевые розы",cat:"bright"},
-    {id:4,name:"Розовый фламинго",price:3100,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Ярко-розовые пионы",cat:"bright"},
-    {id:5,name:"Красный квадрат",price:4000,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Алые розы",cat:"bright"},
-    {id:6,name:"Манго",price:2900,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Желто-оранжевая",cat:"bright"},
-    {id:7,name:"Фуксия",price:3400,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Яркие цветы фуксии",cat:"bright"},
-    {id:8,name:"Тропиканка",price:4600,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Экзотические цветы",cat:"bright"},
-    {id:9,name:"Коралл",price:3300,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Коралловый букет",cat:"bright"},
-    {id:10,name:"Малибу",price:3900,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Малиновый букет",cat:"bright"},
-    {id:11,name:"Карнавал",price:3700,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Разноцветный",cat:"bright"},
-    {id:12,name:"Апельсин",price:2600,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Цитрусовый букет",cat:"bright"},
-    // Нежные (11)
-    {id:13,name:"Утренняя роса",price:2800,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Кремово-белые пионы",cat:"gentle"},
-    {id:14,name:"Лавандовый бриз",price:1800,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Лаванда и эвкалипт",cat:"gentle"},
-    {id:15,name:"Персиковый сон",price:3200,img:"https://i.pinimg.com/1200x/8f/88/a9/8f88a96b3dc7115e5696434d41d2412c.jpg",desc:"Персиковые розы",cat:"gentle"},
-    {id:16,name:"Облако",price:2600,img:"https://i.pinimg.com/1200x/59/5e/26/595e26df6c21b9d5bd535b96c21ed0ed.jpg",desc:"Белые хризантемы",cat:"gentle"},
-    {id:17,name:"Невеста",price:4500,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Свадебный букет",cat:"gentle"},
-    {id:18,name:"Жемчужина",price:3600,img:"https://i.pinimg.com/1200x/8f/88/a9/8f88a96b3dc7115e5696434d41d2412c.jpg",desc:"Жемчужные тона",cat:"gentle"},
-    {id:19,name:"Эвкалипт и роза",price:2400,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Зелень и розы",cat:"gentle"},
-    {id:20,name:"Фиалка",price:2100,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Сиреневые тона",cat:"gentle"},
-    {id:21,name:"Ангел",price:3900,img:"https://i.pinimg.com/1200x/59/5e/26/595e26df6c21b9d5bd535b96c21ed0ed.jpg",desc:"Белоснежный",cat:"gentle"},
-    {id:22,name:"Вдохновение",price:3000,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Пастельные тона",cat:"gentle"},
-    {id:23,name:"Лесная сказка",price:2700,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Полевые цветы",cat:"gentle"},
-    // Минимализм (9)
-    {id:24,name:"Монохром",price:2200,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Одна сортность",cat:"minimalism"},
-    {id:25,name:"Графика",price:1900,img:"https://i.pinimg.com/736x/1d/ff/a3/1dffa3feb0a214ef136ab6ee430d3f71.jpg",desc:"Лаконичная",cat:"minimalism"},
-    {id:26,name:"Сухоцветы",price:1500,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Вечная красота",cat:"minimalism"},
-    {id:27,name:"Эфир",price:1700,img:"https://i.pinimg.com/1200x/4e/e6/72/4ee672c55ef157043075a4a79112d337.jpg",desc:"Сдержанный",cat:"minimalism"},
-    {id:28,name:"Черный квадрат",price:2500,img:"https://i.pinimg.com/736x/1d/ff/a3/1dffa3feb0a214ef136ab6ee430d3f71.jpg",desc:"Черно-белый",cat:"minimalism"},
-    {id:29,name:"Тишина",price:1600,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Сдержанность",cat:"minimalism"},
-    {id:30,name:"Линия",price:2100,img:"https://i.pinimg.com/736x/1d/ff/a3/1dffa3feb0a214ef136ab6ee430d3f71.jpg",desc:"Графичный",cat:"minimalism"},
-    {id:31,name:"Минималист",price:1800,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Простота",cat:"minimalism"},
-    {id:32,name:"Асимметрия",price:2300,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Нестандартная",cat:"minimalism"},
-    // Единичные (8)
-    {id:33,name:"Одна роза",price:500,img:"https://i.pinimg.com/1200x/59/5e/26/595e26df6c21b9d5bd535b96c21ed0ed.jpg",desc:"Классическая роза",cat:"single"},
-    {id:34,name:"Один пион",price:650,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Роскошный пион",cat:"single"},
-    {id:35,name:"Одна гортензия",price:400,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Пышная гортензия",cat:"single"},
-    {id:36,name:"Веточка лаванды",price:350,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Ароматная лаванда",cat:"single"},
-    {id:37,name:"Тюльпан",price:300,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Весенний тюльпан",cat:"single"},
-    {id:38,name:"Гербера",price:280,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Яркая гербера",cat:"single"},
-    {id:39,name:"Хризантема",price:320,img:"https://i.pinimg.com/1200x/4e/e6/72/4ee672c55ef157043075a4a79112d337.jpg",desc:"Пышная хризантема",cat:"single"},
-    {id:40,name:"Орхидея",price:800,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Изысканная орхидея",cat:"single"}
-];
+// ==================== НАСТРОЙКИ JSONBIN.IO ====================
+const BIN_ID = '6a0e46146877513b27a708ce';
+const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-let filteredProducts = [...products];
+let products = [];
+let filteredProducts = [];
 
-// ==================== КОРЗИНА (привязка к пользователю) ====================
-function getCurrentUser() {
-    let data = localStorage.getItem('estetica_current_user');
-    return data ? JSON.parse(data) : null;
-}
-
-function getCart() {
-    const user = getCurrentUser();
-    if (user) {
-        let users = JSON.parse(localStorage.getItem('estetica_users') || '[]');
-        let currentUser = users.find(u => u.id === user.id);
-        return currentUser?.cart || [];
-    } else {
-        return JSON.parse(localStorage.getItem('estetica_guest_cart') || '[]');
-    }
-}
-
-function saveCart(cart) {
-    const user = getCurrentUser();
-    if (user) {
-        let users = JSON.parse(localStorage.getItem('estetica_users') || '[]');
-        let userIndex = users.findIndex(u => u.id === user.id);
-        if (userIndex !== -1) {
-            users[userIndex].cart = cart;
-            localStorage.setItem('estetica_users', JSON.stringify(users));
-            localStorage.setItem('estetica_current_user', JSON.stringify(users[userIndex]));
+// ==================== ЗАГРУЗКА ТОВАРОВ ИЗ JSONBIN ====================
+async function loadProducts() {
+    try {
+        const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+        const data = await res.json();
+        const serverProducts = data.record?.products || [];
+        
+        if (serverProducts.length > 0) {
+            products = serverProducts;
+        } else {
+            // Товары по умолчанию, если в JSONBin ещё ничего нет
+            products = [
+                { id: 1, name: "Марсала", price: 3500, img: "https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg", desc: "Роскошные гортензии", cat: "bright" },
+                { id: 2, name: "Пламя страсти", price: 4200, img: "https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg", desc: "Ярко-красные розы", cat: "bright" },
+                { id: 3, name: "Лавандовый бриз", price: 1800, img: "https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg", desc: "Лаванда и эвкалипт", cat: "gentle" },
+                { id: 4, name: "Утренняя роса", price: 2800, img: "https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg", desc: "Кремово-белые пионы", cat: "gentle" },
+                { id: 5, name: "Монохром", price: 2200, img: "https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg", desc: "Одна сортность — сила в простоте", cat: "minimalism" },
+                { id: 6, name: "Одна роза", price: 500, img: "https://i.pinimg.com/1200x/59/5e/26/595e26df6c21b9d5bd535b96c21ed0ed.jpg", desc: "Классическая роза в упаковке", cat: "single" }
+            ];
         }
-    } else {
-        localStorage.setItem('estetica_guest_cart', JSON.stringify(cart));
+        
+        filteredProducts = [...products];
+        renderCategories();
+        renderCatalog();
+    } catch(e) {
+        console.error('Ошибка загрузки:', e);
+        // Запасной вариант — товары по умолчанию
+        products = [
+            { id: 1, name: "Марсала", price: 3500, img: "https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg", desc: "Роскошные гортензии", cat: "bright" },
+            { id: 2, name: "Пламя страсти", price: 4200, img: "https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg", desc: "Ярко-красные розы", cat: "bright" }
+        ];
+        filteredProducts = [...products];
+        renderCategories();
+        renderCatalog();
     }
-    updateCartCount();
 }
 
-function updateCartCount() {
-    const cart = getCart();
-    let total = cart.reduce((s,i) => s + i.quantity, 0);
-    let link = document.querySelector('.nav a[href="index3.html"]');
-    if (link) link.innerHTML = total > 0 ? `КОРЗИНА 🛒(${total})` : `КОРЗИНА`;
+// ==================== КОРЗИНА ====================
+function getCart() { return JSON.parse(localStorage.getItem('estetica_cart') || '[]'); }
+function saveCart(c) { localStorage.setItem('estetica_cart', JSON.stringify(c)); updateCartCount(); }
+function updateCartCount() { 
+    let total = getCart().reduce((s,i)=>s+i.quantity,0); 
+    let link = document.querySelector('.nav a[href="index3.html"]'); 
+    if(link) link.innerHTML = total>0 ? `КОРЗИНА 🛒(${total})` : `КОРЗИНА`; 
 }
-
-function showToast(m) {
-    let t = document.querySelector('.toast');
-    if (t) t.remove();
-    t = document.createElement('div');
-    t.className = 'toast';
-    t.textContent = m;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2000);
+function showToast(m) { 
+    let t = document.querySelector('.toast'); if(t) t.remove(); 
+    t = document.createElement('div'); t.className = 'toast'; t.textContent = m; 
+    document.body.appendChild(t); setTimeout(()=>t.remove(),2000); 
 }
-
-function addToCart(id) {
-    let p = products.find(p => p.id === id);
-    if (!p) return;
-    
-    let cart = getCart();
-    let existing = cart.find(i => i.id === id);
-    if (existing) {
-        existing.quantity += 1;
-    } else {
-        cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, quantity: 1 });
-    }
-    saveCart(cart);
-    showToast(`${p.name} добавлен в корзину!`);
+function addToCart(id) { 
+    let cart = getCart(), item = cart.find(i=>i.id===id), p = products.find(p=>p.id===id); 
+    if(item) item.quantity++; 
+    else cart.push({id:p.id,name:p.name,price:p.price,img:p.img,quantity:1}); 
+    saveCart(cart); showToast(`${p.name} добавлен в корзину!`); 
 }
 
 // ==================== ФИЛЬТРАЦИЯ ====================
@@ -235,7 +185,6 @@ function applyFilters() {
     filteredProducts = products.filter(p => (cat === 'all' || p.cat === cat) && p.price >= min && p.price <= max);
     renderCatalog();
 }
-
 function resetFilters() {
     document.getElementById('categoryFilter').value = 'all';
     document.getElementById('priceMin').value = 0;
@@ -243,15 +192,11 @@ function resetFilters() {
     filteredProducts = [...products];
     renderCatalog();
 }
-
-function filterByCat(cat) {
-    document.getElementById('categoryFilter').value = cat;
-    applyFilters();
-}
+function filterByCat(cat) { document.getElementById('categoryFilter').value = cat; applyFilters(); }
 
 function renderCatalog() {
     const grid = document.getElementById('catalogGrid');
-    if (filteredProducts.length === 0) {
+    if(filteredProducts.length === 0) {
         grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#D56989;font-size:24px;">🌸 Ничего не найдено 🌸</div>';
         return;
     }
@@ -266,7 +211,7 @@ function renderCatalog() {
     `).join('');
 }
 
-function renderCats() {
+function renderCategories() {
     const cats = [
         {id:"bright", name:"🔥 Яркие букеты", icon:"🔥", count: products.filter(p => p.cat === "bright").length},
         {id:"gentle", name:"💕 Нежные букеты", icon:"💕", count: products.filter(p => p.cat === "gentle").length},
@@ -283,8 +228,7 @@ function renderCats() {
 }
 
 // ==================== ЗАПУСК ====================
-renderCats();
-renderCatalog();
+loadProducts();
 updateCartCount();
 </script>
 </body>
