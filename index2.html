@@ -3,85 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Корзина | Estética</title>
+    <title>Каталог | Estética</title>
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Poiret One',cursive;background:#D56989;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
         .frame{max-width:1300px;width:100%;background:#F3EEF1;padding:30px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
         .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;margin-bottom:30px;padding:25px 30px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
-        .header::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
-        .logo,.nav,.bottom-block>*{position:relative;z-index:1}
+        .header::before,.hero::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
+        .logo,.nav,.hero h1,.hero p,.bottom-block>*{position:relative;z-index:1}
         .logo{font-size:36px;font-weight:600;color:#C2DC80;text-decoration:none;text-shadow:0 2px 6px rgba(0,0,0,0.5)}
         .nav{display:flex;flex-wrap:wrap;gap:20px}
-        .nav a{color:#C2DC80;text-decoration:none;font-size:20px}
+        .nav a{color:#C2DC80;text-decoration:none;font-size:20px;text-shadow:0 1px 3px rgba(0,0,0,0.3)}
+        .hero{text-align:center;padding:80px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin:20px 0;position:relative}
+        .hero h1{font-size:54px;color:#C2DC80;text-shadow:2px 2px 6px black}
+        .hero p{font-size:22px;color:#C2DC80;margin-top:10px}
         .line{height:3px;background:#C2DC80;margin:30px 0;opacity:.5}
-        .cart-title{font-size:38px;font-weight:700;color:#D56989;margin-bottom:30px;text-align:center}
-        .cart-table{width:100%;border-collapse:collapse;margin:20px 0}
-        .cart-table th,.cart-table td{padding:15px 10px;border-bottom:1px solid #C2DC80;text-align:left}
-        .cart-table th{background:#C2DC80;color:#D56989}
-        .cart-product-img{width:70px;height:70px;object-fit:cover}
-        .quantity-btn{background:#D56989;border:none;width:30px;height:30px;cursor:pointer;font-size:18px;color:#F3EEF1}
-        .remove-btn{background:none;border:none;color:#D56989;font-size:24px;cursor:pointer}
-        .cart-summary{text-align:right;padding:20px;background:#C2DC80;margin:20px 0;font-size:24px;font-weight:bold;color:#D56989}
-        .empty-cart{text-align:center;padding:60px;color:#D56989;font-size:24px}
-        .continue-btn{display:inline-block;margin-top:20px;padding:12px 30px;background:#D56989;color:#F3EEF1;text-decoration:none;font-size:18px}
-        .form-section{margin-top:30px;padding:20px;background:#F3EEF1;border:1px solid #C2DC80}
-        .form-title{font-size:28px;color:#D56989;margin-bottom:20px;text-align:center}
-        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
-        .field-group{display:flex;flex-direction:column;gap:8px}
-        .field-group label{font-size:16px;font-weight:600;color:#D56989}
-        .field-group input{padding:12px;border:1px solid #C2DC80;background:#F3EEF1;font-family:inherit;font-size:16px;color:#D56989}
-        .info-text{background:#C2DC80;padding:18px;margin:20px 0;text-align:center;color:#D56989}
-        .submit-order-btn{background:#D56989;border:none;color:#F3EEF1;font-size:20px;font-weight:600;padding:14px 36px;cursor:pointer;display:block;margin:20px auto 0}
-        .submit-order-btn:hover{background:#b84d6e}
+        .categories-block{margin-bottom:30px}
+        .categories-title{font-size:28px;color:#D56989;text-align:center;margin-bottom:20px}
+        .category-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+        .category-item{background:#C2DC80;border:1px solid #D56989;padding:20px;text-align:center;cursor:pointer;transition:.3s}
+        .category-item:hover{transform:translateY(-5px);background:#b8d16e}
+        .category-icon{font-size:40px;margin-bottom:10px}
+        .category-name{font-size:20px;font-weight:600;color:#D56989}
+        .category-count{font-size:14px;color:#5b3b45;margin-top:5px}
+        .filters{display:flex;flex-wrap:wrap;gap:20px;margin-bottom:30px;padding:20px;background:#F3EEF1;border:1px solid #C2DC80;align-items:flex-end}
+        .filter-group{display:flex;flex-direction:column;gap:8px;min-width:160px}
+        .filter-group label{font-size:14px;font-weight:600;color:#D56989;text-transform:uppercase}
+        .filter-group select,.filter-group input{padding:10px 12px;background:#F3EEF1;border:1px solid #C2DC80;font-family:inherit;font-size:16px;color:#D56989;cursor:pointer}
+        .price-range{display:flex;gap:10px;align-items:center}
+        .price-range input{width:100px}
+        .filter-btn{background:#D56989;border:none;padding:10px 20px;font-family:inherit;font-size:16px;cursor:pointer;color:#F3EEF1}
+        .filter-btn:hover{background:#b84d6e}
+        .reset-btn{background:#b84d6e}
+        .catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
+        .product-card{background:#C2DC80;border:1px solid #D56989;padding:1.2rem;text-align:center;transition:.3s}
+        .product-card:hover{transform:translateY(-5px);background:#b8d16e}
+        .product-card img{width:80%;height:200px;object-fit:cover;margin-bottom:1rem}
+        .product-card h3{font-size:1.5rem;color:#D56989;text-transform:uppercase}
+        .product-card p{font-family:system-ui;font-size:.8rem;color:#5b3b45;margin:.5rem 0}
+        .price{font-size:1.3rem;font-weight:bold;color:#D56989;border-top:1px dashed #D56989;padding-top:.5rem;margin:.5rem auto}
+        .product-card button{font-family:inherit;font-size:1rem;font-weight:bold;color:#F3EEF1;background:#D56989;border:none;padding:.5rem;cursor:pointer;width:80%;margin:0 auto;text-transform:uppercase}
+        .product-card button:hover{background:#b84d6e}
         .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:40px;padding:30px 20px 20px;position:relative}
         .footer-info{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;color:#C2DC80;margin:15px 0 30px;font-size:18px}
         .social-links{display:flex;justify-content:center;gap:35px;flex-wrap:wrap;margin-bottom:20px}
-        .social-link{color:#C2DC80;text-decoration:none;font-size:20px;padding:6px 18px}
+        .social-link{color:#C2DC80;text-decoration:none;font-size:20px;padding:6px 18px;transition:.2s}
         .social-link:hover{background:rgba(193,130,146,0.35);transform:translateY(-2px)}
         .copyright{text-align:center;font-size:15px;color:#C2DC80}
         .toast{position:fixed;bottom:30px;right:30px;background:#1f5437;color:white;padding:12px 24px;font-family:system-ui;font-size:14px;z-index:1000;animation:slideIn .3s}
         @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
-        @media(max-width:700px){.frame{padding:20px}.header{flex-direction:column;text-align:center}.logo{font-size:28px}.nav a{font-size:16px}.form-grid{grid-template-columns:1fr}.footer-info{flex-direction:column;gap:15px;text-align:center}.social-link{font-size:16px}}
+        @media(max-width:700px){.frame{padding:20px}.header{flex-direction:column;text-align:center}.logo{font-size:28px}.nav a{font-size:16px}.hero h1{font-size:38px}.hero{padding:60px 15px}.category-cards{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.filters{flex-direction:column;align-items:stretch}.price-range input{width:100%}.footer-info{flex-direction:column;gap:15px;text-align:center}.social-link{font-size:16px;padding:4px 12px}}
     </style>
 </head>
 <body>
 <div class="frame">
-    <div class="header"><a href="index.html" class="logo">Estética</a><div class="nav"><a href="index.html">ГЛАВНАЯ</a><a href="index2.html">КАТАЛОГ</a><a href="index5.html">КОНТАКТЫ</a><a href="index3.html">КОРЗИНА</a><a href="index4.html">КАБИНЕТ</a></div></div>
+    <div class="header">
+        <a href="index.html" class="logo">Estética</a>
+        <div class="nav">
+            <a href="index.html">ГЛАВНАЯ</a>
+            <a href="index2.html">КАТАЛОГ</a>
+            <a href="index5.html">КОНТАКТЫ</a>
+            <a href="index3.html">КОРЗИНА</a>
+            <a href="index4.html">КАБИНЕТ</a>
+        </div>
+    </div>
+    <div class="hero"><h1>ESTÉTICA</h1><p>Создаём любовь через цветы</p></div>
     <div class="line"></div>
-    <h1 class="cart-title">Корзина</h1>
-    <div id="cartContent"></div>
-    <div id="orderSection" style="display:none;"><div class="form-section"><div class="form-title">Информация о заказе</div><div class="form-grid">
-        <div class="field-group"><label>Ваше имя *</label><input type="text" id="userName" placeholder="Ваше имя"></div>
-        <div class="field-group"><label>Имя получателя</label><input type="text" id="recipientName" placeholder="Имя получателя"></div>
-        <div class="field-group"><label>Ваш телефон *</label><input type="tel" id="userPhone" placeholder="+7"></div>
-        <div class="field-group"><label>Телефон получателя</label><input type="tel" id="recipientPhone" placeholder="+7"></div>
-        <div class="field-group"><label>Адрес доставки *</label><input type="text" id="address" placeholder="Адрес"></div>
-        <div class="field-group"><label>Время доставки</label><input type="text" id="deliveryTime" placeholder="14:00"></div>
-        <div class="field-group"><label>Дата доставки</label><input type="text" id="deliveryDate" placeholder="27.05.2025"></div>
-        <div class="field-group"><label>Комментарий</label><input type="text" id="comment" placeholder="Пожелания"></div>
-    </div><div class="info-text">🌸 Оплата только на месте получения</div><button class="submit-order-btn" id="submitOrderBtn">🌿 Оформить заказ</button></div></div>
-    <div class="bottom-block"><div class="footer-info"><span>✦ Цветы, которых нет у других</span><span>✦ Эксклюзив в каждом стебле</span><span>✦ Скажут больше, чем слова</span></div><div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">📘 ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">📷 Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">💬 WhatsApp</a></div><div class="copyright">© 2026 Estética — Цветочная мастерская</div></div>
+
+    <!-- БЛОК КАТЕГОРИЙ -->
+    <div class="categories-block">
+        <div class="categories-title">🌸 Выберите категорию</div>
+        <div class="category-cards" id="categoryCards"></div>
+    </div>
+    <div class="line"></div>
+
+    <!-- ФИЛЬТРЫ -->
+    <div class="filters">
+        <div class="filter-group">
+            <label>📂 Категория</label>
+            <select id="categoryFilter">
+                <option value="all">Все букеты</option>
+                <option value="bright">🔥 Яркие</option>
+                <option value="gentle">💕 Нежные</option>
+                <option value="minimalism">🖤 Минимализм</option>
+                <option value="single">🌿 Единичные</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>💰 Цена</label>
+            <div class="price-range">
+                <input type="number" id="priceMin" placeholder="от" value="0">
+                <span>—</span>
+                <input type="number" id="priceMax" placeholder="до" value="10000">
+            </div>
+        </div>
+        <button class="filter-btn" onclick="applyFilters()">🔍 Применить</button>
+        <button class="filter-btn reset-btn" onclick="resetFilters()">🗑 Сбросить</button>
+    </div>
+
+    <div class="catalog-grid" id="catalogGrid"></div>
+
+    <div class="bottom-block">
+        <div class="footer-info"><span>✦ Цветы, которых нет у других</span><span>✦ Эксклюзив в каждом стебле</span><span>✦ Скажут больше, чем слова</span></div>
+        <div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">📘 ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">📷 Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">💬 WhatsApp</a></div>
+        <div class="copyright">© 2026 Estética — Цветочная мастерская</div>
+    </div>
 </div>
 
 <script>
-// ==================== РАБОТА С ПОЛЬЗОВАТЕЛЯМИ ====================
+// ==================== ТОВАРЫ (40 шт) ====================
+const products = [
+    // Яркие (12)
+    {id:1,name:"Марсала",price:3500,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Роскошные гортензии",cat:"bright"},
+    {id:2,name:"Пламя страсти",price:4200,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Ярко-красные розы",cat:"bright"},
+    {id:3,name:"Солнечный закат",price:3800,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Оранжевые розы",cat:"bright"},
+    {id:4,name:"Розовый фламинго",price:3100,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Ярко-розовые пионы",cat:"bright"},
+    {id:5,name:"Красный квадрат",price:4000,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Алые розы",cat:"bright"},
+    {id:6,name:"Манго",price:2900,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Желто-оранжевая",cat:"bright"},
+    {id:7,name:"Фуксия",price:3400,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Яркие цветы фуксии",cat:"bright"},
+    {id:8,name:"Тропиканка",price:4600,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Экзотические цветы",cat:"bright"},
+    {id:9,name:"Коралл",price:3300,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Коралловый букет",cat:"bright"},
+    {id:10,name:"Малибу",price:3900,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Малиновый букет",cat:"bright"},
+    {id:11,name:"Карнавал",price:3700,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Разноцветный",cat:"bright"},
+    {id:12,name:"Апельсин",price:2600,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Цитрусовый букет",cat:"bright"},
+    // Нежные (11)
+    {id:13,name:"Утренняя роса",price:2800,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Кремово-белые пионы",cat:"gentle"},
+    {id:14,name:"Лавандовый бриз",price:1800,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Лаванда и эвкалипт",cat:"gentle"},
+    {id:15,name:"Персиковый сон",price:3200,img:"https://i.pinimg.com/1200x/8f/88/a9/8f88a96b3dc7115e5696434d41d2412c.jpg",desc:"Персиковые розы",cat:"gentle"},
+    {id:16,name:"Облако",price:2600,img:"https://i.pinimg.com/1200x/59/5e/26/595e26df6c21b9d5bd535b96c21ed0ed.jpg",desc:"Белые хризантемы",cat:"gentle"},
+    {id:17,name:"Невеста",price:4500,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Свадебный букет",cat:"gentle"},
+    {id:18,name:"Жемчужина",price:3600,img:"https://i.pinimg.com/1200x/8f/88/a9/8f88a96b3dc7115e5696434d41d2412c.jpg",desc:"Жемчужные тона",cat:"gentle"},
+    {id:19,name:"Эвкалипт и роза",price:2400,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Зелень и розы",cat:"gentle"},
+    {id:20,name:"Фиалка",price:2100,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Сиреневые тона",cat:"gentle"},
+    {id:21,name:"Ангел",price:3900,img:"https://i.pinimg.com/1200x/59/5e/26/595e26df6c21b9d5bd535b96c21ed0ed.jpg",desc:"Белоснежный",cat:"gentle"},
+    {id:22,name:"Вдохновение",price:3000,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Пастельные тона",cat:"gentle"},
+    {id:23,name:"Лесная сказка",price:2700,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Полевые цветы",cat:"gentle"},
+    // Минимализм (9)
+    {id:24,name:"Монохром",price:2200,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Одна сортность",cat:"minimalism"},
+    {id:25,name:"Графика",price:1900,img:"https://i.pinimg.com/736x/1d/ff/a3/1dffa3feb0a214ef136ab6ee430d3f71.jpg",desc:"Лаконичная",cat:"minimalism"},
+    {id:26,name:"Сухоцветы",price:1500,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Вечная красота",cat:"minimalism"},
+    {id:27,name:"Эфир",price:1700,img:"https://i.pinimg.com/1200x/4e/e6/72/4ee672c55ef157043075a4a79112d337.jpg",desc:"Сдержанный",cat:"minimalism"},
+    {id:28,name:"Черный квадрат",price:2500,img:"https://i.pinimg.com/736x/1d/ff/a3/1dffa3feb0a214ef136ab6ee430d3f71.jpg",desc:"Черно-белый",cat:"minimalism"},
+    {id:29,name:"Тишина",price:1600,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Сдержанность",cat:"minimalism"},
+    {id:30,name:"Линия",price:2100,img:"https://i.pinimg.com/736x/1d/ff/a3/1dffa3feb0a214ef136ab6ee430d3f71.jpg",desc:"Графичный",cat:"minimalism"},
+    {id:31,name:"Минималист",price:1800,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Простота",cat:"minimalism"},
+    {id:32,name:"Асимметрия",price:2300,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Нестандартная",cat:"minimalism"},
+    // Единичные (8)
+    {id:33,name:"Одна роза",price:500,img:"https://i.pinimg.com/1200x/59/5e/26/595e26df6c21b9d5bd535b96c21ed0ed.jpg",desc:"Классическая роза",cat:"single"},
+    {id:34,name:"Один пион",price:650,img:"https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg",desc:"Роскошный пион",cat:"single"},
+    {id:35,name:"Одна гортензия",price:400,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Пышная гортензия",cat:"single"},
+    {id:36,name:"Веточка лаванды",price:350,img:"https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg",desc:"Ароматная лаванда",cat:"single"},
+    {id:37,name:"Тюльпан",price:300,img:"https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg",desc:"Весенний тюльпан",cat:"single"},
+    {id:38,name:"Гербера",price:280,img:"https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg",desc:"Яркая гербера",cat:"single"},
+    {id:39,name:"Хризантема",price:320,img:"https://i.pinimg.com/1200x/4e/e6/72/4ee672c55ef157043075a4a79112d337.jpg",desc:"Пышная хризантема",cat:"single"},
+    {id:40,name:"Орхидея",price:800,img:"https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg",desc:"Изысканная орхидея",cat:"single"}
+];
+
+let filteredProducts = [...products];
+
+// ==================== КОРЗИНА (привязка к пользователю) ====================
 function getCurrentUser() {
     let data = localStorage.getItem('estetica_current_user');
     return data ? JSON.parse(data) : null;
 }
 
-// ==================== КОРЗИНА (привязана к пользователю) ====================
 function getCart() {
     const user = getCurrentUser();
     if (user) {
-        // Авторизованный пользователь — корзина в его данных
         let users = JSON.parse(localStorage.getItem('estetica_users') || '[]');
         let currentUser = users.find(u => u.id === user.id);
         return currentUser?.cart || [];
     } else {
-        // Гость — корзина в отдельном хранилище
         return JSON.parse(localStorage.getItem('estetica_guest_cart') || '[]');
     }
 }
@@ -89,17 +182,14 @@ function getCart() {
 function saveCart(cart) {
     const user = getCurrentUser();
     if (user) {
-        // Сохраняем корзину в данные пользователя
         let users = JSON.parse(localStorage.getItem('estetica_users') || '[]');
         let userIndex = users.findIndex(u => u.id === user.id);
         if (userIndex !== -1) {
             users[userIndex].cart = cart;
             localStorage.setItem('estetica_users', JSON.stringify(users));
-            // Обновляем текущего пользователя
             localStorage.setItem('estetica_current_user', JSON.stringify(users[userIndex]));
         }
     } else {
-        // Гость — сохраняем отдельно
         localStorage.setItem('estetica_guest_cart', JSON.stringify(cart));
     }
     updateCartCount();
@@ -119,143 +209,83 @@ function showToast(m) {
     t.className = 'toast';
     t.textContent = m;
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 3000);
+    setTimeout(() => t.remove(), 2000);
 }
 
-function renderCart() {
-    const cart = getCart();
-    const container = document.getElementById('cartContent');
-    const orderSec = document.getElementById('orderSection');
+function addToCart(id) {
+    let p = products.find(p => p.id === id);
+    if (!p) return;
     
-    if (cart.length === 0) {
-        container.innerHTML = `<div class="empty-cart">🛒 Корзина пуста<br><a href="index2.html" class="continue-btn">🌸 В каталог</a></div>`;
-        orderSec.style.display = 'none';
-        return;
-    }
-    
-    orderSec.style.display = 'block';
-    let total = 0, rows = '';
-    
-    cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        rows += `<tr>
-            <td><img src="${item.img}" class="cart-product-img"></td>
-            <td>${item.name}</td>
-            <td>${item.price} ₽</td>
-            <td><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">−</button><span style="margin:0 15px">${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></td>
-            <td>${itemTotal} ₽</td>
-            <td><button class="remove-btn" onclick="removeItem(${item.id})">✕</button></td>
-        </tr>`;
-    });
-    
-    container.innerHTML = `<table class="cart-table"><thead><tr><th>Товар</th><th>Название</th><th>Цена</th><th>Кол-во</th><th>Сумма</th><th></th></tr></thead><tbody>${rows}</tbody></table><div class="cart-summary">💐 Итого: ${total} ₽</div>`;
-}
-
-function updateQuantity(id, delta) {
     let cart = getCart();
-    let idx = cart.findIndex(i => i.id === id);
-    if (idx !== -1) {
-        cart[idx].quantity += delta;
-        if (cart[idx].quantity <= 0) cart.splice(idx, 1);
-        saveCart(cart);
-        renderCart();
-    }
-}
-
-function removeItem(id) {
-    let cart = getCart();
-    cart = cart.filter(i => i.id !== id);
-    saveCart(cart);
-    renderCart();
-}
-
-// ==================== ДОБАВЛЕНИЕ ТОВАРА (вызывается из каталога) ====================
-window.addToCart = function(product) {
-    let cart = getCart();
-    let existing = cart.find(i => i.id === product.id);
+    let existing = cart.find(i => i.id === id);
     if (existing) {
         existing.quantity += 1;
     } else {
-        cart.push({ ...product, quantity: 1 });
+        cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, quantity: 1 });
     }
     saveCart(cart);
-    showToast(`${product.name} добавлен в корзину!`);
-    renderCart();
-};
-
-// ==================== ОФОРМЛЕНИЕ ЗАКАЗА ====================
-function getUsers() { return JSON.parse(localStorage.getItem('estetica_users') || '[]'); }
-function saveUsers(u) { localStorage.setItem('estetica_users', JSON.stringify(u)); }
-
-function saveOrderToAccount(orderData) {
-    const currentUser = getCurrentUser();
-    
-    if (!currentUser) {
-        // Гость — сохраняем в guestOrders
-        let guestOrders = JSON.parse(localStorage.getItem('estetica_guest_orders') || '[]');
-        guestOrders.unshift(orderData);
-        localStorage.setItem('estetica_guest_orders', JSON.stringify(guestOrders));
-        return false;
-    }
-    
-    // Авторизованный пользователь
-    let users = getUsers();
-    const userIndex = users.findIndex(u => u.id === currentUser.id);
-    if (userIndex !== -1) {
-        users[userIndex].orders = users[userIndex].orders || [];
-        users[userIndex].orders.unshift(orderData);
-        saveUsers(users);
-        localStorage.setItem('estetica_current_user', JSON.stringify(users[userIndex]));
-        return true;
-    }
-    return false;
+    showToast(`${p.name} добавлен в корзину!`);
 }
 
-function submitOrder() {
-    const cart = getCart();
-    if (cart.length === 0) return alert('Корзина пуста');
-    
-    const name = document.getElementById('userName')?.value.trim();
-    const phone = document.getElementById('userPhone')?.value.trim();
-    const address = document.getElementById('address')?.value.trim();
-    
-    if (!name || !phone || !address) return alert('Заполните имя, телефон и адрес!');
-    
-    const total = cart.reduce((s,i) => s + i.price * i.quantity, 0);
-    
-    const newOrder = {
-        id: Date.now(),
-        date: new Date().toLocaleString(),
-        items: cart.map(i => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price, img: i.img })),
-        total: total,
-        status: '🟢 Новый',
-        customerName: name,
-        customerPhone: phone,
-        address: address,
-        deliveryTime: document.getElementById('deliveryTime')?.value || '',
-        deliveryDate: document.getElementById('deliveryDate')?.value || '',
-        comment: document.getElementById('comment')?.value || ''
-    };
-    
-    const saved = saveOrderToAccount(newOrder);
-    
-    // Очищаем корзину
-    saveCart([]);
-    renderCart();
-    
-    // Очищаем форму
-    document.querySelectorAll('#orderSection input').forEach(i => i.value = '');
-    
-    alert(`🌿 Заказ оформлен!\nСумма: ${total} ₽\n${saved ? '✅ Заказ сохранён в личном кабинете!' : '📦 Заказ сохранён. Зарегистрируйтесь для истории!'}`);
-    showToast(`Заказ на ${total} ₽ оформлен!`);
+// ==================== ФИЛЬТРАЦИЯ ====================
+function applyFilters() {
+    let cat = document.getElementById('categoryFilter').value;
+    let min = +document.getElementById('priceMin').value || 0;
+    let max = +document.getElementById('priceMax').value || 10000;
+    filteredProducts = products.filter(p => (cat === 'all' || p.cat === cat) && p.price >= min && p.price <= max);
+    renderCatalog();
+}
+
+function resetFilters() {
+    document.getElementById('categoryFilter').value = 'all';
+    document.getElementById('priceMin').value = 0;
+    document.getElementById('priceMax').value = 10000;
+    filteredProducts = [...products];
+    renderCatalog();
+}
+
+function filterByCat(cat) {
+    document.getElementById('categoryFilter').value = cat;
+    applyFilters();
+}
+
+function renderCatalog() {
+    const grid = document.getElementById('catalogGrid');
+    if (filteredProducts.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#D56989;font-size:24px;">🌸 Ничего не найдено 🌸</div>';
+        return;
+    }
+    grid.innerHTML = filteredProducts.map(p => `
+        <div class="product-card">
+            <img src="${p.img}" alt="${p.name}">
+            <h3>${p.name}</h3>
+            <p>${p.desc}</p>
+            <div class="price">${p.price} ₽</div>
+            <button onclick="addToCart(${p.id})">В корзину</button>
+        </div>
+    `).join('');
+}
+
+function renderCats() {
+    const cats = [
+        {id:"bright", name:"🔥 Яркие букеты", icon:"🔥", count: products.filter(p => p.cat === "bright").length},
+        {id:"gentle", name:"💕 Нежные букеты", icon:"💕", count: products.filter(p => p.cat === "gentle").length},
+        {id:"minimalism", name:"🖤 Минимализм", icon:"🖤", count: products.filter(p => p.cat === "minimalism").length},
+        {id:"single", name:"🌿 Единичная позиция", icon:"🌿", count: products.filter(p => p.cat === "single").length}
+    ];
+    document.getElementById('categoryCards').innerHTML = cats.map(c => `
+        <div class="category-item" onclick="filterByCat('${c.id}')">
+            <div class="category-icon">${c.icon}</div>
+            <div class="category-name">${c.name}</div>
+            <div class="category-count">${c.count} товаров</div>
+        </div>
+    `).join('');
 }
 
 // ==================== ЗАПУСК ====================
-document.addEventListener('DOMContentLoaded', () => {
-    renderCart();
-    document.getElementById('submitOrderBtn')?.addEventListener('click', submitOrder);
-});
+renderCats();
+renderCatalog();
+updateCartCount();
 </script>
 </body>
 </html>

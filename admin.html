@@ -43,29 +43,30 @@
 </div>
 
 <script>
-function getUsers() { 
+// Получение данных
+function getUsers() {
     let data = localStorage.getItem('estetica_users');
     return data ? JSON.parse(data) : [];
 }
 
-function getCurrentUser() { 
+function getCurrentUser() {
     let data = localStorage.getItem('estetica_current_user');
     return data ? JSON.parse(data) : null;
 }
 
-function getGuestOrders() { 
+function getGuestOrders() {
     let data = localStorage.getItem('estetica_guest_orders');
     return data ? JSON.parse(data) : [];
 }
 
-function isAdmin() { 
-    const u = getCurrentUser(); 
-    return u && u.isAdmin === true; 
+function isAdmin() {
+    let u = getCurrentUser();
+    return u && u.isAdmin === true;
 }
 
 function getAllOrders() {
-    const users = getUsers();
-    const guestOrders = getGuestOrders();
+    let users = getUsers();
+    let guestOrders = getGuestOrders();
     let orders = [];
     
     users.forEach(user => {
@@ -90,12 +91,12 @@ function getAllOrders() {
         });
     });
     
-    return orders.sort((a,b) => b.id - a.id);
+    return orders.sort((a,b) => (b.id || 0) - (a.id || 0));
 }
 
 function getStats() {
-    const orders = getAllOrders();
-    const users = getUsers();
+    let orders = getAllOrders();
+    let users = getUsers();
     return {
         total: orders.length,
         revenue: orders.reduce((s,o) => s + (o.total || 0), 0),
@@ -106,17 +107,17 @@ function getStats() {
 }
 
 function renderAdmin() {
-    const container = document.getElementById('adminContent');
+    let container = document.getElementById('adminContent');
     
     if (!isAdmin()) {
         container.innerHTML = `<div class="access-denied"><h2>🚫 Доступ запрещён</h2><p><a href="index4.html" style="color:#C2DC80;">← Вернуться в кабинет</a></p></div>`;
         return;
     }
     
-    const cu = getCurrentUser();
-    const stats = getStats();
-    const orders = getAllOrders();
-    const users = getUsers();
+    let cu = getCurrentUser();
+    let stats = getStats();
+    let orders = getAllOrders();
+    let users = getUsers();
     
     container.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
