@@ -73,7 +73,7 @@
 
     <!-- БЛОК КАТЕГОРИЙ -->
     <div class="categories-block">
-        <div class="categories-title">🌸 Выберите категорию</div>
+        <div class="categories-title">Выберите категорию</div>
         <div class="category-cards" id="categoryCards"></div>
     </div>
     <div class="line"></div>
@@ -81,32 +81,32 @@
     <!-- ФИЛЬТРЫ -->
     <div class="filters">
         <div class="filter-group">
-            <label>📂 Категория</label>
+            <label>Категория</label>
             <select id="categoryFilter">
                 <option value="all">Все букеты</option>
-                <option value="bright">🔥 Яркие</option>
-                <option value="gentle">💕 Нежные</option>
-                <option value="minimalism">🖤 Минимализм</option>
-                <option value="single">🌿 Единичные</option>
+                <option value="bright">Яркие</option>
+                <option value="gentle">Нежные</option>
+                <option value="minimalism">Минимализм</option>
+                <option value="single">Единичные</option>
             </select>
         </div>
         <div class="filter-group">
-            <label>💰 Цена</label>
+            <label>Цена</label>
             <div class="price-range">
                 <input type="number" id="priceMin" placeholder="от" value="0">
                 <span>—</span>
                 <input type="number" id="priceMax" placeholder="до" value="10000">
             </div>
         </div>
-        <button class="filter-btn" onclick="applyFilters()">🔍 Применить</button>
-        <button class="filter-btn reset-btn" onclick="resetFilters()">🗑 Сбросить</button>
+        <button class="filter-btn" onclick="applyFilters()"> Применить</button>
+        <button class="filter-btn reset-btn" onclick="resetFilters()">Сбросить</button>
     </div>
 
     <div class="catalog-grid" id="catalogGrid"></div>
 
     <div class="bottom-block">
         <div class="footer-info"><span>✦ Цветы, которых нет у других</span><span>✦ Эксклюзив в каждом стебле</span><span>✦ Скажут больше, чем слова</span></div>
-        <div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">📘 ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">📷 Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">💬 WhatsApp</a></div>
+        <div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">📘 ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link"></a><a href="https://wa.me/79381112274" target="_blank" class="social-link">💬 WhatsApp</a></div>
         <div class="copyright">© 2026 Estética — Цветочная мастерская</div>
     </div>
 </div>
@@ -163,7 +163,7 @@ function saveCart(c) { localStorage.setItem('estetica_cart', JSON.stringify(c));
 function updateCartCount() { 
     let total = getCart().reduce((s,i)=>s+i.quantity,0); 
     let link = document.querySelector('.nav a[href="index3.html"]'); 
-    if(link) link.innerHTML = total>0 ? `КОРЗИНА 🛒(${total})` : `КОРЗИНА`; 
+    if(link) link.innerHTML = total>0 ? `КОРЗИНА (${total})` : `КОРЗИНА`; 
 }
 function showToast(m) { 
     let t = document.querySelector('.toast'); if(t) t.remove(); 
