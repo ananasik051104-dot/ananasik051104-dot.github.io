@@ -72,31 +72,277 @@
 </div>
 
 <script>
-const BIN_ID = '6a0e46146877513b27a708ce';
-const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
-const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+// ==================== НАСТРОЙКИ SUPABASE ====================
+const SUPABASE_URL = 'https://udurupapnhmhbxtollbi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkdXJ1cGFwbmhtaGJ4dG9sbGJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NDc0NTUsImV4cCI6MjA5NTMyMzQ1NX0.xx-Vi9yKkRAt4jkA84RZV_90za5SDtjwrPvK-jB0s00';
+
 let currentUser = null;
 
-async function getData() { const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } }); const data = await res.json(); return data.record || { users: [], orders: [], messages: [], products: [] }; }
-async function saveData(data) { await fetch(API_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY }, body: JSON.stringify(data) }); }
-async function getCurrentUser() { const saved = localStorage.getItem('estetica_current_user'); if (saved) { currentUser = JSON.parse(saved); const data = await getData(); const freshUser = (data.users || []).find(u => u.id === currentUser.id); if (freshUser) currentUser = freshUser; } return currentUser; }
-function setCurrentUser(u) { u ? localStorage.setItem('estetica_current_user', JSON.stringify(u)) : localStorage.removeItem('estetica_current_user'); }
-async function register(email, password, name) { let data = await getData(); let users = data.users || []; if (users.find(u => u.email === email)) return alert('Пользователь уже существует'); let isAdmin = (email === 'ancord51217@gmail.com' && password === 'ananasik051217'); let newUser = { id: Date.now(), email, password, name: name || email.split('@')[0], phone: 'не указан', addresses: ['Москва, ул. Нансена, 1'], orders: [], cart: [], isAdmin: isAdmin }; users.push(newUser); data.users = users; await saveData(data); setCurrentUser(newUser); alert(isAdmin ? 'Вы администратор' : 'Регистрация успешна'); renderAuthScreen(); return true; }
-async function login(email, password) { const data = await getData(); const user = (data.users || []).find(u => u.email === email && u.password === password); if (user) { setCurrentUser(user); alert(`Добро пожаловать, ${user.name}!`); renderAuthScreen(); return true; } alert('Неверный email или пароль'); return false; }
-function logout() { setCurrentUser(null); renderAuthScreen(); alert('Вы вышли'); }
-async function updateUserData(updates) { if (!currentUser) return; let data = await getData(); let users = data.users || []; let idx = users.findIndex(u => u.id === currentUser.id); if (idx !== -1) { users[idx] = { ...users[idx], ...updates }; data.users = users; await saveData(data); setCurrentUser(users[idx]); renderAuthScreen(); alert('Профиль обновлён'); } }
-function togglePassword(id) { let i = document.getElementById(id); i.type = i.type === 'password' ? 'text' : 'password'; }
-async function renderAuthScreen() { await getCurrentUser(); let auth = document.getElementById('authBlock'), panel = document.getElementById('userPanel'); if (!currentUser) { auth.innerHTML = `<div class="auth-card"><div id="authForm"><h3>Вход</h3><div class="input-group"><input type="email" id="loginEmail" class="auth-input" placeholder="Email"></div><div class="input-group"><input type="password" id="loginPassword" class="auth-input" placeholder="Пароль"><button class="toggle-password" onclick="togglePassword('loginPassword')">👁</button></div><button class="auth-btn" onclick="doLogin()">Войти</button><div class="switch-auth" onclick="showRegisterForm()">Нет аккаунта? Зарегистрироваться</div></div></div>`; panel.style.display = 'none'; } else { let adminBtn = currentUser.isAdmin ? `<button class="admin-btn" onclick="location.href='admin.html'">Админ-панель</button>` : ''; auth.innerHTML = `<div class="profile-card"><div class="avatar">🌸</div><div class="profile-name">${currentUser.name}</div><div class="profile-email">${currentUser.email}</div><div class="profile-phone">${currentUser.phone || 'не указан'}</div><div class="profile-buttons"><button onclick="editProfile()">Редактировать</button><button class="logout-btn" onclick="logout()">Выйти</button>${adminBtn}</div></div>`; panel.style.display = 'block'; await loadOrders(); loadAddresses(); } }
-window.showRegisterForm = function() { document.getElementById('authForm').innerHTML = `<h3>Регистрация</h3><div class="input-group"><input type="text" id="regName" class="auth-input" placeholder="Ваше имя"></div><div class="input-group"><input type="email" id="regEmail" class="auth-input" placeholder="Email"></div><div class="input-group"><input type="password" id="regPassword" class="auth-input" placeholder="Пароль"><button class="toggle-password" onclick="togglePassword('regPassword')">👁</button></div><button class="auth-btn" onclick="doRegister()">Зарегистрироваться</button><div class="switch-auth" onclick="showLoginForm()">Уже есть аккаунт? Войти</div>`; };
-window.showLoginForm = function() { document.getElementById('authForm').innerHTML = `<h3>Вход</h3><div class="input-group"><input type="email" id="loginEmail" class="auth-input" placeholder="Email"></div><div class="input-group"><input type="password" id="loginPassword" class="auth-input" placeholder="Пароль"><button class="toggle-password" onclick="togglePassword('loginPassword')">👁</button></div><button class="auth-btn" onclick="doLogin()">Войти</button><div class="switch-auth" onclick="showRegisterForm()">Нет аккаунта? Зарегистрироваться</div>`; };
-window.doLogin = async function() { let e = document.getElementById('loginEmail')?.value, p = document.getElementById('loginPassword')?.value; if (e && p && await login(e, p)) renderAuthScreen(); else alert('Заполните поля'); };
-window.doRegister = async function() { let n = document.getElementById('regName')?.value, e = document.getElementById('regEmail')?.value, p = document.getElementById('regPassword')?.value; if (n && e && p && await register(e, p, n)) renderAuthScreen(); else alert('Заполните поля'); };
-window.editProfile = function() { let cu = getCurrentUser(); if (!cu) return; let n = prompt('Новое имя:', cu.name), ph = prompt('Новый телефон:', cu.phone || ''); let upd = {}; if (n) upd.name = n; if (ph) upd.phone = ph; if (Object.keys(upd).length) updateUserData(upd); };
-async function loadOrders() { if (!currentUser) return; const data = await getData(); const user = (data.users || []).find(u => u.id === currentUser.id); const orders = user?.orders || []; const container = document.getElementById('ordersList'); if (!orders.length) { container.innerHTML = '<div class="empty">Заказов пока нет<br><a href="index2.html">Перейти в каталог</a></div>'; return; } container.innerHTML = orders.map(o => `<div class="order-item"><div class="order-header"><span>${o.date}</span><span class="order-status">${o.status || 'Новый'}</span></div><div class="order-details">${o.items?.map(i => `${i.name} x ${i.quantity}`).join(', ') || ''}</div><div class="order-details">${o.total} ₽ | ${o.address || ''}</div></div>`).join(''); }
-function loadAddresses() { const container = document.getElementById('addressesList'); const addresses = currentUser?.addresses || ['Москва, ул. Нансена, 1']; container.innerHTML = addresses.map((a, i) => `<div class="address-item"><span>${a}</span><button class="remove-btn" onclick="deleteAddress(${i})">Удалить</button></div>`).join(''); }
-window.addAddress = async function() { const a = prompt('Новый адрес:'); if (a?.trim()) { const addresses = [...(currentUser?.addresses || []), a.trim()]; await updateUserData({ addresses }); loadAddresses(); } };
-window.deleteAddress = async function(i) { const addresses = [...(currentUser?.addresses || [])]; addresses.splice(i, 1); await updateUserData({ addresses }); loadAddresses(); };
-window.showTab = function(t) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); event.target.classList.add('active'); document.getElementById(`tab-${t}`).classList.add('active'); if (t === 'orders') loadOrders(); if (t === 'addresses') loadAddresses(); };
+// ==================== ФУНКЦИИ SUPABASE ====================
+async function supabaseGet(table, filter = null) {
+    let url = `${SUPABASE_URL}/rest/v1/${table}?select=*`;
+    if (filter) url += `&${filter}`;
+    const res = await fetch(url, {
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+    });
+    return await res.json();
+}
+
+async function supabasePost(table, data) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+        method: 'POST',
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    return await res.json();
+}
+
+async function supabasePut(table, id, data) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    return await res.json();
+}
+
+// ==================== АВТОРИЗАЦИЯ ====================
+async function register(email, password, name) {
+    const users = await supabaseGet('users');
+    if (users.find(u => u.email === email)) {
+        alert('Пользователь с таким email уже существует');
+        return false;
+    }
+    
+    const isAdmin = (email === 'ancord51217@gmail.com' && password === 'ananasik051217');
+    
+    const newUser = {
+        email: email,
+        password: password,
+        name: name || email.split('@')[0],
+        phone: 'не указан',
+        addresses: [],
+        orders: [],
+        cart: [],
+        isadmin: isAdmin
+    };
+    
+    const result = await supabasePost('users', newUser);
+    if (result && result.id) {
+        currentUser = result;
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        alert(isAdmin ? 'Вы зарегистрировались как администратор' : 'Регистрация успешна');
+        renderAuthScreen();
+        return true;
+    }
+    return false;
+}
+
+async function login(email, password) {
+    const users = await supabaseGet('users');
+    const user = users.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+        currentUser = user;
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        alert(`Добро пожаловать, ${user.name}!`);
+        renderAuthScreen();
+        return true;
+    }
+    alert('Неверный email или пароль');
+    return false;
+}
+
+function logout() {
+    currentUser = null;
+    localStorage.removeItem('estetica_current_user');
+    renderAuthScreen();
+    alert('Вы вышли из аккаунта');
+}
+
+// ==================== УПРАВЛЕНИЕ ПРОФИЛЕМ ====================
+async function updateUserData(updates) {
+    if (!currentUser) return;
+    
+    const result = await supabasePut('users', currentUser.id, updates);
+    if (result) {
+        currentUser = { ...currentUser, ...updates };
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        renderAuthScreen();
+        alert('Профиль обновлён');
+    }
+}
+
+// ==================== ЗАКАЗЫ ====================
+async function loadOrders() {
+    if (!currentUser) return;
+    const orders = currentUser.orders || [];
+    const container = document.getElementById('ordersList');
+    
+    if (!orders.length) {
+        container.innerHTML = '<div class="empty">Заказов пока нет<br><a href="index2.html" style="color:#D56989;">Перейти в каталог</a></div>';
+        return;
+    }
+    
+    container.innerHTML = orders.map(order => `
+        <div class="order-item">
+            <div class="order-header"><span>${order.date}</span><span class="order-status">${order.status || 'Новый'}</span></div>
+            <div class="order-details">${order.items?.map(i => `${i.name} x ${i.quantity}`).join(', ') || ''}</div>
+            <div class="order-details">${order.total} ₽ | ${order.address || ''}</div>
+        </div>
+    `).join('');
+}
+
+function loadAddresses() {
+    const container = document.getElementById('addressesList');
+    const addresses = currentUser?.addresses || ['Москва, ул. Нансена, 1'];
+    container.innerHTML = addresses.map((addr, i) => `
+        <div class="address-item">
+            <span>${addr}</span>
+            <button class="remove-btn" onclick="deleteAddress(${i})">Удалить</button>
+        </div>
+    `).join('');
+}
+
+async function addAddress() {
+    const newAddr = prompt('Введите новый адрес:');
+    if (newAddr?.trim()) {
+        const addresses = [...(currentUser?.addresses || []), newAddr.trim()];
+        await updateUserData({ addresses });
+        loadAddresses();
+    }
+}
+
+async function deleteAddress(index) {
+    const addresses = [...(currentUser?.addresses || [])];
+    addresses.splice(index, 1);
+    await updateUserData({ addresses });
+    loadAddresses();
+}
+
+// ==================== ПОКАЗ/СКРЫТИЕ ПАРОЛЯ ====================
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+// ==================== ОТОБРАЖЕНИЕ ====================
+function renderAuthScreen() {
+    const savedUser = localStorage.getItem('estetica_current_user');
+    if (savedUser && !currentUser) {
+        currentUser = JSON.parse(savedUser);
+    }
+    
+    const authBlock = document.getElementById('authBlock');
+    const userPanel = document.getElementById('userPanel');
+    
+    if (!currentUser) {
+        authBlock.innerHTML = `
+            <div class="auth-card">
+                <div id="authForm">
+                    <h3>Вход</h3>
+                    <div class="input-group"><input type="email" id="loginEmail" class="auth-input" placeholder="Email"></div>
+                    <div class="input-group"><input type="password" id="loginPassword" class="auth-input" placeholder="Пароль"><button class="toggle-password" onclick="togglePassword('loginPassword')">👁</button></div>
+                    <button class="auth-btn" onclick="doLogin()">Войти</button>
+                    <div class="switch-auth" onclick="showRegisterForm()">Нет аккаунта? Зарегистрироваться</div>
+                </div>
+            </div>
+        `;
+        userPanel.style.display = 'none';
+    } else {
+        const adminButton = currentUser.isadmin ? `<button class="admin-btn" onclick="location.href='admin.html'">Админ-панель</button>` : '';
+        authBlock.innerHTML = `
+            <div class="profile-card">
+                <div class="avatar">🌸</div>
+                <div class="profile-name">${currentUser.name}</div>
+                <div class="profile-email">${currentUser.email}</div>
+                <div class="profile-phone">${currentUser.phone || 'не указан'}</div>
+                <div class="profile-buttons">
+                    <button onclick="editProfile()">Редактировать</button>
+                    <button class="logout-btn" onclick="logout()">Выйти</button>
+                    ${adminButton}
+                </div>
+            </div>
+        `;
+        userPanel.style.display = 'block';
+        loadOrders();
+        loadAddresses();
+    }
+}
+
+window.showRegisterForm = function() {
+    document.getElementById('authForm').innerHTML = `
+        <h3>Регистрация</h3>
+        <div class="input-group"><input type="text" id="regName" class="auth-input" placeholder="Ваше имя"></div>
+        <div class="input-group"><input type="email" id="regEmail" class="auth-input" placeholder="Email"></div>
+        <div class="input-group"><input type="password" id="regPassword" class="auth-input" placeholder="Пароль"><button class="toggle-password" onclick="togglePassword('regPassword')">👁</button></div>
+        <button class="auth-btn" onclick="doRegister()">Зарегистрироваться</button>
+        <div class="switch-auth" onclick="showLoginForm()">Уже есть аккаунт? Войти</div>
+    `;
+};
+
+window.showLoginForm = function() {
+    document.getElementById('authForm').innerHTML = `
+        <h3>Вход</h3>
+        <div class="input-group"><input type="email" id="loginEmail" class="auth-input" placeholder="Email"></div>
+        <div class="input-group"><input type="password" id="loginPassword" class="auth-input" placeholder="Пароль"><button class="toggle-password" onclick="togglePassword('loginPassword')">👁</button></div>
+        <button class="auth-btn" onclick="doLogin()">Войти</button>
+        <div class="switch-auth" onclick="showRegisterForm()">Нет аккаунта? Зарегистрироваться</div>
+    `;
+};
+
+window.doLogin = async function() {
+    const email = document.getElementById('loginEmail')?.value;
+    const password = document.getElementById('loginPassword')?.value;
+    if (email && password) {
+        await login(email, password);
+    } else {
+        alert('Заполните все поля');
+    }
+};
+
+window.doRegister = async function() {
+    const name = document.getElementById('regName')?.value;
+    const email = document.getElementById('regEmail')?.value;
+    const password = document.getElementById('regPassword')?.value;
+    if (name && email && password) {
+        await register(email, password, name);
+    } else {
+        alert('Заполните все поля');
+    }
+};
+
+window.editProfile = function() {
+    const newName = prompt('Новое имя:', currentUser.name);
+    const newPhone = prompt('Новый телефон:', currentUser.phone || '');
+    const updates = {};
+    if (newName) updates.name = newName;
+    if (newPhone) updates.phone = newPhone;
+    if (Object.keys(updates).length) {
+        updateUserData(updates);
+    }
+};
+
+window.showTab = function(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+    if (tabName === 'orders') loadOrders();
+    if (tabName === 'addresses') loadAddresses();
+};
+
 renderAuthScreen();
 </script>
 </body>
