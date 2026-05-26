@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta http-equiv="Cache-Control" content="max-age=3600">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Каталог | Estética</title>
@@ -127,6 +126,7 @@
 <script>
 const SUPABASE_URL = 'https://nmbxiqanaeqmelxhczdu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tYnhpcWFuYWVxbWVseGhjemR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDM2MDYsImV4cCI6MjA5NTM3OTYwNn0.Tthpbmnys_e4B13bZ1mt0t4t4QRYwzxDqu_83vuSks8';
+
 let products = [];
 let filteredProducts = [];
 let categories = [];
@@ -162,11 +162,6 @@ async function loadData() {
 function getCategoryName(categoryId) {
     const cat = categories.find(c => c.id == categoryId);
     return cat ? cat.name : 'Без категории';
-}
-
-function getCategorySlug(categoryId) {
-    const cat = categories.find(c => c.id == categoryId);
-    return cat ? cat.slug : '';
 }
 
 function getCart() { return JSON.parse(localStorage.getItem('estetica_cart') || '[]'); }
