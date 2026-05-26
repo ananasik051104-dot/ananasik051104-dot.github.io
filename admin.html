@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta http-equiv="Cache-Control" content="max-age=300">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Админ-панель | Estética</title>
@@ -17,37 +16,57 @@
         .nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
         .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 10px}
         .access-denied{text-align:center;padding:40px;background:#D56989;color:#F3EEF1}
+        
+        /* СТАТИСТИКА */
         .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px;margin-bottom:25px}
         .stat-card{background:#D56989;padding:15px;text-align:center;color:#F3EEF1}
         .stat-number{font-size:32px;font-weight:bold}
+        
+        /* ЗАГОЛОВКИ СЕКЦИЙ */
         .section-title{font-size:22px;color:#D56989;margin:25px 0 12px;border-left:4px solid #C2DC80;padding-left:12px}
-        .table-wrapper{overflow-x:auto}
+        
+        /* ТАБЛИЦЫ */
+        .table-wrapper{overflow-x:auto;margin:15px 0}
         .data-table{width:100%;border-collapse:collapse;font-size:13px}
-        .data-table th,.data-table td{padding:10px 6px;border-bottom:1px solid #C2DC80;text-align:left}
-        .data-table th{background:#C2DC80;color:#D56989}
-        .badge-admin{background:#C2DC80;color:#D56989;padding:2px 8px;font-size:11px}
-        .btn-small{background:#D56989;border:none;padding:4px 10px;font-family:inherit;font-size:11px;cursor:pointer;color:#F3EEF1;margin:2px}
+        .data-table th,.data-table td{padding:10px 8px;border-bottom:1px solid #C2DC80;text-align:left;vertical-align:middle}
+        .data-table th{background:#C2DC80;color:#D56989;font-weight:bold;white-space:nowrap}
+        .data-table td{color:#5b3b45}
+        
+        .badge-admin{background:#C2DC80;color:#D56989;padding:2px 8px;font-size:11px;border-radius:20px}
+        .btn-small{background:#D56989;border:none;padding:4px 10px;font-family:inherit;font-size:11px;cursor:pointer;color:#F3EEF1;margin:2px;border-radius:4px}
         .btn-small:hover{background:#b84d6e}
+        
         .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:20px 15px 15px;position:relative}
         .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 15px;font-size:12px;text-align:center}
         .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:12px}
         .social-link{color:#C2DC80;text-decoration:none;font-size:13px;padding:5px 10px}
         .social-link:hover{background:rgba(193,130,146,0.35)}
         .copyright{text-align:center;font-size:10px;color:#C2DC80}
+        
         .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center}
         .modal-content{background:#F3EEF1;padding:20px;max-width:500px;width:90%;max-height:85vh;overflow-y:auto}
         .modal-content h3{color:#D56989;margin-bottom:15px}
         .modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:8px;margin:8px 0;border:1px solid #C2DC80;font-family:inherit;background:#F3EEF1;color:#D56989}
         .modal-content textarea{min-height:80px}
         .modal-content button{background:#D56989;color:#F3EEF1;border:none;padding:8px;cursor:pointer;margin-top:8px}
-        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:10px;text-align:center;font-family:system-ui;font-size:12px;z-index:1001;animation:slideIn .3s ease}
+        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:10px;text-align:center;font-family:system-ui;font-size:12px;z-index:1001;animation:slideIn .3s ease;border-radius:30px}
         .loading{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;justify-content:center;align-items:center;z-index:9999;color:white;font-size:20px}
         @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-        @media(max-width:700px){.frame{padding:15px}.header{flex-direction:column;text-align:center}}
+        
+        @media(max-width:700px){
+            .frame{padding:15px}
+            .header{flex-direction:column;text-align:center}
+            .data-table{font-size:11px}
+            .data-table th,.data-table td{padding:6px 4px}
+        }
+        @media(max-width:480px){
+            .stats-grid{grid-template-columns:repeat(2,1fr)}
+            .section-title{font-size:18px}
+        }
     </style>
 </head>
 <body>
-<div class="loading" id="loading" style="display:none;">Загрузка...</div>
+<div class="loading" id="loading" style="display:flex;">Загрузка...</div>
 
 <div class="frame">
     <div class="header"><a href="index.html" class="logo">Estética Админ</a><div class="nav"><a href="index.html">ГЛАВНАЯ</a><a href="index2.html">КАТАЛОГ</a><a href="index5.html">КОНТАКТЫ</a><a href="index3.html">КОРЗИНА</a><a href="index4.html">КАБИНЕТ</a></div></div>
@@ -64,7 +83,12 @@
         <input type="text" id="productImg" placeholder="URL фото">
         <textarea id="productDesc" placeholder="Краткое описание"></textarea>
         <textarea id="productFullDesc" placeholder="Полное описание"></textarea>
-        <select id="productCategory"></select>
+        <select id="productCategory">
+            <option value="bright">Яркие букеты</option>
+            <option value="gentle">Нежные букеты</option>
+            <option value="minimalism">Минимализм</option>
+            <option value="single">Единичная позиция</option>
+        </select>
         <button onclick="saveProduct()">Сохранить</button>
         <button onclick="closeModal()">Отмена</button>
     </div>
@@ -76,9 +100,8 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 let currentUser = null;
 let editingProductId = null;
-let categories = [];
-let orderStatuses = [];
 let cache = {};
+let cacheTime = {};
 
 async function supabaseFetch(endpoint, options = {}) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
@@ -92,29 +115,26 @@ async function supabaseFetch(endpoint, options = {}) {
     return res;
 }
 
-async function supabaseGet(table) {
-    if (cache[table]) return cache[table];
+async function supabaseGet(table, forceRefresh = false) {
+    const now = Date.now();
+    if (!forceRefresh && cache[table] && cacheTime[table] && (now - cacheTime[table] < 10000)) {
+        return cache[table];
+    }
     const res = await supabaseFetch(`${table}?select=*`);
     const data = await res.json();
     cache[table] = data;
-    setTimeout(() => { delete cache[table]; }, 10000);
+    cacheTime[table] = now;
     return data;
 }
 
 async function supabasePost(table, data) {
-    const res = await supabaseFetch(table, {
-        method: 'POST',
-        body: JSON.stringify(data)
-    });
+    const res = await supabaseFetch(table, { method: 'POST', body: JSON.stringify(data) });
     delete cache[table];
     return await res.json();
 }
 
 async function supabasePut(table, id, data) {
-    const res = await supabaseFetch(`${table}?id=eq.${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(data)
-    });
+    const res = await supabaseFetch(`${table}?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify(data) });
     delete cache[table];
     return await res.json();
 }
@@ -125,18 +145,8 @@ async function supabaseDelete(table, id) {
     return true;
 }
 
-async function loadCategories() {
-    categories = await supabaseGet('categories');
-    return categories;
-}
-
-async function loadOrderStatuses() {
-    orderStatuses = await supabaseGet('order_statuses');
-    return orderStatuses;
-}
-
 async function login(email, password) {
-    const users = await supabaseGet('users');
+    const users = await supabaseGet('users', true);
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
         currentUser = user;
@@ -157,19 +167,7 @@ async function getCurrentUser() {
     return currentUser;
 }
 
-function logout() {
-    currentUser = null;
-    localStorage.removeItem('estetica_current_user');
-    renderAdminPanel();
-}
-
-function renderCategorySelect(selectedId = null) {
-    let html = '';
-    for (let cat of categories) {
-        html += `<option value="${cat.id}" ${selectedId == cat.id ? 'selected' : ''}>${cat.name}</option>`;
-    }
-    return html;
-}
+function logout() { currentUser = null; localStorage.removeItem('estetica_current_user'); renderAdminPanel(); }
 
 async function addProduct() {
     editingProductId = null;
@@ -179,7 +177,7 @@ async function addProduct() {
     document.getElementById('productImg').value = '';
     document.getElementById('productDesc').value = '';
     document.getElementById('productFullDesc').value = '';
-    document.getElementById('productCategory').innerHTML = renderCategorySelect();
+    document.getElementById('productCategory').value = 'bright';
     document.getElementById('productModal').style.display = 'flex';
 }
 
@@ -191,7 +189,7 @@ function editProduct(product) {
     document.getElementById('productImg').value = product.img;
     document.getElementById('productDesc').value = product.short_desc || '';
     document.getElementById('productFullDesc').value = product.full_desc || '';
-    document.getElementById('productCategory').innerHTML = renderCategorySelect(product.category_id);
+    document.getElementById('productCategory').value = product.cat;
     document.getElementById('productModal').style.display = 'flex';
 }
 
@@ -201,35 +199,21 @@ async function saveProduct() {
     const img = document.getElementById('productImg').value.trim();
     const short_desc = document.getElementById('productDesc').value.trim();
     const full_desc = document.getElementById('productFullDesc').value.trim();
-    const category_id = parseInt(document.getElementById('productCategory').value);
-    
-    if (!name || !price || !img) {
-        alert('Заполните название, цену и фото');
-        return;
-    }
-    
-    const productData = { name, price, img, short_desc, full_desc, category_id };
-    
+    const cat = document.getElementById('productCategory').value;
+    if (!name || !price || !img) { alert('Заполните название, цену и фото'); return; }
+    const productData = { name, price, img, short_desc, full_desc, cat };
     try {
-        let result;
         if (editingProductId === null) {
-            result = await supabasePost('products', productData);
-            if (result && result.id) {
-                showToast('Товар добавлен');
-            } else {
-                showToast('Ошибка добавления');
-                return;
-            }
+            const result = await supabasePost('products', productData);
+            if (result && result.id) showToast('Товар добавлен');
+            else { showToast('Ошибка добавления'); return; }
         } else {
-            result = await supabasePut('products', editingProductId, productData);
+            await supabasePut('products', editingProductId, productData);
             showToast('Товар обновлён');
         }
         closeModal();
         await renderAdminPanel();
-    } catch(e) {
-        console.error('Ошибка сохранения:', e);
-        showToast('Ошибка сохранения товара');
-    }
+    } catch(e) { showToast('Ошибка сохранения товара'); }
 }
 
 async function deleteProduct(id) {
@@ -245,46 +229,28 @@ async function toggleAdmin(userId, currentIsAdmin) {
     await renderAdminPanel();
 }
 
-async function updateOrderStatus(orderId, newStatusId) {
-    const newStatus = orderStatuses.find(s => s.id == newStatusId);
-    await supabasePut('orders', orderId, { status_id: newStatusId, status: newStatus.name });
+async function updateOrderStatus(orderId, newStatus) {
+    await supabasePut('orders', orderId, { status: newStatus });
     showToast('Статус заказа обновлён');
     await renderAdminPanel();
 }
 
-function closeModal() {
-    document.getElementById('productModal').style.display = 'none';
-    editingProductId = null;
-}
-
-function showToast(msg) {
-    let t = document.querySelector('.toast');
-    if (t) t.remove();
-    t = document.createElement('div');
-    t.className = 'toast';
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2500);
-}
+function closeModal() { document.getElementById('productModal').style.display = 'none'; editingProductId = null; }
+function showToast(msg) { let t = document.querySelector('.toast'); if (t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2500); }
 
 async function renderAdminPanel() {
     await getCurrentUser();
-    await loadCategories();
-    await loadOrderStatuses();
-    
     const container = document.getElementById('adminContent');
     const isUserAdmin = currentUser && (currentUser.isadmin || currentUser.isAdmin || currentUser.is_admin);
     
     if (!currentUser || !isUserAdmin) {
         container.innerHTML = `<div class="access-denied"><h2>Доступ запрещён</h2><p><a href="index4.html" style="color:#C2DC80;">Вернуться в кабинет</a></p></div>`;
+        document.getElementById('loading').style.display = 'none';
         return;
     }
     
     const [users, orders, messages, products] = await Promise.all([
-        supabaseGet('users'),
-        supabaseGet('orders'),
-        supabaseGet('messages'),
-        supabaseGet('products')
+        supabaseGet('users'), supabaseGet('orders'), supabaseGet('messages'), supabaseGet('products')
     ]);
     
     const stats = {
@@ -298,19 +264,16 @@ async function renderAdminPanel() {
     
     // Каталог товаров
     let productsHtml = `<div style="display:flex; justify-content:space-between; align-items:center;"><div class="section-title">Каталог товаров (${products.length})</div><button class="btn-small" onclick="addProduct()" style="background:#1f5437; padding:6px 12px;">+ Добавить товар</button></div>`;
-    if (products.length === 0) {
-        productsHtml += '<div style="text-align:center;padding:20px;">Товаров пока нет</div>';
-    } else {
+    if (products.length === 0) productsHtml += '<div style="text-align:center;padding:20px;">Товаров пока нет</div>';
+    else {
         productsHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Фото</th><th>Название</th><th>Цена</th><th>Категория</th><th>Действия</th></tr></thead><tbody>`;
         for (let p of products) {
-            const category = categories.find(c => c.id == p.category_id);
-            const catName = category ? category.name : 'Без категории';
+            const catName = {bright:'Яркие', gentle:'Нежные', minimalism:'Минимализм', single:'Единичные'}[p.cat] || p.cat;
             productsHtml += `<tr>
                 <td>${p.id}</td>
                 <td><img src="${p.img}" style="width:40px;height:40px;object-fit:cover;"></td>
                 <td>${p.name}</td>
-                <td>${p.price} ₽</td>
-                <td>${catName}</td>
+                <td>${p.price} ₽</td><td>${catName}</td>
                 <td><button class="btn-small" onclick='editProduct(${JSON.stringify(p).replace(/'/g, "&#39;")})'>✏️</button>
                 <button class="btn-small" onclick="deleteProduct('${p.id}')">🗑</button></td>
             </tr>`;
@@ -318,11 +281,10 @@ async function renderAdminPanel() {
         productsHtml += `</tbody></table></div>`;
     }
     
-    // Пользователи
+    // Пользователи - ТАБЛИЦА ВЫРОВНЕНА
     let usersHtml = `<div class="section-title">Пользователи (${users.length})</div>`;
-    if (users.length === 0) {
-        usersHtml += '<div style="text-align:center;padding:20px;">Пока нет пользователей</div>';
-    } else {
+    if (users.length === 0) usersHtml += '<div style="text-align:center;padding:20px;">Пока нет пользователей</div>';
+    else {
         usersHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Заказов</th><th>Статус</th><th>Действия</th></tr></thead><tbody>`;
         for (let u of users) {
             const isAdminUser = u.isadmin || u.isAdmin || u.is_admin;
@@ -336,57 +298,49 @@ async function renderAdminPanel() {
                 <td><button class="btn-small" onclick="toggleAdmin('${u.id}', ${isAdminUser})">${isAdminUser ? 'Снять права' : 'Назначить админом'}</button></td>
             </tr>`;
         }
-        usersHtml += `</tbody><tr></div>`;
+        usersHtml += `</tbody></table></div>`;
     }
     
-    // Заказы
+    // Заказы - ТАБЛИЦА ВЫРОВНЕНА
     let ordersHtml = `<div class="section-title">Заказы (${orders.length})</div>`;
-    if (orders.length === 0) {
-        ordersHtml += '<div style="text-align:center;padding:20px;">Заказов пока нет</div>';
-    } else {
-        ordersHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th><th>Действия</th></td></thead><tbody>`;
+    if (orders.length === 0) ordersHtml += '<div style="text-align:center;padding:20px;">Заказов пока нет</div>';
+    else {
+        ordersHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th><th>Действия</th></tr></thead><tbody>`;
         for (let o of orders) {
-            const currentStatus = orderStatuses.find(s => s.id == o.status_id) || { name: o.status, color: '#D56989' };
-            
-            let statusOptions = '';
-            for (let s of orderStatuses) {
-                statusOptions += `<option value="${s.id}" ${s.id == o.status_id ? 'selected' : ''}>${s.name}</option>`;
-            }
-            
             ordersHtml += `<tr>
                 <td>${o.id}</td>
                 <td>${o.date}</td>
                 <td>${o.userEmail || 'Гость'}</td>
                 <td>${o.items?.map(i => `${i.name} x${i.quantity}`).join('<br>') || '-'}</td>
                 <td>${o.total} ₽</td>
-                <td>
-                    <select class="btn-small" onchange="updateOrderStatus('${o.id}', this.value)" style="background:${currentStatus.color}; color:white;">
-                        ${statusOptions}
-                    </select>
-                </td>
+                <td><select class="btn-small" onchange="updateOrderStatus('${o.id}', this.value)" style="background:#D56989;color:white;">
+                    <option value="Новый" ${o.status === 'Новый' ? 'selected' : ''}>Новый</option>
+                    <option value="В обработке" ${o.status === 'В обработке' ? 'selected' : ''}>В обработке</option>
+                    <option value="Доставлен" ${o.status === 'Доставлен' ? 'selected' : ''}>Доставлен</option>
+                    <option value="Отменён" ${o.status === 'Отменён' ? 'selected' : ''}>Отменён</option>
+                </select></td>
                 <td>${o.address || '-'}</td>
-                <td><button class="btn-small" onclick="updateOrderStatus('${o.id}', ${orderStatuses.find(s => s.name === 'Отменён')?.id})">Отменить</button></td>
+                <td><button class="btn-small" onclick="updateOrderStatus('${o.id}', 'Отменён')">Отменить</button></td>
             </tr>`;
         }
         ordersHtml += `</tbody></table></div>`;
     }
     
-    // Сообщения
+    // Сообщения - ТАБЛИЦА ВЫРОВНЕНА
     let messagesHtml = `<div class="section-title">Сообщения (${messages.length})</div>`;
-    if (messages.length === 0) {
-        messagesHtml += '<div style="text-align:center;padding:20px;">Сообщений пока нет</div>';
-    } else {
+    if (messages.length === 0) messagesHtml += '<div style="text-align:center;padding:20px;">Сообщений пока нет</div>';
+    else {
         messagesHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>Дата</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Сообщение</th></tr></thead><tbody>`;
         for (let m of messages) {
-            messagesHtml += `<td>
+            messagesHtml += `<tr>
                 <td>${m.date}</td>
                 <td>${m.name}</td>
                 <td>${m.email}</td>
                 <td>${m.phone || '-'}</td>
-                <td style="max-width:300px;">${m.message}</td>
+                <td style="max-width:350px;">${m.message}</td>
             </tr>`;
         }
-        messagesHtml += `</tbody><table></div>`;
+        messagesHtml += `</tbody></table></div>`;
     }
     
     container.innerHTML = `
@@ -407,6 +361,7 @@ async function renderAdminPanel() {
         ${ordersHtml}
         ${messagesHtml}
     `;
+    document.getElementById('loading').style.display = 'none';
 }
 
 async function init() {
@@ -429,16 +384,15 @@ async function init() {
             <button onclick="doLogin()" style="background:#D56989;color:white;border:none;padding:8px 20px;">Войти</button>
         </div>
     `;
+    document.getElementById('loading').style.display = 'none';
 }
 
 window.doLogin = async function() {
+    document.getElementById('loading').style.display = 'flex';
     const email = document.getElementById('loginEmail')?.value;
     const password = document.getElementById('loginPassword')?.value;
-    if (await login(email, password)) {
-        renderAdminPanel();
-    } else {
-        alert('Неверный email или пароль!');
-    }
+    if (await login(email, password)) renderAdminPanel();
+    else { alert('Неверный email или пароль!'); document.getElementById('loading').style.display = 'none'; }
 };
 
 init();
