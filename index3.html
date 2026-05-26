@@ -23,58 +23,102 @@
         .nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
         .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 10px}
         .line{height:2px;background:#C2DC80;margin:20px 0;opacity:.5}
-        .cart-title{font-size:28px;color:#D56989;margin-bottom:20px;text-align:center}
+        .cart-title{font-size:32px;color:#D56989;margin-bottom:25px;text-align:center;font-weight:600}
         
         /* ТАБЛИЦА КОРЗИНЫ НА ВСЮ ШИРИНУ */
         .table-wrapper{
             overflow-x:auto;
-            margin:15px 0;
+            margin:20px 0;
+            border:1px solid #C2DC80;
         }
         .cart-table{
             width:100%;
             border-collapse:collapse;
-            font-size:14px;
-            min-width:600px;
-        }
-        .cart-table th,.cart-table td{
-            padding:12px 10px;
-            border-bottom:1px solid #C2DC80;
-            text-align:left;
-            vertical-align:middle;
+            font-size:15px;
+            min-width:650px;
         }
         .cart-table th{
             background:#C2DC80;
             color:#D56989;
-            font-weight:bold;
+            padding:15px 12px;
+            text-align:left;
+            font-weight:600;
+            font-size:16px;
+        }
+        .cart-table td{
+            padding:15px 12px;
+            border-bottom:1px solid #C2DC80;
+            vertical-align:middle;
         }
         .cart-product-img{
-            width:60px;
-            height:60px;
+            width:70px;
+            height:70px;
             object-fit:cover;
+            border:1px solid #D56989;
+        }
+        .product-name{
+            font-weight:600;
+            color:#D56989;
+            font-size:16px;
+        }
+        .product-price{
+            color:#D56989;
+            font-weight:500;
+        }
+        .quantity-control{
+            display:flex;
+            align-items:center;
+            gap:12px;
         }
         .quantity-btn{
             background:#D56989;
             border:none;
-            width:30px;
-            height:30px;
+            width:32px;
+            height:32px;
             cursor:pointer;
-            font-size:16px;
+            font-size:18px;
             color:#F3EEF1;
             border-radius:4px;
+            transition:0.2s;
+        }
+        .quantity-btn:hover{
+            background:#b84d6e;
+            transform:scale(1.05);
+        }
+        .quantity-value{
+            font-size:16px;
+            font-weight:600;
+            color:#D56989;
+            min-width:30px;
+            text-align:center;
         }
         .remove-btn{
             background:none;
             border:none;
             color:#D56989;
-            font-size:22px;
+            font-size:24px;
             cursor:pointer;
+            transition:0.2s;
+        }
+        .remove-btn:hover{
+            color:#b84d6e;
+            transform:scale(1.1);
+        }
+        .discount-badge{
+            display:inline-block;
+            background:#1f5437;
+            color:white;
+            font-size:11px;
+            padding:2px 8px;
+            margin-top:5px;
+            border-radius:20px;
         }
         .cart-summary{
             text-align:right;
-            padding:15px 20px;
+            padding:20px 25px;
             background:#C2DC80;
-            margin:15px 0;
-            font-size:22px;
+            margin:20px 0;
+            font-size:24px;
             font-weight:bold;
             color:#D56989;
         }
@@ -82,45 +126,51 @@
             font-size:13px;
             font-weight:normal;
             display:block;
-            margin-top:5px;
+            margin-top:8px;
+            color:#5b3b45;
         }
         .empty-cart{
             text-align:center;
             padding:60px;
             color:#D56989;
-            font-size:22px;
+            font-size:24px;
         }
         .continue-btn{
             display:inline-block;
-            margin-top:15px;
-            padding:10px 25px;
+            margin-top:20px;
+            padding:12px 30px;
             background:#D56989;
             color:#F3EEF1;
             text-decoration:none;
             font-size:16px;
+            transition:0.2s;
+        }
+        .continue-btn:hover{
+            background:#b84d6e;
         }
         .form-section{
-            margin-top:25px;
-            padding:20px;
+            margin-top:30px;
+            padding:25px;
             background:#F3EEF1;
             border:1px solid #C2DC80;
         }
         .form-title{
-            font-size:24px;
+            font-size:26px;
             color:#D56989;
             margin-bottom:20px;
             text-align:center;
+            font-weight:600;
         }
         .form-grid{
             display:grid;
             grid-template-columns:1fr 1fr;
-            gap:15px;
-            margin-bottom:20px;
+            gap:18px;
+            margin-bottom:25px;
         }
         .field-group{
             display:flex;
             flex-direction:column;
-            gap:5px;
+            gap:6px;
         }
         .field-group label{
             font-size:14px;
@@ -128,17 +178,22 @@
             color:#D56989;
         }
         .field-group input{
-            padding:10px 12px;
+            padding:12px 15px;
             border:1px solid #C2DC80;
             background:#F3EEF1;
             font-family:inherit;
-            font-size:14px;
+            font-size:15px;
             color:#D56989;
+            transition:0.2s;
+        }
+        .field-group input:focus{
+            outline:none;
+            border-color:#D56989;
         }
         .info-text{
             background:#C2DC80;
-            padding:12px;
-            margin:15px 0;
+            padding:15px;
+            margin:20px 0;
             text-align:center;
             color:#D56989;
             font-size:14px;
@@ -148,11 +203,16 @@
             border:none;
             color:#F3EEF1;
             font-size:18px;
-            padding:12px 30px;
+            font-weight:600;
+            padding:14px 40px;
             cursor:pointer;
             display:block;
-            margin:15px auto 0;
-            border-radius:40px;
+            margin:20px auto 0;
+            transition:0.2s;
+        }
+        .submit-order-btn:hover{
+            background:#b84d6e;
+            transform:scale(1.02);
         }
         .bottom-block{
             background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');
@@ -164,32 +224,33 @@
         .footer-info{
             display:flex;
             justify-content:center;
-            gap:15px;
+            gap:20px;
             flex-wrap:wrap;
             color:#C2DC80;
             margin:10px 0 15px;
-            font-size:12px;
+            font-size:13px;
             text-align:center;
         }
         .social-links{
             display:flex;
             justify-content:center;
-            gap:15px;
+            gap:20px;
             flex-wrap:wrap;
             margin-bottom:12px;
         }
         .social-link{
             color:#C2DC80;
             text-decoration:none;
-            font-size:13px;
-            padding:5px 10px;
+            font-size:14px;
+            padding:5px 12px;
+            transition:0.2s;
         }
         .social-link:hover{
             background:rgba(193,130,146,0.35);
         }
         .copyright{
             text-align:center;
-            font-size:10px;
+            font-size:11px;
             color:#C2DC80;
         }
         .toast{
@@ -199,51 +260,31 @@
             left:20px;
             background:#1f5437;
             color:white;
-            padding:10px;
+            padding:12px;
             text-align:center;
             font-family:system-ui;
-            font-size:12px;
+            font-size:13px;
             z-index:1001;
             animation:slideIn .3s ease;
             border-radius:30px;
         }
         @keyframes slideIn{
             from{transform:translateY(100%);opacity:0}
-            to{transform:translateY(0);opacity:1}
+            to{transform:translateX(0);opacity:1}
         }
-        @media (min-width:481px){
-            .form-grid{
-                grid-template-columns:1fr 1fr;
-            }
+        @media (max-width:700px){
+            .frame{padding:15px}
+            .header{flex-direction:column;text-align:center}
+            .cart-title{font-size:26px}
+            .cart-table th,.cart-table td{padding:10px 8px;font-size:13px}
+            .cart-product-img{width:50px;height:50px}
+            .quantity-btn{width:28px;height:28px;font-size:16px}
+            .cart-summary{font-size:20px}
+            .form-grid{grid-template-columns:1fr}
+            .footer-info{flex-direction:column;gap:10px}
         }
-        @media(max-width:700px){
-            .frame{
-                padding:15px;
-            }
-            .header{
-                flex-direction:column;
-                text-align:center;
-            }
-            .cart-table th,.cart-table td{
-                padding:8px 5px;
-                font-size:12px;
-            }
-            .cart-product-img{
-                width:45px;
-                height:45px;
-            }
-            .quantity-btn{
-                width:25px;
-                height:25px;
-                font-size:14px;
-            }
-            .cart-summary{
-                font-size:18px;
-            }
-            .footer-info{
-                flex-direction:column;
-                gap:8px;
-            }
+        @media (min-width:701px) and (max-width:1024px){
+            .form-grid{grid-template-columns:1fr 1fr}
         }
     </style>
 </head>
@@ -259,12 +300,12 @@
             <div class="form-grid">
                 <div class="field-group"><label>Ваше имя</label><input type="text" id="userName" placeholder="Ваше имя"></div>
                 <div class="field-group"><label>Имя получателя</label><input type="text" id="recipientName" placeholder="Имя получателя"></div>
-                <div class="field-group"><label>Ваш телефон</label><input type="tel" id="userPhone" placeholder="+7"></div>
-                <div class="field-group"><label>Телефон получателя</label><input type="tel" id="recipientPhone" placeholder="+7"></div>
-                <div class="field-group"><label>Адрес доставки</label><input type="text" id="address" placeholder="Адрес"></div>
+                <div class="field-group"><label>Ваш телефон</label><input type="tel" id="userPhone" placeholder="+7 (___) ___-__-__"></div>
+                <div class="field-group"><label>Телефон получателя</label><input type="tel" id="recipientPhone" placeholder="+7 (___) ___-__-__"></div>
+                <div class="field-group"><label>Адрес доставки</label><input type="text" id="address" placeholder="Улица, дом, квартира"></div>
                 <div class="field-group"><label>Время доставки</label><input type="text" id="deliveryTime" placeholder="14:00"></div>
                 <div class="field-group"><label>Дата доставки</label><input type="text" id="deliveryDate" placeholder="27.05.2025"></div>
-                <div class="field-group"><label>Комментарий</label><input type="text" id="comment" placeholder="Пожелания"></div>
+                <div class="field-group"><label>Комментарий</label><input type="text" id="comment" placeholder="Пожелания к заказу"></div>
             </div>
             <div class="info-text">Оплата только на месте получения</div>
             <button class="submit-order-btn" id="submitOrderBtn">Оформить заказ</button>
@@ -344,40 +385,49 @@ async function renderCart() {
         let originalPrice = item.price * item.quantity;
         let discountAmount = 0;
         let discountedPrice = originalPrice;
+        let showDiscount = false;
         
         if (activePromo.category_id && activePromo.category_id === itemCategoryId) {
             discountAmount = originalPrice * (activePromo.percent / 100);
             discountedPrice = originalPrice - discountAmount;
+            showDiscount = true;
         }
         
         total += discountedPrice;
-        const showDiscount = discountAmount > 0;
         
         rows += `<tr>
-            <td><img src="${item.img}" class="cart-product-img"></td>
-            <td>${item.name}${showDiscount ? `<br><span style="color:#1f5437; font-size:11px;">Скидка ${activePromo.percent}%</span>` : ''}</td>
-            <td>${showDiscount ? `<s style="color:#999; font-size:11px;">${Math.round(originalPrice)} ₽</s><br><span style="color:#1f5437;">${Math.round(discountedPrice)} ₽</span>` : `${Math.round(originalPrice)} ₽`}</td>
-            <td><div><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button><span style="margin:0 12px">${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></div></td>
+            <td><img src="${item.img}" class="cart-product-img" loading="lazy"></td>
+            <td>
+                <div class="product-name">${item.name}</div>
+                ${showDiscount ? `<span class="discount-badge">Скидка ${activePromo.percent}%</span>` : ''}
+            </td>
+            <td><div class="product-price">${Math.round(originalPrice)} ₽</div></td>
+            <td>
+                <div class="quantity-control">
+                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                    <span class="quantity-value">${item.quantity}</span>
+                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                </div>
+            </td>
+            <td>
+                <div class="product-price">
+                    ${showDiscount ? `<s style="color:#999; font-size:12px;">${Math.round(originalPrice)} ₽</s><br><span style="color:#1f5437; font-weight:bold;">${Math.round(discountedPrice)} ₽</span>` : `${Math.round(originalPrice)} ₽`}
+                </div>
+            </td>
             <td><button class="remove-btn" onclick="removeItem(${item.id})">✕</button></td>
         </tr>`;
     }
     
     let promoMessage = '';
     if (activePromo.category_id && activePromo.percent > 0) {
-        promoMessage = `<small style="display:block; margin-top:8px;">Применена акция: скидка ${activePromo.percent}%</small>`;
+        promoMessage = `<small>Применена акция: скидка ${activePromo.percent}%</small>`;
     }
     
     container.innerHTML = `
         <div class="table-wrapper">
             <table class="cart-table">
                 <thead>
-                    <tr>
-                        <th>Товар</th>
-                        <th>Название</th>
-                        <th>Цена</th>
-                        <th>Кол-во</th>
-                        <th></th>
-                    </tr>
+                    <tr><th>Товар</th><th>Название</th><th>Цена</th><th>Кол-во</th><th>Сумма</th><th></th></tr>
                 </thead>
                 <tbody>${rows}</tbody>
             </table>
