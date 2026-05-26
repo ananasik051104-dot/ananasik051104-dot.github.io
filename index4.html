@@ -52,8 +52,6 @@
         .social-link{color:#C2DC80;text-decoration:none;font-size:13px;padding:5px 10px}
         .social-link:hover{background:rgba(193,130,146,0.35)}
         .copyright{text-align:center;font-size:10px;color:#C2DC80}
-        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:10px;text-align:center;font-family:system-ui;font-size:12px;z-index:1001;animation:slideIn .3s}
-        @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
         @media(max-width:700px){.frame{padding:15px}.header{flex-direction:column;text-align:center}.profile-buttons{flex-direction:column;align-items:center}.footer-info{flex-direction:column;gap:8px}}
     </style>
 </head>
@@ -83,10 +81,7 @@ async function supabaseGet(table, filter = null) {
     let url = `${SUPABASE_URL}/rest/v1/${table}?select=*`;
     if (filter) url += `&${filter}`;
     const res = await fetch(url, {
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-        }
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     return await res.json();
 }
@@ -171,7 +166,6 @@ function logout() {
     alert('Вы вышли из аккаунта');
 }
 
-// ==================== УПРАВЛЕНИЕ ПРОФИЛЕМ ====================
 async function updateUserData(updates) {
     if (!currentUser) return;
     
@@ -261,7 +255,12 @@ function renderAuthScreen() {
         `;
         userPanel.style.display = 'none';
     } else {
-        const adminButton = currentUser.isadmin ? `<button class="admin-btn" onclick="location.href='admin.html'">Админ-панель</button>` : '';
+        const isUserAdmin = currentUser.isadmin || currentUser.isAdmin || currentUser.is_admin;
+        const adminButtons = isUserAdmin ? `
+            <button class="admin-btn" onclick="location.href='admin.html'">Админ-панель</button>
+            <button class="admin-btn" onclick="location.href='database.html'" style="background:#1f5437; margin-left:5px;">База данных</button>
+        ` : '';
+        
         authBlock.innerHTML = `
             <div class="profile-card">
                 <div class="avatar">🌸</div>
@@ -271,7 +270,7 @@ function renderAuthScreen() {
                 <div class="profile-buttons">
                     <button onclick="editProfile()">Редактировать</button>
                     <button class="logout-btn" onclick="logout()">Выйти</button>
-                    ${adminButton}
+                    ${adminButtons}
                 </div>
             </div>
         `;

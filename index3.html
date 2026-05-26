@@ -24,6 +24,7 @@
         .quantity-btn{background:#D56989;border:none;width:28px;height:28px;cursor:pointer;font-size:16px;color:#F3EEF1}
         .remove-btn{background:none;border:none;color:#D56989;font-size:20px;cursor:pointer}
         .cart-summary{text-align:right;padding:15px;background:#C2DC80;margin:15px 0;font-size:20px;font-weight:bold;color:#D56989}
+        .cart-summary small{font-size:12px;font-weight:normal;display:block;margin-top:5px}
         .empty-cart{text-align:center;padding:40px;color:#D56989;font-size:20px}
         .continue-btn{display:inline-block;margin-top:15px;padding:10px 20px;background:#D56989;color:#F3EEF1;text-decoration:none}
         .form-section{margin-top:20px;padding:15px;background:#F3EEF1;border:1px solid #C2DC80}
@@ -66,23 +67,192 @@
 </div>
 
 <script>
-const BIN_ID = '6a0e46146877513b27a708ce';
-const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
-const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-let currentUser = null;
+const SUPABASE_URL = 'https://udurupapnhmhbxtollbi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkdXJ1cGFwbmhtaGJ4dG9sbGJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NDc0NTUsImV4cCI6MjA5NTMyMzQ1NX0.xx-Vi9yKkRAt4jkA84RZV_90za5SDtjwrPvK-jB0s00';
 
-async function getData() { const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } }); const data = await res.json(); return data.record || { users: [], orders: [], messages: [], products: [] }; }
-async function saveData(data) { await fetch(API_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY }, body: JSON.stringify(data) }); }
-async function getCurrentUser() { const saved = localStorage.getItem('estetica_current_user'); if (saved) { currentUser = JSON.parse(saved); const data = await getData(); const freshUser = (data.users || []).find(u => u.id === currentUser.id); if (freshUser) currentUser = freshUser; } return currentUser; }
+let currentUser = null;
+let activePromo = { category_id: null, percent: 0, name: null };
+let productsFromDB = [];
+
+async function loadProducts() {
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        productsFromDB = await res.json();
+    } catch(e) { console.error(e); }
+}
+
+async function getActivePromoFromDB() {
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/promotions?is_active=eq.true&select=*`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const promotions = await res.json();
+        if (promotions && promotions.length > 0) {
+            const active = promotions[0];
+            activePromo = { category_id: active.category_id, percent: active.discount_percent, name: active.name };
+        } else {
+            activePromo = { category_id: null, percent: 0, name: null };
+        }
+    } catch(e) { console.error(e); }
+}
+
+async function getCurrentUser() {
+    const saved = localStorage.getItem('estetica_current_user');
+    if (saved) { currentUser = JSON.parse(saved); }
+    return currentUser;
+}
+
 function getCart() { return JSON.parse(localStorage.getItem('estetica_cart') || '[]'); }
 function saveCart(c) { localStorage.setItem('estetica_cart', JSON.stringify(c)); updateCartCount(); renderCart(); }
-function updateCartCount() { const cart = getCart(); const total = cart.reduce((s,i) => s + i.quantity, 0); const link = document.querySelector('.nav a[href="index3.html"]'); if (link) link.innerHTML = total > 0 ? `КОРЗИНА (${total})` : `КОРЗИНА`; }
-function showToast(m) { let t = document.querySelector('.toast'); if (t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
-function updateQuantity(id, delta) { let cart = getCart(); const idx = cart.findIndex(i => i.id === id); if (idx !== -1) { cart[idx].quantity += delta; if (cart[idx].quantity <= 0) cart.splice(idx, 1); saveCart(cart); } }
+function updateCartCount() { let t = getCart().reduce((s,i)=>s+i.quantity,0); let l = document.querySelector('.nav a[href="index3.html"]'); if(l) l.innerHTML = t > 0 ? `КОРЗИНА (${t})` : `КОРЗИНА`; }
+function showToast(m) { let t = document.querySelector('.toast'); if(t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
+
+function updateQuantity(id, delta) {
+    let cart = getCart(); let idx = cart.findIndex(i => i.id === id);
+    if (idx !== -1) { cart[idx].quantity += delta; if (cart[idx].quantity <= 0) cart.splice(idx, 1); saveCart(cart); }
+}
 function removeItem(id) { let cart = getCart(); cart = cart.filter(i => i.id !== id); saveCart(cart); }
-function renderCart() { const cart = getCart(); const container = document.getElementById('cartContent'); const orderSec = document.getElementById('orderSection'); if (cart.length === 0) { container.innerHTML = `<div class="empty-cart">Корзина пуста<br><a href="index2.html" class="continue-btn">В каталог</a></div>`; orderSec.style.display = 'none'; return; } orderSec.style.display = 'block'; let total = 0, rows = ''; cart.forEach(item => { const itemTotal = item.price * item.quantity; total += itemTotal; rows += `<tr><td><img src="${item.img}" class="cart-product-img"></td><td>${item.name}</td><td>${item.price} ₽</td><td><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button><span style="margin:0 15px">${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></td><td>${itemTotal} ₽</td><td><button class="remove-btn" onclick="removeItem(${item.id})">✕</button></td></tr>`; }); container.innerHTML = `<table class="cart-table"><thead><tr><th>Товар</th><th>Название</th><th>Цена</th><th>Кол-во</th><th>Сумма</th><th></th></tr></thead><tbody>${rows}</tbody></table><div class="cart-summary">Итого: ${total} ₽</div>`; }
-async function submitOrder() { const cart = getCart(); if (cart.length === 0) return alert('Корзина пуста'); const name = document.getElementById('userName')?.value.trim(); const phone = document.getElementById('userPhone')?.value.trim(); const address = document.getElementById('address')?.value.trim(); if (!name || !phone || !address) return alert('Заполните имя, телефон и адрес!'); await getCurrentUser(); const total = cart.reduce((s,i) => s + i.price * i.quantity, 0); const data = await getData(); const newOrder = { id: Date.now(), date: new Date().toLocaleString('ru-RU'), userId: currentUser?.id || 0, userEmail: currentUser?.email || 'Гость', items: cart, total: total, status: 'Новый', address: address, deliveryTime: document.getElementById('deliveryTime')?.value || '', comment: document.getElementById('comment')?.value || '' }; data.orders = data.orders || []; data.orders.unshift(newOrder); if (currentUser) { const users = data.users || []; const userIndex = users.findIndex(u => u.id === currentUser.id); if (userIndex !== -1) { users[userIndex].orders = users[userIndex].orders || []; users[userIndex].orders.unshift({ id: newOrder.id, date: newOrder.date, items: cart, total: total, status: 'Новый', address: address }); data.users = users; } } await saveData(data); localStorage.removeItem('estetica_cart'); renderCart(); updateCartCount(); document.querySelectorAll('#orderSection input').forEach(i => i.value = ''); alert(`Заказ оформлен!\nСумма: ${total} ₽\nСкоро с вами свяжутся!`); showToast(`Заказ на ${total} ₽ оформлен!`); }
-document.addEventListener('DOMContentLoaded', () => { renderCart(); document.getElementById('submitOrderBtn')?.addEventListener('click', submitOrder); });
+
+async function renderCart() {
+    if (productsFromDB.length === 0) await loadProducts();
+    await getActivePromoFromDB();
+    
+    const cart = getCart();
+    const container = document.getElementById('cartContent');
+    const orderSec = document.getElementById('orderSection');
+    
+    if (cart.length === 0) {
+        container.innerHTML = `<div class="empty-cart">Корзина пуста<br><a href="index2.html" class="continue-btn">В каталог</a></div>`;
+        orderSec.style.display = 'none';
+        return;
+    }
+    
+    orderSec.style.display = 'block';
+    let total = 0;
+    let rows = '';
+    
+    for (let item of cart) {
+        const productInfo = productsFromDB.find(p => p.id == item.id);
+        const itemCategoryId = productInfo ? productInfo.category_id : null;
+        
+        let originalPrice = item.price * item.quantity;
+        let discountAmount = 0;
+        let discountedPrice = originalPrice;
+        
+        if (activePromo.category_id === null) {
+            // нет скидки
+        } else if (activePromo.category_id === itemCategoryId) {
+            discountAmount = originalPrice * (activePromo.percent / 100);
+            discountedPrice = originalPrice - discountAmount;
+        }
+        
+        total += discountedPrice;
+        const showDiscount = discountAmount > 0;
+        
+        rows += `<tr>
+            <td><img src="${item.img}" class="cart-product-img"></td>
+            <td>${item.name}${showDiscount ? `<br><span style="color:#1f5437; font-size:11px;">Скидка ${activePromo.percent}%</span>` : ''}</td>
+            <td>${showDiscount ? `<s style="color:#999; font-size:11px;">${Math.round(originalPrice)} ₽</s><br><span style="color:#1f5437;">${Math.round(discountedPrice)} ₽</span>` : `${Math.round(originalPrice)} ₽`}</td>
+            <td><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button><span style="margin:0 12px">${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></td>
+            <td><button class="remove-btn" onclick="removeItem(${item.id})">✕</button></td>
+        </tr>`;
+    }
+    
+    let promoMessage = '';
+    if (activePromo.category_id && activePromo.percent > 0) {
+        promoMessage = `<small style="display:block; margin-top:8px;">Применена акция: скидка ${activePromo.percent}%</small>`;
+    }
+    
+    container.innerHTML = `
+        <table class="cart-table">
+            <thead><tr><th>Товар</th><th>Название</th><th>Цена</th><th>Кол-во</th><th></th></tr></thead>
+            <tbody>${rows}</tbody>
+        </table>
+        <div class="cart-summary">Итого: ${Math.round(total)} ₽${promoMessage}</div>
+    `;
+}
+
+async function saveOrderToSupabase(orderData) {
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        });
+        return await res.json();
+    } catch(e) { console.error(e); return null; }
+}
+
+async function submitOrder() {
+    const cart = getCart();
+    if (cart.length === 0) return alert('Корзина пуста');
+    
+    const name = document.getElementById('userName')?.value.trim();
+    const phone = document.getElementById('userPhone')?.value.trim();
+    const address = document.getElementById('address')?.value.trim();
+    
+    if (!name || !phone || !address) return alert('Заполните имя, телефон и адрес!');
+    
+    await getCurrentUser();
+    await loadProducts();
+    await getActivePromoFromDB();
+    
+    let total = 0;
+    const itemsWithDiscount = [];
+    
+    for (let item of cart) {
+        const productInfo = productsFromDB.find(p => p.id == item.id);
+        const itemCategoryId = productInfo ? productInfo.category_id : null;
+        
+        let originalPrice = item.price * item.quantity;
+        let discountAmount = 0;
+        
+        if (activePromo.category_id && activePromo.category_id === itemCategoryId) {
+            discountAmount = originalPrice * (activePromo.percent / 100);
+        }
+        
+        total += (originalPrice - discountAmount);
+        itemsWithDiscount.push({ ...item, category_id: itemCategoryId, originalPrice, discountAmount });
+    }
+    
+    const orderData = {
+        date: new Date().toLocaleString('ru-RU'),
+        user_id: currentUser?.id || null,
+        userEmail: currentUser?.email || 'Гость',
+        items: itemsWithDiscount,
+        total: Math.round(total),
+        address: address,
+        deliveryTime: document.getElementById('deliveryTime')?.value || '',
+        comment: document.getElementById('comment')?.value || '',
+        promo_applied: activePromo.category_id,
+        promo_discount: activePromo.percent
+    };
+    
+    const result = await saveOrderToSupabase(orderData);
+    
+    if (result && result.id) {
+        localStorage.removeItem('estetica_cart');
+        renderCart();
+        updateCartCount();
+        document.querySelectorAll('#orderSection input').forEach(i => i.value = '');
+        alert(`Заказ оформлен!\nСумма: ${Math.round(total)} ₽\nСкоро с вами свяжутся!`);
+        showToast(`Заказ на ${Math.round(total)} ₽ оформлен!`);
+    } else {
+        alert('Ошибка оформления заказа. Попробуйте позже.');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadProducts();
+    await renderCart();
+    document.getElementById('submitOrderBtn')?.addEventListener('click', submitOrder);
+});
 </script>
 </body>
 </html>

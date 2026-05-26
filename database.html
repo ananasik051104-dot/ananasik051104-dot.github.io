@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Управление БД | Estética</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Poiret One',cursive;background:#D56989;padding:15px}
+        .frame{max-width:1400px;margin:0 auto;background:#F3EEF1;padding:20px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
+        .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:20px;padding:12px 18px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
+        .header::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
+        .logo,.nav{position:relative;z-index:1}
+        .logo{font-size:28px;font-weight:600;color:#C2DC80;text-decoration:none}
+        .nav{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+        .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 12px}
+        .title{font-size:28px;color:#C2DC80;margin-bottom:20px;border-left:5px solid #C2DC80;padding-left:15px}
+        
+        .tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:20px;border-bottom:2px solid #C2DC80}
+        .tab-btn{background:transparent;border:none;padding:10px 20px;font-family:inherit;font-size:16px;cursor:pointer;color:#D56989;transition:.2s}
+        .tab-btn.active{background:#C2DC80;color:#D56989}
+        .tab-btn:hover{background:#C2DC80;color:#D56989}
+        
+        .tab-content{display:none}
+        .tab-content.active{display:block}
+        .table-wrapper{overflow-x:auto;margin:15px 0;max-height:60vh;overflow-y:auto}
+        .data-table{width:100%;border-collapse:collapse;font-size:13px}
+        .data-table th,.data-table td{padding:10px 6px;border-bottom:1px solid #C2DC80;text-align:left;vertical-align:top}
+        .data-table th{background:#C2DC80;color:#D56989;position:sticky;top:0}
+        .data-table tr:hover{background:#e8ecef}
+        .edit-input{width:100%;padding:6px;border:1px solid #C2DC80;background:#F3EEF1;font-family:inherit;font-size:12px;color:#D56989}
+        .btn-small{background:#D56989;border:none;padding:4px 8px;font-family:inherit;font-size:11px;cursor:pointer;color:#F3EEF1;margin:2px;border-radius:4px}
+        .btn-small:hover{background:#b84d6e}
+        
+        .loading{text-align:center;padding:40px;color:#D56989}
+        .access-denied{text-align:center;padding:60px;background:#D56989;color:#F3EEF1}
+        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:12px;text-align:center;font-family:system-ui;font-size:13px;z-index:1001;animation:slideIn .3s ease;border-radius:30px}
+        @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+        
+        @media(max-width:700px){
+            .frame{padding:15px}
+            .header{flex-direction:column;text-align:center}
+            .tab-btn{padding:6px 12px;font-size:13px}
+            .data-table{font-size:11px}
+        }
+    </style>
+</head>
+<body>
+<div class="frame">
+    <div class="header">
+        <a href="index.html" class="logo">Estética Админ БД</a>
+        <div class="nav">
+            <a href="index.html">ГЛАВНАЯ</a>
+            <a href="index2.html">КАТАЛОГ</a>
+            <a href="index5.html">КОНТАКТЫ</a>
+            <a href="index3.html">КОРЗИНА</a>
+            <a href="index4.html">КАБИНЕТ</a>
+            <a href="database.html">БД</a>
+        </div>
+    </div>
+
+    <h1 class="title">Управление базой данных</h1>
+
+    <div class="tabs" id="tabs"></div>
+    <div id="tabContents"></div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://udurupapnhmhbxtollbi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkdXJ1cGFwbmhtaGJ4dG9sbGJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NDc0NTUsImV4cCI6MjA5NTMyMzQ1NX0.xx-Vi9yKkRAt4jkA84RZV_90za5SDtjwrPvK-jB0s00';
+
+let currentUser = null;
+let currentTable = 'users';
+let editingRow = null;
+
+const tables = {
+    users: { name: 'Пользователи', fields: ['id', 'email', 'name', 'phone', 'isAdmin'], editable: ['email', 'name', 'phone', 'isAdmin'] },
+    products: { name: 'Товары', fields: ['id', 'name', 'price', 'img', 'short_desc', 'cat'], editable: ['name', 'price', 'img', 'short_desc', 'cat'] },
+    orders: { name: 'Заказы', fields: ['id', 'date', 'userEmail', 'total', 'status', 'address'], editable: ['status', 'address'] },
+    messages: { name: 'Сообщения', fields: ['id', 'date', 'name', 'email', 'message'], editable: ['name', 'email', 'message'] },
+    reviews: { name: 'Отзывы', fields: ['id', 'name', 'rating', 'text', 'is_approved'], editable: ['name', 'rating', 'text', 'is_approved'] },
+    promotions: { name: 'Акции', fields: ['id', 'name', 'category', 'discount_percent', 'is_active'], editable: ['name', 'category', 'discount_percent', 'is_active'] }
+};
+
+async function checkAuth() {
+    const saved = localStorage.getItem('estetica_current_user');
+    if (!saved) return false;
+    
+    try {
+        currentUser = JSON.parse(saved);
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${currentUser.id}&select=*`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const userData = await res.json();
+        if (userData && userData[0] && (userData[0].isAdmin || userData[0].isadmin)) {
+            currentUser = userData[0];
+            return true;
+        }
+    } catch(e) {
+        console.error('Auth error:', e);
+    }
+    return false;
+}
+
+async function fetchData(table) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*&order=id.desc`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    return await res.json();
+}
+
+async function updateRecord(table, id, data) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    return res.ok;
+}
+
+async function deleteRecord(table, id) {
+    if (!confirm('Удалить запись?')) return false;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    return res.ok;
+}
+
+function showToast(msg) {
+    let t = document.querySelector('.toast');
+    if (t) t.remove();
+    t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+}
+
+function startEdit(rowId) { editingRow = rowId; renderTable(currentTable); }
+function cancelEdit() { editingRow = null; renderTable(currentTable); }
+
+async function saveEdit(table, id) {
+    const fields = tables[table].editable;
+    const updates = {};
+    for (let field of fields) {
+        const input = document.getElementById(`edit_${table}_${id}_${field}`);
+        if (input) {
+            let value = input.value;
+            if (field === 'isAdmin' || field === 'is_active' || field === 'is_approved') value = value === 'true';
+            if (field === 'rating' || field === 'discount_percent' || field === 'price') value = parseInt(value);
+            updates[field] = value;
+        }
+    }
+    if (Object.keys(updates).length > 0) {
+        const success = await updateRecord(table, id, updates);
+        if (success) { showToast('Запись обновлена'); editingRow = null; renderTable(table); }
+        else showToast('Ошибка обновления');
+    }
+}
+
+async function deleteRow(table, id) {
+    const success = await deleteRecord(table, id);
+    if (success) { showToast('Запись удалена'); renderTable(table); }
+    else showToast('Ошибка удаления');
+}
+
+async function renderTable(table) {
+    const data = await fetchData(table);
+    const config = tables[table];
+    const container = document.getElementById(`content_${table}`);
+    if (!container) return;
+    
+    if (!data || data.length === 0) {
+        container.innerHTML = '<div class="loading">Нет данных</div>';
+        return;
+    }
+    
+    let html = `<div class="table-wrapper"><table class="data-table"><thead><tr>`;
+    for (let field of config.fields) html += `<th>${field}</th>`;
+    html += `<th>Действия</th></tr></thead><tbody>`;
+    
+    for (let row of data) {
+        const isEditing = editingRow === row.id;
+        html += `<tr>`;
+        for (let field of config.fields) {
+            html += `<td>`;
+            if (isEditing && config.editable.includes(field)) {
+                let value = row[field] !== undefined ? row[field] : '';
+                if (typeof value === 'object') value = JSON.stringify(value);
+                if (field === 'isAdmin' || field === 'is_active' || field === 'is_approved') {
+                    html += `<select id="edit_${table}_${row.id}_${field}" class="edit-input">
+                        <option value="true" ${value === true ? 'selected' : ''}>true</option>
+                        <option value="false" ${value === false ? 'selected' : ''}>false</option>
+                    </select>`;
+                } else {
+                    html += `<input type="text" id="edit_${table}_${row.id}_${field}" value="${String(value).replace(/"/g, '&quot;')}" class="edit-input">`;
+                }
+            } else {
+                let displayValue = row[field];
+                if (typeof displayValue === 'object') displayValue = JSON.stringify(displayValue);
+                html += `<span>${String(displayValue).substring(0, 100)}${String(displayValue).length > 100 ? '...' : ''}</span>`;
+            }
+            html += `</td>`;
+        }
+        html += `<td>`;
+        if (isEditing) {
+            html += `<button class="btn-small" onclick="saveEdit('${table}', ${row.id})">💾</button>`;
+            html += `<button class="btn-small" onclick="cancelEdit()">❌</button>`;
+        } else {
+            html += `<button class="btn-small" onclick="startEdit(${row.id})">✏️</button>`;
+            html += `<button class="btn-small" onclick="deleteRow('${table}', ${row.id})">🗑</button>`;
+        }
+        html += `</td></tr>`;
+    }
+    html += `</tbody></table></div>`;
+    container.innerHTML = html;
+}
+
+function renderTabs() {
+    const tabsContainer = document.getElementById('tabs');
+    const contentContainer = document.getElementById('tabContents');
+    
+    let tabsHtml = '';
+    let contentHtml = '';
+    
+    for (let [key, config] of Object.entries(tables)) {
+        tabsHtml += `<button class="tab-btn ${currentTable === key ? 'active' : ''}" onclick="switchTab('${key}')">${config.name}</button>`;
+        contentHtml += `<div id="content_${key}" class="tab-content ${currentTable === key ? 'active' : ''}"><div class="loading">Загрузка...</div></div>`;
+    }
+    
+    tabsContainer.innerHTML = tabsHtml;
+    contentContainer.innerHTML = contentHtml;
+    
+    for (let key of Object.keys(tables)) {
+        renderTable(key);
+    }
+}
+
+window.switchTab = function(table) {
+    currentTable = table;
+    editingRow = null;
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    const btns = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+    for (let i = 0; i < btns.length; i++) {
+        if (btns[i].innerText === tables[table].name) {
+            btns[i].classList.add('active');
+            contents[i].classList.add('active');
+        }
+    }
+    renderTable(table);
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+async function init() {
+    const isAdmin = await checkAuth();
+    if (!isAdmin) {
+        document.getElementById('tabContents').innerHTML = '<div class="access-denied"><h2>Доступ запрещён</h2><p>Только для администраторов</p><p><a href="index4.html" style="color:#C2DC80;">Вернуться в кабинет</a></p></div>';
+        document.getElementById('tabs').style.display = 'none';
+        return;
+    }
+    renderTabs();
+}
+
+init();
+</script>
+</body>
+</html>
