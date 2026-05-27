@@ -113,10 +113,10 @@
         <a href="index.html" class="logo">Estética</a>
         <div class="nav">
             <a href="index.html">ГЛАВНАЯ</a>
-            <a href="catalog.html">КАТАЛОГ</a>
-            <a href="contacts.html">КОНТАКТЫ</a>
-            <a href="cart.html">КОРЗИНА</a>
-            <a href="profile.html">КАБИНЕТ</a>
+            <a href="index2.html">КАТАЛОГ</a>
+            <a href="index5.html">КОНТАКТЫ</a>
+            <a href="index3.html">КОРЗИНА</a>
+            <a href="index4.html">КАБИНЕТ</a>
         </div>
     </div>
 
@@ -135,47 +135,22 @@
     <div class="line"></div>
 
     <!-- БЛОК АКЦИЙ И СКИДОК -->
-    <div class="promo-block">
+    <div class="promo-block" id="promoSection">
         <div class="promo-title">Акции и скидки</div>
-        <div class="promo-grid" id="promoGrid">
-            <div class="promo-card" data-category="bright">
-                <div class="promo-name">Яркие букеты</div>
-                <div class="promo-category">Скидка на все яркие букеты</div>
-                <div class="promo-discount">-15%</div>
-                <button class="apply-promo-btn" onclick="applyPromo('bright', 15)">Применить скидку</button>
-            </div>
-            <div class="promo-card" data-category="gentle">
-                <div class="promo-name">Нежные букеты</div>
-                <div class="promo-category">Скидка на все нежные букеты</div>
-                <div class="promo-discount">-10%</div>
-                <button class="apply-promo-btn" onclick="applyPromo('gentle', 10)">Применить скидку</button>
-            </div>
-            <div class="promo-card" data-category="all">
-                <div class="promo-name">Первый заказ</div>
-                <div class="promo-category">Скидка на весь ассортимент</div>
-                <div class="promo-discount">-5%</div>
-                <button class="apply-promo-btn" onclick="applyPromo('all', 5)">Применить скидку</button>
-            </div>
-        </div>
+        <div class="promo-grid" id="promoGrid"></div>
     </div>
 
     <div class="line"></div>
 
     <div class="section-title">Наши товары</div>
-    <div class="grid">
-        <div class="card"><img src="https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg" alt="Страсть"><div class="price">2500 ₽</div></div>
-        <div class="card"><img src="https://i.pinimg.com/1200x/4e/e6/72/4ee672c55ef157043075a4a79112d337.jpg" alt="Вопреки канонам"><div class="price">3000 ₽</div></div>
-        <div class="card"><img src="https://i.pinimg.com/736x/11/3a/01/113a012a6475e2ccdd0146aa0567915b.jpg" alt="Обещание любви"><div class="price">2000 ₽</div></div>
-    </div>
+    <div class="grid" id="productsGrid"></div>
 
     <div class="line"></div>
 
     <!-- БЛОК ОТЗЫВОВ -->
-    <div class="reviews-block">
+    <div class="reviews-block" id="reviewsSection">
         <div class="reviews-title">Отзывы наших клиентов</div>
-        <div class="reviews-grid" id="reviewsGrid">
-            <div class="review-card">Загрузка отзывов...</div>
-        </div>
+        <div class="reviews-grid" id="reviewsGrid"></div>
 
         <div class="review-form-block">
             <div class="review-form-title">Оставить отзыв</div>
@@ -216,76 +191,108 @@
 </div>
 
 <script>
-// ==================== АКЦИИ И СКИДКИ ====================
+const BIN_ID = '6a0e46146877513b27a708ce';
+const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+let activePromo = null;
+
+async function getData() {
+    const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+    const data = await res.json();
+    return data.record || { users: [], orders: [], messages: [], products: [], promos: [], reviews: [] };
+}
+async function saveData(data) {
+    await fetch(API_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY }, body: JSON.stringify(data) });
+}
+
+// ========== ТОВАРЫ ==========
+async function loadProducts() {
+    const data = await getData();
+    const products = data.products || [];
+    const container = document.getElementById('productsGrid');
+    if (products.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:40px;color:#D56989;">Товары скоро появятся</div>';
+        return;
+    }
+    const displayProducts = products.slice(0, 3);
+    container.innerHTML = displayProducts.map(p => `
+        <div class="card">
+            <img src="${p.img}" alt="${p.name}">
+            <div class="price">${p.price} ₽</div>
+        </div>
+    `).join('');
+}
+
+// ========== АКЦИИ ==========
+async function loadPromos() {
+    const data = await getData();
+    const promos = data.promos || [];
+    const container = document.getElementById('promoGrid');
+    if (promos.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:40px;color:#F3EEF1;">Акций пока нет</div>';
+        return;
+    }
+    container.innerHTML = promos.map(p => `
+        <div class="promo-card" data-category="${p.category}" data-discount="${p.discount}">
+            <div class="promo-name">${p.name}</div>
+            <div class="promo-category">${p.description || 'Скидка на категорию'}</div>
+            <div class="promo-discount">-${p.discount}%</div>
+            <button class="apply-promo-btn" onclick="applyPromo('${p.category}', ${p.discount})">Применить скидку</button>
+        </div>
+    `).join('');
+    loadActivePromoFromStorage();
+}
+
 function applyPromo(category, discountPercent) {
-    // Сохраняем активную скидку в localStorage
-    const promoData = { category: category, percent: discountPercent };
-    localStorage.setItem('estetica_promo', JSON.stringify(promoData));
+    activePromo = { category, percent: discountPercent };
+    localStorage.setItem('estetica_promo', JSON.stringify(activePromo));
     
-    // Визуальное выделение активной карточки
     document.querySelectorAll('.promo-card').forEach(card => {
         card.classList.remove('active-promo');
     });
     const activeCard = document.querySelector(`.promo-card[data-category="${category}"]`);
-    if (activeCard) {
-        activeCard.classList.add('active-promo');
-    }
+    if (activeCard) activeCard.classList.add('active-promo');
     
-    showToast(`Акция применена! Скидка ${discountPercent}% на ${category === 'all' ? 'весь ассортимент' : category === 'bright' ? 'яркие букеты' : 'нежные букеты'}`);
+    showToast(`Акция применена! Скидка ${discountPercent}% ${category === 'all' ? 'на весь ассортимент' : 'на выбранные букеты'}`);
 }
 
-// Загрузка активной акции при загрузке страницы
-function loadActivePromo() {
-    const savedPromo = localStorage.getItem('estetica_promo');
-    if (savedPromo) {
-        const promo = JSON.parse(savedPromo);
-        const activeCard = document.querySelector(`.promo-card[data-category="${promo.category}"]`);
-        if (activeCard) {
-            activeCard.classList.add('active-promo');
-        }
+function loadActivePromoFromStorage() {
+    const saved = localStorage.getItem('estetica_promo');
+    if (saved) {
+        activePromo = JSON.parse(saved);
+        const activeCard = document.querySelector(`.promo-card[data-category="${activePromo.category}"]`);
+        if (activeCard) activeCard.classList.add('active-promo');
     }
 }
 
-// ==================== ОТЗЫВЫ ====================
-function initReviews() {
-    if (!localStorage.getItem('estetica_reviews')) {
-        const defaultReviews = [
-            { id: 1, name: "Анна", rating: 5, text: "Заказывала букет для мамы. Очень свежие цветы, доставили точно в срок. Спасибо флористам за красоту!", date: "2025-05-20" },
-            { id: 2, name: "Екатерина", rating: 5, text: "Потрясающий сервис! Букет выглядел даже лучше, чем на фото. Обязательно закажу ещё.", date: "2025-05-18" },
-            { id: 3, name: "Мария", rating: 4, text: "Хороший магазин, цветы свежие. Единственное - немного задержали доставку. В остальном всё отлично.", date: "2025-05-15" }
-        ];
-        localStorage.setItem('estetica_reviews', JSON.stringify(defaultReviews));
-    }
-}
-
-function getReviews() {
-    return JSON.parse(localStorage.getItem('estetica_reviews') || '[]');
-}
-
-function saveReviews(reviews) {
-    localStorage.setItem('estetica_reviews', JSON.stringify(reviews));
-}
-
-function renderStars(rating) {
-    let stars = '';
-    for (let i = 1; i <= 5; i++) {
-        stars += i <= rating ? '★' : '☆';
-    }
-    return `<span class="star">${stars}</span>`;
-}
-
-function loadReviews() {
-    const reviews = getReviews();
-    const container = document.getElementById('reviewsGrid');
+// ========== ОТЗЫВЫ (через JSONBin) ==========
+async function loadReviews() {
+    const data = await getData();
+    let reviews = data.reviews || [];
     
     if (reviews.length === 0) {
+        const defaultReviews = [
+            { id: 1, name: "Анна", rating: 5, text: "Заказывала букет для мамы. Очень свежие цветы, доставили точно в срок. Спасибо флористам за красоту!", date: "2025-05-20", approved: true },
+            { id: 2, name: "Екатерина", rating: 5, text: "Потрясающий сервис! Букет выглядел даже лучше, чем на фото. Обязательно закажу ещё.", date: "2025-05-18", approved: true },
+            { id: 3, name: "Мария", rating: 4, text: "Хороший магазин, цветы свежие. Единственное - немного задержали доставку. В остальном всё отлично.", date: "2025-05-15", approved: true }
+        ];
+        data.reviews = defaultReviews;
+        await saveData(data);
+        reviews = defaultReviews;
+    }
+    
+    const approvedReviews = reviews.filter(r => r.appved !== false);
+    const container = document.getElementById('reviewsGrid');
+    
+    if (approvedReviews.length === 0) {
         container.innerHTML = '<div class="review-card">Пока нет отзывов. Будьте первым!</div>';
         return;
     }
     
-    reviews.sort((a, b) => b.id - a.id);
+    approvedReviews.sort((a, b) => b.id - a.id);
     
-    container.innerHTML = reviews.map(review => `
+    container.innerHTML = approvedReviews.map(review => `
         <div class="review-card">
             <div class="review-header">
                 <span class="review-name">${escapeHtml(review.name)}</span>
@@ -295,6 +302,14 @@ function loadReviews() {
             <div class="review-date">${review.date}</div>
         </div>
     `).join('');
+}
+
+function renderStars(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+        stars += i <= rating ? '★' : '☆';
+    }
+    return `<span class="star">${stars}</span>`;
 }
 
 let selectedRating = 5;
@@ -341,36 +356,30 @@ function showToast(message) {
     setTimeout(() => t.remove(), 3000);
 }
 
-function submitReview() {
+async function submitReview() {
     const name = document.getElementById('reviewName')?.value.trim();
     const text = document.getElementById('reviewText')?.value.trim();
     
-    if (!name) {
-        showToast('Пожалуйста, введите ваше имя');
-        return;
-    }
-    if (!text) {
-        showToast('Пожалуйста, введите текст отзыва');
-        return;
-    }
-    if (text.length < 10) {
-        showToast('Отзыв должен содержать минимум 10 символов');
-        return;
-    }
+    if (!name) { showToast('Пожалуйста, введите ваше имя'); return; }
+    if (!text) { showToast('Пожалуйста, введите текст отзыва'); return; }
+    if (text.length < 10) { showToast('Отзыв должен содержать минимум 10 символов'); return; }
     
     const today = new Date().toISOString().split('T')[0];
-    const reviews = getReviews();
+    const data = await getData();
+    const reviews = data.reviews || [];
     
     const newReview = {
         id: Date.now(),
         name: name,
         rating: selectedRating,
         text: text,
-        date: today
+        date: today,
+        approved: true
     };
     
     reviews.unshift(newReview);
-    saveReviews(reviews);
+    data.reviews = reviews;
+    await saveData(data);
     
     document.getElementById('reviewName').value = '';
     document.getElementById('reviewText').value = '';
@@ -385,23 +394,27 @@ function submitReview() {
     });
     
     showToast('Спасибо за отзыв!');
-    loadReviews();
+    await loadReviews();
 }
 
-// ==================== КОРЗИНА (для счётчика) ====================
+// ========== КОРЗИНА ==========
 function getCart() { return JSON.parse(localStorage.getItem('estetica_cart') || '[]'); }
 function updateCartCount() { 
     let total = getCart().reduce((s,i)=>s+i.quantity,0); 
-    let link = document.querySelector('.nav a[href="cart.html"]'); 
+    let link = document.querySelector('.nav a[href="index3.html"]'); 
     if(link) link.innerHTML = total > 0 ? `КОРЗИНА (${total})` : `КОРЗИНА`; 
 }
 
-// Инициализация
-initReviews();
-loadReviews();
-initStarSelector();
-loadActivePromo();
-updateCartCount();
+// ========== ИНИЦИАЛИЗАЦИЯ ==========
+async function init() {
+    await loadProducts();
+    await loadPromos();
+    await loadReviews();
+    initStarSelector();
+    updateCartCount();
+}
+
+init();
 </script>
 </body>
 </html>

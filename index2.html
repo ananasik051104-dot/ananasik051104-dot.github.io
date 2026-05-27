@@ -2,290 +2,470 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Каталог | Estética</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель | Estética</title>
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Poiret One',cursive;background:#D56989;padding:15px}
-        .frame{max-width:1300px;margin:0 auto;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
-        
-        /* ШАПКА */
+        body{font-family:'Poiret One',cursive;background:#D56989;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:15px}
+        .frame{max-width:1400px;width:100%;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
         .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
-        .header::before,.hero::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
-        .logo,.nav,.hero h1,.hero p,.bottom-block>*{position:relative;z-index:1}
+        .header::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
+        .logo,.nav,.bottom-block>*{position:relative;z-index:1}
         .logo{font-size:28px;font-weight:600;color:#C2DC80;text-decoration:none}
         .nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-        .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 10px;white-space:nowrap}
-        
-        /* ГЕРОЙ */
-        .hero{text-align:center;padding:40px 15px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin:15px 0;position:relative}
-        .hero h1{font-size:32px;color:#C2DC80;text-shadow:2px 2px 6px black}
-        .hero p{font-size:16px;color:#C2DC80;margin-top:8px}
-        .line{height:2px;background:#C2DC80;margin:20px 0;opacity:.5}
-        
-        /* ФИЛЬТРЫ */
-        .filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;padding:15px;background:#F3EEF1;border:1px solid #C2DC80;align-items:flex-end}
-        .filter-group{display:flex;flex-direction:column;gap:5px;min-width:140px;flex:1}
-        .filter-group label{font-size:12px;font-weight:600;color:#D56989;text-transform:uppercase}
-        .filter-group select,.filter-group input{padding:8px 10px;background:#F3EEF1;border:1px solid #C2DC80;font-family:inherit;font-size:14px;color:#D56989}
-        .price-range{display:flex;gap:8px;align-items:center}
-        .price-range input{width:80px}
-        .filter-btn{background:#D56989;border:none;padding:8px 15px;font-family:inherit;font-size:14px;cursor:pointer;color:#F3EEF1}
-        .reset-btn{background:#b84d6e}
-        
-        /* СЕТКА ТОВАРОВ */
-        .catalog-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
-        
-        /* КАРТОЧКА ТОВАРА */
-        .product-card{
-            background:#C2DC80;
-            border:1px solid #D56989;
-            padding:20px;
-            text-align:center;
-            transition:.3s;
-            display:flex;
-            flex-direction:column;
-            position:relative;
-        }
-        .product-card:hover{transform:translateY(-5px);background:#b8d16e}
-        .product-card img{width:100%;height:220px;object-fit:cover;margin-bottom:15px}
-        .product-card h3{font-size:20px;color:#D56989;margin:10px 0 5px}
-        .price{font-size:24px;font-weight:bold;color:#D56989;margin:10px 0}
-        .card-buttons{display:flex;gap:12px;justify-content:center;margin-top:10px}
-        .card-buttons button{
-            font-family:inherit;
-            font-size:14px;
-            font-weight:bold;
-            padding:8px 16px;
-            cursor:pointer;
-            border:none;
-            border-radius:40px;
-            transition:.2s;
-        }
-        .cart-btn{background:#D56989;color:#F3EEF1}
-        .cart-btn:hover{background:#b84d6e;transform:scale(1.02)}
-        .details-btn{background:#F3EEF1;color:#D56989;border:1px solid #D56989}
-        .details-btn:hover{background:#D56989;color:#F3EEF1}
-        
-        /* МОДАЛЬНОЕ ОКНО (описание товара) */
-        .modal{
-            display:none;
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,0.85);
-            z-index:1000;
-            justify-content:center;
-            align-items:center;
-        }
-        .modal-content{
-            background:#F3EEF1;
-            max-width:550px;
-            width:90%;
-            max-height:85vh;
-            overflow-y:auto;
-            padding:25px;
-            border:2px solid #C2DC80;
-            position:relative;
-            border-radius:0;
-        }
-        .modal-close{
-            position:absolute;
-            top:12px;
-            right:18px;
-            font-size:32px;
-            cursor:pointer;
-            color:#D56989;
-            transition:.2s;
-        }
-        .modal-close:hover{color:#b84d6e}
-        .modal-content img{width:100%;height:300px;object-fit:cover;margin-bottom:20px}
-        .modal-content h3{font-size:28px;color:#D56989;margin-bottom:10px}
-        .modal-price{font-size:26px;font-weight:bold;color:#D56989;margin:15px 0}
-        .modal-cat{font-size:14px;color:#D56989;margin:10px 0;padding-bottom:10px;border-bottom:1px solid #C2DC80}
-        .modal-desc{font-size:16px;color:#5b3b45;line-height:1.6;margin:15px 0}
-        .modal-add-btn{
-            background:#D56989;
-            color:#F3EEF1;
-            border:none;
-            padding:14px;
-            font-family:inherit;
-            font-size:18px;
-            font-weight:600;
-            cursor:pointer;
-            width:100%;
-            margin-top:20px;
-            transition:.2s;
-        }
-        .modal-add-btn:hover{background:#b84d6e}
-        
-        /* ПОДВАЛ */
-        .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:25px 15px 15px;position:relative}
-        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 20px;font-size:13px;text-align:center}
-        .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:15px}
-        .social-link{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 12px}
+        .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 10px}
+        .access-denied{text-align:center;padding:40px;background:#D56989;color:#F3EEF1}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px;margin-bottom:25px}
+        .stat-card{background:#D56989;padding:15px;text-align:center;color:#F3EEF1}
+        .stat-number{font-size:32px;font-weight:bold}
+        .section-title{font-size:22px;color:#D56989;margin:25px 0 12px;border-left:4px solid #C2DC80;padding-left:12px}
+        .table-wrapper{overflow-x:auto}
+        .data-table{width:100%;border-collapse:collapse;font-size:13px}
+        .data-table th,.data-table td{padding:10px 6px;border-bottom:1px solid #C2DC80;text-align:left}
+        .data-table th{background:#C2DC80;color:#D56989}
+        .badge-admin{background:#C2DC80;color:#D56989;padding:2px 8px;font-size:11px}
+        .btn-small{background:#D56989;border:none;padding:4px 10px;font-family:inherit;font-size:11px;cursor:pointer;color:#F3EEF1;margin:2px}
+        .btn-small:hover{background:#b84d6e}
+        .tabs{display:flex;gap:5px;margin-bottom:20px;flex-wrap:wrap;border-bottom:2px solid #C2DC80}
+        .tab{background:none;border:none;padding:10px 20px;font-family:inherit;font-size:16px;cursor:pointer;color:#D56989;transition:.2s}
+        .tab.active{background:#C2DC80;color:#D56989}
+        .tab-content{display:none}
+        .tab-content.active{display:block}
+        .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:20px 15px 15px;position:relative}
+        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 15px;font-size:12px;text-align:center}
+        .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:12px}
+        .social-link{color:#C2DC80;text-decoration:none;font-size:13px;padding:5px 10px}
         .social-link:hover{background:rgba(193,130,146,0.35)}
-        .copyright{text-align:center;font-size:11px;color:#C2DC80}
-        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:12px;text-align:center;font-family:system-ui;font-size:13px;z-index:1001;animation:slideIn .3s ease;border-radius:30px}
+        .copyright{text-align:center;font-size:10px;color:#C2DC80}
+        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center}
+        .modal-content{background:#F3EEF1;padding:20px;max-width:500px;width:90%;max-height:85vh;overflow-y:auto}
+        .modal-content h3{color:#D56989;margin-bottom:15px}
+        .modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:8px;margin:8px 0;border:1px solid #C2DC80;font-family:inherit;background:#F3EEF1;color:#D56989}
+        .modal-content textarea{min-height:80px}
+        .modal-content button{background:#D56989;color:#F3EEF1;border:none;padding:8px;cursor:pointer;margin-top:8px}
+        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:10px;text-align:center;font-family:system-ui;font-size:12px;z-index:1001;animation:slideIn .3s ease}
+        .loading{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;justify-content:center;align-items:center;z-index:9999;color:white;font-size:20px}
         @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-        
-        @media (max-width:700px){
-            .frame{padding:15px}
-            .header{flex-direction:column;text-align:center}
-            .catalog-grid{grid-template-columns:1fr}
-            .product-card img{height:200px}
-            .modal-content img{height:220px}
-            .card-buttons{flex-direction:column;align-items:center}
-            .card-buttons button{width:100%}
-        }
-        @media (min-width:701px) and (max-width:1024px){
-            .catalog-grid{grid-template-columns:repeat(2,1fr)}
-        }
-        @media (min-width:1025px){
-            .catalog-grid{grid-template-columns:repeat(4,1fr)}
-        }
+        @media(max-width:700px){.frame{padding:15px}.header{flex-direction:column;text-align:center}}
     </style>
 </head>
 <body>
+<div class="loading" id="loading" style="display:flex;">Загрузка...</div>
+
 <div class="frame">
-    <div class="header">
-        <a href="index.html" class="logo">Estética</a>
-        <div class="nav">
-            <a href="index.html">ГЛАВНАЯ</a>
-            <a href="catalog.html">КАТАЛОГ</a>
-            <a href="contacts.html">КОНТАКТЫ</a>
-            <a href="cart.html">КОРЗИНА</a>
-            <a href="profile.html">КАБИНЕТ</a>
-        </div>
+    <div class="header"><a href="index.html" class="logo">Estética Админ</a><div class="nav"><a href="index.html">ГЛАВНАЯ</a><a href="index2.html">КАТАЛОГ</a><a href="index5.html">КОНТАКТЫ</a><a href="index3.html">КОРЗИНА</a><a href="index4.html">КАБИНЕТ</a></div></div>
+    <h1 style="font-size:28px;color:#C2DC80;margin-bottom:20px;border-left:5px solid #C2DC80;padding-left:15px;">Админ-панель</h1>
+    
+    <div class="tabs" id="tabs">
+        <button class="tab active" onclick="switchTab('products')">📦 Товары</button>
+        <button class="tab" onclick="switchTab('promos')">🎁 Акции</button>
+        <button class="tab" onclick="switchTab('reviews')">💬 Отзывы</button>
+        <button class="tab" onclick="switchTab('orders')">📦 Заказы</button>
+        <button class="tab" onclick="switchTab('messages')">📞 Сообщения</button>
+        <button class="tab" onclick="switchTab('users')">👥 Пользователи</button>
     </div>
+    
+    <div id="adminContent"></div>
+    <div class="bottom-block"><div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div><div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div><div class="copyright">2026 Estética Цветочная мастерская</div></div>
+</div>
 
-    <div class="hero"><h1>ESTÉTICA</h1><p>Создаём любовь через цветы</p></div>
-    <div class="line"></div>
-
-    <!-- ФИЛЬТРЫ -->
-    <div class="filters">
-        <div class="filter-group"><label>Категория</label><select id="categoryFilter"><option value="all">Все букеты</option><option value="bright">Яркие</option><option value="gentle">Нежные</option><option value="minimalism">Минимализм</option><option value="single">Единичные</option></select></div>
-        <div class="filter-group"><label>Цена</label><div class="price-range"><input type="number" id="priceMin" placeholder="от" value="0"><span>—</span><input type="number" id="priceMax" placeholder="до" value="10000"></div></div>
-        <button class="filter-btn" onclick="applyFilters()">Применить</button>
-        <button class="filter-btn reset-btn" onclick="resetFilters()">Сбросить</button>
-    </div>
-
-    <!-- СЕТКА ТОВАРОВ -->
-    <div class="catalog-grid" id="catalogGrid"></div>
-
-    <div class="bottom-block">
-        <div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div>
-        <div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div>
-        <div class="copyright">2026 Estética Цветочная мастерская</div>
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">Редактировать товар</h3>
+        <input type="text" id="productName" placeholder="Название">
+        <input type="number" id="productPrice" placeholder="Цена">
+        <input type="text" id="productImg" placeholder="URL фото">
+        <textarea id="productDesc" placeholder="Краткое описание"></textarea>
+        <textarea id="productFullDesc" placeholder="Полное описание"></textarea>
+        <select id="productCategory">
+            <option value="bright">Яркие букеты</option>
+            <option value="gentle">Нежные букеты</option>
+            <option value="minimalism">Минимализм</option>
+            <option value="single">Единичная позиция</option>
+        </select>
+        <button onclick="saveProduct()">Сохранить</button>
+        <button onclick="closeModal()">Отмена</button>
     </div>
 </div>
 
-<!-- МОДАЛЬНОЕ ОКНО ДЛЯ ОПИСАНИЯ ТОВАРА -->
-<div id="productModal" class="modal">
+<div id="promoModal" class="modal">
     <div class="modal-content">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-        <img id="modalImg" src="" alt="">
-        <h3 id="modalName"></h3>
-        <div class="modal-price" id="modalPrice"></div>
-        <div class="modal-cat" id="modalCat"></div>
-        <div class="modal-desc" id="modalDesc"></div>
-        <button class="modal-add-btn" id="modalAddBtn" onclick="addToCartFromModal()">В корзину</button>
+        <h3 id="promoModalTitle">Редактировать акцию</h3>
+        <input type="text" id="promoName" placeholder="Название акции">
+        <input type="text" id="promoDescription" placeholder="Описание">
+        <input type="text" id="promoCategory" placeholder="Категория (bright/gentle/all)">
+        <input type="number" id="promoDiscount" placeholder="Скидка %">
+        <button onclick="savePromo()">Сохранить</button>
+        <button onclick="closePromoModal()">Отмена</button>
     </div>
 </div>
 
 <script>
-// ==================== ТОВАРЫ ====================
-const products = [
-    { id: 1, name: "Марсала", price: 3500, img: "https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg", desc: "Роскошные гортензии глубокого бордового оттенка. Идеальный выбор для особого случая.", cat: "bright", fullDesc: "Букет из крупных гортензий. Подходит для юбилея, дня рождения или годовщины. Цветы сохраняют свежесть до 10 дней при правильном уходе. Упаковка — крафтовая бумага с лентой." },
-    { id: 2, name: "Пламя страсти", price: 4200, img: "https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg", desc: "Ярко-красные розы в авторской упаковке. Для самых сильных чувств.", cat: "bright", fullDesc: "Букет из 25 алых роз. Высота букета 50 см, диаметр 35 см. Упаковка — дизайнерская плёнка. Розы срезаны за 12 часов до доставки." },
-    { id: 3, name: "Лавандовый бриз", price: 1800, img: "https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg", desc: "Ароматная композиция из лаванды и эвкалипта. Успокаивает и расслабляет.", cat: "gentle", fullDesc: "Натуральные травы. Сохраняет свежесть до 14 дней. Подходит для создания уюта в доме. Можно использовать как саше." },
-    { id: 4, name: "Утренняя роса", price: 2800, img: "https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg", desc: "Кремово-белые пионы с нежным ароматом. Идеальный свадебный букет.", cat: "gentle", fullDesc: "Пионы премиум-класса. Высота букета 45 см. Упаковка — крафтовая бумага с кружевом." },
-    { id: 5, name: "Монохром", price: 2200, img: "https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg", desc: "Сила в простоте. Лаконичный букет для ценителей стиля.", cat: "minimalism", fullDesc: "Кустовые розы одного сорта. Минималистичная упаковка. Подходит как мужчинам, так и женщинам." },
-    { id: 6, name: "Одна роза", price: 500, img: "https://i.pinimg.com/1200x/59/5e/26/595e26df6c21b9d5bd535b96c21ed0ed.jpg", desc: "Классическая роза в индивидуальной упаковке. Элегантный комплимент.", cat: "single", fullDesc: "Доступно 5 цветов на выбор. Упаковка — прозрачная плёнка с лентой." }
-];
+const BIN_ID = '6a0e46146877513b27a708ce';
+const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-let filteredProducts = [...products];
-let currentModalProduct = null;
+let currentUser = null;
+let editingProductId = null;
+let editingPromoId = null;
+let currentTab = 'products';
 
-// ==================== КОРЗИНА ====================
-function getCart() { return JSON.parse(localStorage.getItem('estetica_cart') || '[]'); }
-function saveCart(c) { localStorage.setItem('estetica_cart', JSON.stringify(c)); updateCartCount(); }
-function updateCartCount() { 
-    let total = getCart().reduce((s,i)=>s+i.quantity,0); 
-    let link = document.querySelector('.nav a[href="cart.html"]'); 
-    if(link) link.innerHTML = total > 0 ? `КОРЗИНА (${total})` : `КОРЗИНА`; 
+async function getData() {
+    const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+    const data = await res.json();
+    return data.record || { users: [], orders: [], messages: [], products: [], promos: [], reviews: [] };
 }
-function showToast(m) { 
-    let t = document.querySelector('.toast'); if(t) t.remove(); 
-    t = document.createElement('div'); t.className = 'toast'; t.textContent = m; 
-    document.body.appendChild(t); setTimeout(()=>t.remove(),2000); 
+async function saveData(data) {
+    await fetch(API_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY }, body: JSON.stringify(data) });
 }
-function addToCart(id) { 
-    let cart = getCart(), item = cart.find(i=>i.id===id), p = products.find(p=>p.id===id); 
-    if(item) item.quantity++; 
-    else cart.push({id:p.id,name:p.name,price:p.price,img:p.img,quantity:1}); 
-    saveCart(cart); showToast(`${p.name} добавлен в корзину!`); 
-}
-function addToCartFromModal() { if(currentModalProduct) addToCart(currentModalProduct.id); closeModal(); }
 
-// ==================== МОДАЛЬНОЕ ОКНО ====================
-function showDetails(product) {
-    currentModalProduct = product;
-    document.getElementById('modalImg').src = product.img;
-    document.getElementById('modalName').innerText = product.name;
-    document.getElementById('modalPrice').innerText = `${product.price} ₽`;
-    const catNames = {bright:'Яркие букеты', gentle:'Нежные букеты', minimalism:'Минимализм', single:'Единичная позиция'};
-    document.getElementById('modalCat').innerHTML = `Категория: ${catNames[product.cat] || product.cat}`;
-    document.getElementById('modalDesc').innerHTML = product.fullDesc || product.desc || 'Красивый букет от Estética. Свежие цветы, бережная упаковка.';
+async function login(email, password) {
+    const data = await getData();
+    const user = (data.users || []).find(u => u.email === email && u.password === password);
+    if (user && user.isAdmin) {
+        currentUser = user;
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        return true;
+    }
+    return false;
+}
+async function getCurrentUser() {
+    const saved = localStorage.getItem('estetica_current_user');
+    if (saved && !currentUser) currentUser = JSON.parse(saved);
+    return currentUser;
+}
+function logout() { currentUser = null; localStorage.removeItem('estetica_current_user'); renderMainContent(); }
+
+function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    renderMainContent();
+}
+
+// ========== ТОВАРЫ ==========
+async function addProduct() {
+    editingProductId = null;
+    document.getElementById('modalTitle').innerText = 'Добавить товар';
+    document.getElementById('productName').value = '';
+    document.getElementById('productPrice').value = '';
+    document.getElementById('productImg').value = '';
+    document.getElementById('productDesc').value = '';
+    document.getElementById('productFullDesc').value = '';
+    document.getElementById('productCategory').value = 'bright';
     document.getElementById('productModal').style.display = 'flex';
 }
-function closeModal() { document.getElementById('productModal').style.display = 'none'; currentModalProduct = null; }
-
-// ==================== ФИЛЬТРЫ ====================
-function applyFilters() {
-    let cat = document.getElementById('categoryFilter').value;
-    let min = +document.getElementById('priceMin').value || 0;
-    let max = +document.getElementById('priceMax').value || 10000;
-    filteredProducts = products.filter(p => (cat === 'all' || p.cat === cat) && p.price >= min && p.price <= max);
-    renderCatalog();
+function editProduct(p) {
+    editingProductId = p.id;
+    document.getElementById('modalTitle').innerText = 'Редактировать товар';
+    document.getElementById('productName').value = p.name;
+    document.getElementById('productPrice').value = p.price;
+    document.getElementById('productImg').value = p.img;
+    document.getElementById('productDesc').value = p.short_desc || '';
+    document.getElementById('productFullDesc').value = p.full_desc || '';
+    document.getElementById('productCategory').value = p.cat;
+    document.getElementById('productModal').style.display = 'flex';
 }
-function resetFilters() {
-    document.getElementById('categoryFilter').value = 'all';
-    document.getElementById('priceMin').value = 0;
-    document.getElementById('priceMax').value = 10000;
-    filteredProducts = [...products];
-    renderCatalog();
+async function saveProduct() {
+    const name = document.getElementById('productName').value.trim();
+    const price = parseInt(document.getElementById('productPrice').value);
+    const img = document.getElementById('productImg').value.trim();
+    const short_desc = document.getElementById('productDesc').value.trim();
+    const full_desc = document.getElementById('productFullDesc').value.trim();
+    const cat = document.getElementById('productCategory').value;
+    if (!name || !price || !img) { alert('Заполните название, цену и фото'); return; }
+    const data = await getData();
+    data.products = data.products || [];
+    if (editingProductId === null) {
+        const newId = Math.max(...data.products.map(p => p.id), 0) + 1;
+        data.products.push({ id: newId, name, price, img, short_desc, full_desc, cat });
+        showToast('Товар добавлен');
+    } else {
+        const idx = data.products.findIndex(p => p.id === editingProductId);
+        if (idx !== -1) data.products[idx] = { ...data.products[idx], name, price, img, short_desc, full_desc, cat };
+        showToast('Товар обновлён');
+    }
+    await saveData(data);
+    closeModal();
+    renderMainContent();
 }
-function filterByCat(cat) { document.getElementById('categoryFilter').value = cat; applyFilters(); }
+async function deleteProduct(id) {
+    if (!confirm('Удалить товар?')) return;
+    const data = await getData();
+    data.products = (data.products || []).filter(p => p.id !== id);
+    await saveData(data);
+    showToast('Товар удалён');
+    renderMainContent();
+}
 
-// ==================== ОТРИСОВКА КАТАЛОГА ====================
-function renderCatalog() {
-    const grid = document.getElementById('catalogGrid');
-    if(filteredProducts.length === 0) {
-        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#D56989;">Ничего не найдено</div>';
+// ========== АКЦИИ ==========
+async function addPromo() {
+    editingPromoId = null;
+    document.getElementById('promoModalTitle').innerText = 'Добавить акцию';
+    document.getElementById('promoName').value = '';
+    document.getElementById('promoDescription').value = '';
+    document.getElementById('promoCategory').value = '';
+    document.getElementById('promoDiscount').value = '';
+    document.getElementById('promoModal').style.display = 'flex';
+}
+function editPromo(p) {
+    editingPromoId = p.id;
+    document.getElementById('promoModalTitle').innerText = 'Редактировать акцию';
+    document.getElementById('promoName').value = p.name;
+    document.getElementById('promoDescription').value = p.description || '';
+    document.getElementById('promoCategory').value = p.category;
+    document.getElementById('promoDiscount').value = p.discount;
+    document.getElementById('promoModal').style.display = 'flex';
+}
+async function savePromo() {
+    const name = document.getElementById('promoName').value.trim();
+    const description = document.getElementById('promoDescription').value.trim();
+    const category = document.getElementById('promoCategory').value.trim();
+    const discount = parseInt(document.getElementById('promoDiscount').value);
+    if (!name || !category || !discount) { alert('Заполните все поля'); return; }
+    const data = await getData();
+    data.promos = data.promos || [];
+    if (editingPromoId === null) {
+        const newId = Math.max(...data.promos.map(p => p.id), 0) + 1;
+        data.promos.push({ id: newId, name, description, category, discount });
+        showToast('Акция добавлена');
+    } else {
+        const idx = data.promos.findIndex(p => p.id === editingPromoId);
+        if (idx !== -1) data.promos[idx] = { ...data.promos[idx], name, description, category, discount };
+        showToast('Акция обновлена');
+    }
+    await saveData(data);
+    closePromoModal();
+    renderMainContent();
+}
+async function deletePromo(id) {
+    if (!confirm('Удалить акцию?')) return;
+    const data = await getData();
+    data.promos = (data.promos || []).filter(p => p.id !== id);
+    await saveData(data);
+    showToast('Акция удалена');
+    renderMainContent();
+}
+
+// ========== ОТЗЫВЫ ==========
+async function deleteReview(id) {
+    if (!confirm('Удалить отзыв?')) return;
+    const data = await getData();
+    data.reviews = (data.reviews || []).filter(r => r.id !== id);
+    await saveData(data);
+    showToast('Отзыв удалён');
+    renderMainContent();
+}
+async function toggleReviewApproval(id, currentApproved) {
+    const data = await getData();
+    const reviews = data.reviews || [];
+    const idx = reviews.findIndex(r => r.id === id);
+    if (idx !== -1) {
+        reviews[idx].approved = !currentApproved;
+        data.reviews = reviews;
+        await saveData(data);
+        showToast(currentApproved ? 'Отзыв скрыт' : 'Отзыв опубликован');
+        renderMainContent();
+    }
+}
+
+// ========== ЗАКАЗЫ ==========
+async function updateOrderStatus(orderId, newStatus) {
+    const data = await getData();
+    const orders = data.orders || [];
+    const idx = orders.findIndex(o => o.id == orderId);
+    if (idx !== -1) { orders[idx].status = newStatus; data.orders = orders; await saveData(data); showToast('Статус заказа обновлён'); renderMainContent(); }
+}
+
+// ========== ПОЛЬЗОВАТЕЛИ ==========
+async function toggleAdmin(userId, currentIsAdmin) {
+    const data = await getData();
+    const users = data.users || [];
+    const idx = users.findIndex(u => u.id === userId);
+    if (idx !== -1) { users[idx].isAdmin = !currentIsAdmin; data.users = users; await saveData(data); showToast(currentIsAdmin ? 'Права админа сняты' : 'Пользователь назначен админом'); renderMainContent(); }
+}
+
+function closeModal() { document.getElementById('productModal').style.display = 'none'; editingProductId = null; }
+function closePromoModal() { document.getElementById('promoModal').style.display = 'none'; editingPromoId = null; }
+function showToast(msg) { let t = document.querySelector('.toast'); if(t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
+
+async function renderMainContent() {
+    await getCurrentUser();
+    const container = document.getElementById('adminContent');
+    if (!currentUser || !currentUser.isAdmin) {
+        container.innerHTML = `<div class="access-denied"><h2>Доступ запрещён</h2><p><a href="index4.html" style="color:#C2DC80;">Вернуться в кабинет</a></p></div>`;
+        document.getElementById('loading').style.display = 'none';
         return;
     }
-    grid.innerHTML = filteredProducts.map(p => `
-        <div class="product-card">
-            <img src="${p.img}" alt="${p.name}" loading="lazy">
-            <h3>${p.name}</h3>
-            <div class="price">${p.price} ₽</div>
-            <div class="card-buttons">
-                <button class="cart-btn" onclick="addToCart(${p.id})">В корзину</button>
-                <button class="details-btn" onclick='showDetails(${JSON.stringify(p).replace(/'/g, "&#39;")})'>О товаре</button>
-            </div>
-        </div>
-    `).join('');
+    
+    const data = await getData();
+    const users = data.users || [];
+    const orders = data.orders || [];
+    const messages = data.messages || [];
+    const products = data.products || [];
+    const promos = data.promos || [];
+    const reviews = data.reviews || [];
+    
+    if (currentTab === 'products') {
+        let html = `<div style="display:flex; justify-content:space-between; align-items:center;"><div class="section-title">Каталог товаров (${products.length})</div><button class="btn-small" onclick="addProduct()" style="background:#1f5437; padding:6px 12px;">+ Добавить товар</button></div>`;
+        if (products.length === 0) html += '<div style="text-align:center;padding:20px;">Товаров пока нет</div>';
+        else {
+            html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Фото</th><th>Название</th><th>Цена</th><th>Категория</th><th>Действия</th></tr></thead><tbody>`;
+            for (let p of products) {
+                const catName = {bright:'Яркие', gentle:'Нежные', minimalism:'Минимализм', single:'Единичные'}[p.cat] || p.cat;
+                html += `<tr>
+                    <td>${p.id}</td>
+                    <td><img src="${p.img}" style="width:40px;height:40px;object-fit:cover;"></td>
+                    <td>${p.name}</td>
+                    <td>${p.price} ₽</td>
+                    <td>${catName}</td>
+                    <td><button class="btn-small" onclick='editProduct(${JSON.stringify(p).replace(/'/g, "&#39;")})'>✏️</button>
+                    <button class="btn-small" onclick="deleteProduct(${p.id})">🗑</button></td>
+                </tr>`;
+            }
+            html += `</tbody></table></div>`;
+        }
+        container.innerHTML = html;
+    }
+    else if (currentTab === 'promos') {
+        let html = `<div style="display:flex; justify-content:space-between; align-items:center;"><div class="section-title">Акции (${promos.length})</div><button class="btn-small" onclick="addPromo()" style="background:#1f5437; padding:6px 12px;">+ Добавить акцию</button></div>`;
+        if (promos.length === 0) html += '<div style="text-align:center;padding:20px;">Акций пока нет</div>';
+        else {
+            html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Категория</th><th>Скидка</th><th>Действия</th></tr></thead><tbody>`;
+            for (let p of promos) {
+                html += `<tr>
+                    <td>${p.id}</td>
+                    <td>${p.name}</td>
+                    <td>${p.description || '-'}</td>
+                    <td>${p.category}</td>
+                    <td>${p.discount}%</td>
+                    <td><button class="btn-small" onclick='editPromo(${JSON.stringify(p).replace(/'/g, "&#39;")})'>✏️</button>
+                    <button class="btn-small" onclick="deletePromo(${p.id})">🗑</button></td>
+                </tr>`;
+            }
+            html += `</tbody></table></div>`;
+        }
+        container.innerHTML = html;
+    }
+    else if (currentTab === 'reviews') {
+        let html = `<div class="section-title">Отзывы (${reviews.length})</div>`;
+        if (reviews.length === 0) html += '<div style="text-align:center;padding:20px;">Отзывов пока нет</div>';
+        else {
+            html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>Дата</th><th>Имя</th><th>Оценка</th><th>Текст</th><th>Статус</th><th>Действия</th></tr></thead><tbody>`;
+            for (let r of reviews) {
+                html += `<tr>
+                    <td>${r.date}</td>
+                    <td>${r.name}</td>
+                    <td>${r.rating}★</td>
+                    <td style="max-width:300px;">${r.text.substring(0, 100)}${r.text.length > 100 ? '...' : ''}</td>
+                    <td>${r.approved !== false ? '✅ Опубликован' : '⛔ Скрыт'}</td>
+                    <td>
+                        <button class="btn-small" onclick="toggleReviewApproval(${r.id}, ${r.approved !== false})">${r.approved !== false ? 'Скрыть' : 'Опубликовать'}</button>
+                        <button class="btn-small" onclick="deleteReview(${r.id})">🗑</button>
+                    </td>
+                </tr>`;
+            }
+            html += `</tbody></table></div>`;
+        }
+        container.innerHTML = html;
+    }
+    else if (currentTab === 'orders') {
+        let html = `<div class="section-title">Заказы (${orders.length})</div>`;
+        if (orders.length === 0) html += '<div style="text-align:center;padding:20px;">Заказов пока нет</div>';
+        else {
+            html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th><th>Действия</th></tr></thead><tbody>`;
+            for (let o of orders) {
+                html += `<tr>
+                    <td>${o.id}</td>
+                    <td>${o.date}</td>
+                    <td>${o.userEmail || 'Гость'}</td>
+                    <td>${o.items?.map(i => `${i.name} x${i.quantity}`).join('<br>') || '-'}</td>
+                    <td>${o.total} ₽</td>
+                    <td><select class="btn-small" onchange="updateOrderStatus(${o.id}, this.value)" style="background:#D56989;color:white;">
+                        <option value="Новый" ${o.status === 'Новый' ? 'selected' : ''}>Новый</option>
+                        <option value="В обработке" ${o.status === 'В обработке' ? 'selected' : ''}>В обработке</option>
+                        <option value="Доставлен" ${o.status === 'Доставлен' ? 'selected' : ''}>Доставлен</option>
+                        <option value="Отменён" ${o.status === 'Отменён' ? 'selected' : ''}>Отменён</option>
+                    </select></td>
+                    <td>${o.address || '-'}</td>
+                    <td><button class="btn-small" onclick="updateOrderStatus(${o.id}, 'Отменён')">Отменить</button></td>
+                </tr>`;
+            }
+            html += `</tbody></table></div>`;
+        }
+        container.innerHTML = html;
+    }
+    else if (currentTab === 'messages') {
+        let html = `<div class="section-title">Сообщения (${messages.length})</div>`;
+        if (messages.length === 0) html += '<div style="text-align:center;padding:20px;">Сообщений пока нет</div>';
+        else {
+            html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>Дата</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Сообщение</th></tr></thead><tbody>`;
+            for (let m of messages) {
+                html += `<tr>
+                    <td>${m.date}</td>
+                    <td>${m.name}</td>
+                    <td>${m.email}</td>
+                    <td>${m.phone || '-'}</td>
+                    <td style="max-width:300px;">${m.message}</td>
+                </tr>`;
+            }
+            html += `</tbody></table></div>`;
+        }
+        container.innerHTML = html;
+    }
+    else if (currentTab === 'users') {
+        let html = `<div class="section-title">Пользователи (${users.length})</div>`;
+        if (users.length === 0) html += '<div style="text-align:center;padding:20px;">Пока нет пользователей</div>';
+        else {
+            html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Заказов</th><th>Статус</th><th>Действия</th></tr></thead><tbody>`;
+            for (let u of users) {
+                html += `<tr>
+                    <td>${u.id}</td>
+                    <td>${u.name}</td>
+                    <td>${u.email}</td>
+                    <td>${u.phone || '-'}</td>
+                    <td>${u.orders?.length || 0}</td>
+                    <td>${u.isAdmin ? '<span class="badge-admin">Админ</span>' : 'Пользователь'}</td>
+                    <td><button class="btn-small" onclick="toggleAdmin(${u.id}, ${u.isAdmin})">${u.isAdmin ? 'Снять права' : 'Назначить админом'}</button></td>
+                </tr>`;
+            }
+            html += `</tbody></table></div>`;
+        }
+        container.innerHTML = html;
+    }
+    
+    document.getElementById('loading').style.display = 'none';
 }
 
-// ==================== ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА ПО КЛИКУ НА ФОН ====================
-document.addEventListener('click', function(e) { if(e.target === document.getElementById('productModal')) closeModal(); });
+async function init() {
+    const saved = localStorage.getItem('estetica_current_user');
+    if (saved) {
+        currentUser = JSON.parse(saved);
+        const data = await getData();
+        const freshUser = (data.users || []).find(u => u.id === currentUser.id);
+        if (freshUser && freshUser.isAdmin) { currentUser = freshUser; renderMainContent(); return; }
+    }
+    document.getElementById('adminContent').innerHTML = `
+        <div class="access-denied" style="padding:40px;">
+            <h3>Вход в админ-панель</h3>
+            <input type="email" id="loginEmail" placeholder="Email" style="padding:8px; margin:10px 0; width:100%; max-width:300px;">
+            <input type="password" id="loginPassword" placeholder="Пароль" style="padding:8px; margin:10px 0; width:100%; max-width:300px;">
+            <button onclick="doLogin()" style="background:#D56989;color:white;border:none;padding:8px 20px;">Войти</button>
+        </div>
+    `;
+    document.getElementById('loading').style.display = 'none';
+}
 
-renderCatalog();
-updateCartCount();
+window.doLogin = async function() {
+    document.getElementById('loading').style.display = 'flex';
+    const email = document.getElementById('loginEmail')?.value;
+    const password = document.getElementById('loginPassword')?.value;
+    if (await login(email, password)) renderMainContent();
+    else { alert('Неверный email или пароль!'); document.getElementById('loading').style.display = 'none'; }
+};
+
+init();
 </script>
 </body>
 </html>
