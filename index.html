@@ -23,32 +23,83 @@
         .about h2{font-size:32px;color:#D56989;margin-bottom:15px;letter-spacing:1px}
         .about p{font-size:18px;color:#D56989;max-width:800px;margin:0 auto;line-height:1.6}
         .section-title{text-align:center;font-size:32px;color:#D56989;margin-bottom:20px;font-weight:600}
-        .grid{display:grid;gap:25px}
+        
+        /* БЛОК АКЦИЙ */
+        .promo-block{background:#D56989;padding:20px;margin:25px 0;text-align:center}
+        .promo-title{font-size:32px;color:#C2DC80;margin-bottom:20px}
+        .promo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+        .promo-card{background:#F3EEF1;padding:25px;text-align:center;transition:.3s;cursor:pointer}
+        .promo-card:hover{transform:translateY(-5px);background:#C2DC80}
+        .promo-name{font-size:24px;font-weight:600;color:#D56989;margin-bottom:8px}
+        .promo-category{font-size:14px;color:#5b3b45;margin-bottom:10px}
+        .promo-discount{font-size:36px;font-weight:bold;color:#D56989;margin:12px 0}
+        .apply-promo-btn{background:#D56989;color:#F3EEF1;border:none;padding:10px 25px;font-family:inherit;font-size:16px;cursor:pointer;margin-top:12px;border-radius:40px}
+        .apply-promo-btn:hover{background:#b84d6e}
+        .active-promo{background:#C2DC80;border:2px solid #D56989}
+        
+        /* ТОВАРЫ */
+        .grid{display:grid;gap:25px;grid-template-columns:repeat(3,1fr)}
         .card{background:transparent;padding:20px;text-align:center;transition:.3s;display:flex;flex-direction:column;align-items:center}
         .card:hover{transform:translateY(-5px);background:#C2DC80}
         .card img{width:100%;max-width:300px;height:300px;object-fit:cover;margin-bottom:15px}
         .price{font-size:24px;font-weight:bold;color:#D56989;margin:10px 0}
+        
+        /* ОТЗЫВЫ */
+        .reviews-block{background:#D56989;padding:25px;margin:25px 0}
+        .reviews-title{font-size:32px;color:#C2DC80;text-align:center;margin-bottom:25px}
+        .reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:25px;margin-bottom:30px}
+        .review-card{background:#F3EEF1;padding:20px;transition:.3s}
+        .review-card:hover{transform:translateY(-5px);background:#C2DC80}
+        .review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+        .review-name{font-size:18px;font-weight:600;color:#D56989}
+        .review-rating{color:#D56989;font-size:16px;letter-spacing:2px}
+        .review-text{font-size:14px;color:#5b3b45;line-height:1.5;margin-bottom:12px}
+        .review-date{font-size:11px;color:#5b3b45;text-align:right}
+        .star{color:#D56989}
+        
+        /* ФОРМА ОТЗЫВА */
+        .review-form-block{background:#F3EEF1;padding:25px;margin:25px 0;border:2px solid #C2DC80}
+        .review-form-title{font-size:26px;color:#D56989;text-align:center;margin-bottom:20px}
+        .review-form{display:flex;flex-direction:column;gap:15px}
+        .review-form input,.review-form textarea{padding:12px;border:1px solid #C2DC80;background:#F3EEF1;font-family:inherit;font-size:15px;color:#D56989}
+        .review-form textarea{min-height:100px;resize:vertical}
+        .rating-select{display:flex;gap:15px;align-items:center;flex-wrap:wrap;justify-content:center}
+        .rating-select label{font-size:16px;color:#D56989}
+        .star-input{font-size:28px;cursor:pointer;color:#D56989;opacity:0.5;transition:.2s}
+        .star-input:hover,.star-input.active{opacity:1}
+        .submit-review{background:#D56989;color:#F3EEF1;border:none;padding:12px;font-family:inherit;font-size:16px;cursor:pointer;width:200px;margin:0 auto;border-radius:40px}
+        .submit-review:hover{background:#b84d6e}
+        
         .contact-cards{display:grid;gap:20px;grid-template-columns:repeat(3,1fr)}
         .contact-card{background:transparent;padding:15px;text-align:center;transition:.3s}
         .contact-card:hover{transform:translateY(-5px);background:#C2DC80}
         .contact-label{font-size:18px;color:#D56989;margin-bottom:8px;font-weight:600}
         .contact-value{font-size:18px;color:#D56989}
         .contact-value a{color:#D56989;text-decoration:none}
+        
         .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:25px 15px 15px;position:relative}
         .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 20px;font-size:14px;text-align:center}
         .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:15px}
-        .social-link{color:#C2DC80;text-decoration:none;font-size:15px;padding:6px 12px;transition:.2s}
+        .social-link{color:#C2DC80;text-decoration:none;font-size:15px;padding:6px 12px}
         .social-link:hover{background:rgba(193,130,146,0.35)}
         .copyright{text-align:center;font-size:11px;color:#C2DC80}
+        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:12px;text-align:center;font-family:system-ui;font-size:13px;z-index:1001;animation:slideIn .3s ease;border-radius:30px}
+        @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+        
         @media (max-width:700px){
             .grid{grid-template-columns:1fr}
             .contact-cards{grid-template-columns:1fr}
             .hero h1{font-size:24px}
-            .card img{max-width:250px;height:250px}
+            .reviews-grid{grid-template-columns:1fr}
+            .promo-grid{grid-template-columns:1fr}
+            .promo-title{font-size:24px}
+            .review-form-title{font-size:22px}
         }
         @media (min-width:701px) and (max-width:1024px){
             .grid{grid-template-columns:repeat(2,1fr)}
             .contact-cards{grid-template-columns:repeat(3,1fr)}
+            .reviews-grid{grid-template-columns:repeat(2,1fr)}
+            .promo-grid{grid-template-columns:repeat(2,1fr)}
         }
         @media (min-width:1025px){
             .grid{grid-template-columns:repeat(3,1fr)}
@@ -62,52 +113,295 @@
         <a href="index.html" class="logo">Estética</a>
         <div class="nav">
             <a href="index.html">ГЛАВНАЯ</a>
-            <a href="index2.html">КАТАЛОГ</a>
-            <a href="index5.html">КОНТАКТЫ</a>
-            <a href="index3.html">КОРЗИНА</a>
-            <a href="index4.html">КАБИНЕТ</a>
+            <a href="catalog.html">КАТАЛОГ</a>
+            <a href="contacts.html">КОНТАКТЫ</a>
+            <a href="cart.html">КОРЗИНА</a>
+            <a href="profile.html">КАБИНЕТ</a>
         </div>
     </div>
+
     <div class="hero">
         <h1>Создаём любовь через цветы</h1>
         <p>Цветы, которые не забываются</p>
     </div>
+
     <div class="line"></div>
+
     <div class="about">
         <h2>Больше чем просто цветы</h2>
         <p><strong>Estética</strong> - не просто цветочный магазин<br>Цветочная мастерская поможет реализовать ваши самые смелые флористические пожелания</p>
     </div>
+
     <div class="line"></div>
+
+    <!-- БЛОК АКЦИЙ И СКИДОК -->
+    <div class="promo-block">
+        <div class="promo-title">Акции и скидки</div>
+        <div class="promo-grid" id="promoGrid">
+            <div class="promo-card" data-category="bright">
+                <div class="promo-name">Яркие букеты</div>
+                <div class="promo-category">Скидка на все яркие букеты</div>
+                <div class="promo-discount">-15%</div>
+                <button class="apply-promo-btn" onclick="applyPromo('bright', 15)">Применить скидку</button>
+            </div>
+            <div class="promo-card" data-category="gentle">
+                <div class="promo-name">Нежные букеты</div>
+                <div class="promo-category">Скидка на все нежные букеты</div>
+                <div class="promo-discount">-10%</div>
+                <button class="apply-promo-btn" onclick="applyPromo('gentle', 10)">Применить скидку</button>
+            </div>
+            <div class="promo-card" data-category="all">
+                <div class="promo-name">Первый заказ</div>
+                <div class="promo-category">Скидка на весь ассортимент</div>
+                <div class="promo-discount">-5%</div>
+                <button class="apply-promo-btn" onclick="applyPromo('all', 5)">Применить скидку</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="line"></div>
+
     <div class="section-title">Наши товары</div>
     <div class="grid">
         <div class="card"><img src="https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg" alt="Страсть"><div class="price">2500 ₽</div></div>
         <div class="card"><img src="https://i.pinimg.com/1200x/4e/e6/72/4ee672c55ef157043075a4a79112d337.jpg" alt="Вопреки канонам"><div class="price">3000 ₽</div></div>
         <div class="card"><img src="https://i.pinimg.com/736x/11/3a/01/113a012a6475e2ccdd0146aa0567915b.jpg" alt="Обещание любви"><div class="price">2000 ₽</div></div>
     </div>
+
     <div class="line"></div>
+
+    <!-- БЛОК ОТЗЫВОВ -->
+    <div class="reviews-block">
+        <div class="reviews-title">Отзывы наших клиентов</div>
+        <div class="reviews-grid" id="reviewsGrid">
+            <div class="review-card">Загрузка отзывов...</div>
+        </div>
+
+        <div class="review-form-block">
+            <div class="review-form-title">Оставить отзыв</div>
+            <div class="review-form">
+                <input type="text" id="reviewName" placeholder="Ваше имя" required>
+                <div class="rating-select">
+                    <label>Ваша оценка:</label>
+                    <div id="starRating">
+                        <span class="star-input" data-rating="1">☆</span>
+                        <span class="star-input" data-rating="2">☆</span>
+                        <span class="star-input" data-rating="3">☆</span>
+                        <span class="star-input" data-rating="4">☆</span>
+                        <span class="star-input" data-rating="5">☆</span>
+                    </div>
+                </div>
+                <textarea id="reviewText" placeholder="Поделитесь впечатлениями о нашей работе..." required></textarea>
+                <button class="submit-review" onclick="submitReview()">Отправить отзыв</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="line"></div>
+
     <div class="section-title">Контакты</div>
     <div class="contact-cards">
         <div class="contact-card"><div class="contact-label">Адрес</div><div class="contact-value">Темерницкая ул. 93/33</div></div>
         <div class="contact-card"><div class="contact-label">Часы работы</div><div class="contact-value">Ежедневно, 09:00–21:00</div></div>
         <div class="contact-card"><div class="contact-label">Телефон</div><div class="contact-value"><a href="tel:+79381112274">+7 (938) 111-22-74</a></div></div>
     </div>
+
     <div class="line"></div>
+
     <div class="bottom-block">
         <div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div>
         <div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div>
         <div class="copyright">2026 Estética Цветочная мастерская</div>
     </div>
 </div>
+
 <script>
-// Инициализация тестовых данных
-if (!localStorage.getItem('estetica_cart')) {
-    localStorage.setItem('estetica_cart', JSON.stringify([]));
+// ==================== АКЦИИ И СКИДКИ ====================
+function applyPromo(category, discountPercent) {
+    // Сохраняем активную скидку в localStorage
+    const promoData = { category: category, percent: discountPercent };
+    localStorage.setItem('estetica_promo', JSON.stringify(promoData));
+    
+    // Визуальное выделение активной карточки
+    document.querySelectorAll('.promo-card').forEach(card => {
+        card.classList.remove('active-promo');
+    });
+    const activeCard = document.querySelector(`.promo-card[data-category="${category}"]`);
+    if (activeCard) {
+        activeCard.classList.add('active-promo');
+    }
+    
+    showToast(`Акция применена! Скидка ${discountPercent}% на ${category === 'all' ? 'весь ассортимент' : category === 'bright' ? 'яркие букеты' : 'нежные букеты'}`);
 }
-if (!localStorage.getItem('estetica_users')) {
-    localStorage.setItem('estetica_users', JSON.stringify([
-        { id: 1, email: 'admin@estetica.ru', password: 'admin123', name: 'Администратор', isAdmin: true, orders: [] }
-    ]));
+
+// Загрузка активной акции при загрузке страницы
+function loadActivePromo() {
+    const savedPromo = localStorage.getItem('estetica_promo');
+    if (savedPromo) {
+        const promo = JSON.parse(savedPromo);
+        const activeCard = document.querySelector(`.promo-card[data-category="${promo.category}"]`);
+        if (activeCard) {
+            activeCard.classList.add('active-promo');
+        }
+    }
 }
+
+// ==================== ОТЗЫВЫ ====================
+function initReviews() {
+    if (!localStorage.getItem('estetica_reviews')) {
+        const defaultReviews = [
+            { id: 1, name: "Анна", rating: 5, text: "Заказывала букет для мамы. Очень свежие цветы, доставили точно в срок. Спасибо флористам за красоту!", date: "2025-05-20" },
+            { id: 2, name: "Екатерина", rating: 5, text: "Потрясающий сервис! Букет выглядел даже лучше, чем на фото. Обязательно закажу ещё.", date: "2025-05-18" },
+            { id: 3, name: "Мария", rating: 4, text: "Хороший магазин, цветы свежие. Единственное - немного задержали доставку. В остальном всё отлично.", date: "2025-05-15" }
+        ];
+        localStorage.setItem('estetica_reviews', JSON.stringify(defaultReviews));
+    }
+}
+
+function getReviews() {
+    return JSON.parse(localStorage.getItem('estetica_reviews') || '[]');
+}
+
+function saveReviews(reviews) {
+    localStorage.setItem('estetica_reviews', JSON.stringify(reviews));
+}
+
+function renderStars(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+        stars += i <= rating ? '★' : '☆';
+    }
+    return `<span class="star">${stars}</span>`;
+}
+
+function loadReviews() {
+    const reviews = getReviews();
+    const container = document.getElementById('reviewsGrid');
+    
+    if (reviews.length === 0) {
+        container.innerHTML = '<div class="review-card">Пока нет отзывов. Будьте первым!</div>';
+        return;
+    }
+    
+    reviews.sort((a, b) => b.id - a.id);
+    
+    container.innerHTML = reviews.map(review => `
+        <div class="review-card">
+            <div class="review-header">
+                <span class="review-name">${escapeHtml(review.name)}</span>
+                <span class="review-rating">${renderStars(review.rating)}</span>
+            </div>
+            <div class="review-text">${escapeHtml(review.text)}</div>
+            <div class="review-date">${review.date}</div>
+        </div>
+    `).join('');
+}
+
+let selectedRating = 5;
+
+function initStarSelector() {
+    const stars = document.querySelectorAll('.star-input');
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            selectedRating = parseInt(this.dataset.rating);
+            stars.forEach(s => {
+                const rating = parseInt(s.dataset.rating);
+                if (rating <= selectedRating) {
+                    s.textContent = '★';
+                    s.style.opacity = '1';
+                } else {
+                    s.textContent = '☆';
+                    s.style.opacity = '0.5';
+                }
+            });
+        });
+    });
+    stars.forEach(star => {
+        if (parseInt(star.dataset.rating) <= 5) {
+            star.textContent = '★';
+            star.style.opacity = '1';
+        }
+    });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function showToast(message) {
+    let t = document.querySelector('.toast');
+    if (t) t.remove();
+    t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = message;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+}
+
+function submitReview() {
+    const name = document.getElementById('reviewName')?.value.trim();
+    const text = document.getElementById('reviewText')?.value.trim();
+    
+    if (!name) {
+        showToast('Пожалуйста, введите ваше имя');
+        return;
+    }
+    if (!text) {
+        showToast('Пожалуйста, введите текст отзыва');
+        return;
+    }
+    if (text.length < 10) {
+        showToast('Отзыв должен содержать минимум 10 символов');
+        return;
+    }
+    
+    const today = new Date().toISOString().split('T')[0];
+    const reviews = getReviews();
+    
+    const newReview = {
+        id: Date.now(),
+        name: name,
+        rating: selectedRating,
+        text: text,
+        date: today
+    };
+    
+    reviews.unshift(newReview);
+    saveReviews(reviews);
+    
+    document.getElementById('reviewName').value = '';
+    document.getElementById('reviewText').value = '';
+    
+    selectedRating = 5;
+    const stars = document.querySelectorAll('.star-input');
+    stars.forEach(star => {
+        if (parseInt(star.dataset.rating) <= 5) {
+            star.textContent = '★';
+            star.style.opacity = '1';
+        }
+    });
+    
+    showToast('Спасибо за отзыв!');
+    loadReviews();
+}
+
+// ==================== КОРЗИНА (для счётчика) ====================
+function getCart() { return JSON.parse(localStorage.getItem('estetica_cart') || '[]'); }
+function updateCartCount() { 
+    let total = getCart().reduce((s,i)=>s+i.quantity,0); 
+    let link = document.querySelector('.nav a[href="cart.html"]'); 
+    if(link) link.innerHTML = total > 0 ? `КОРЗИНА (${total})` : `КОРЗИНА`; 
+}
+
+// Инициализация
+initReviews();
+loadReviews();
+initStarSelector();
+loadActivePromo();
+updateCartCount();
 </script>
 </body>
 </html>
