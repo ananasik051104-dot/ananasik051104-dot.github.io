@@ -2,62 +2,68 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Личный кабинет | Estética</title>
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Poiret One',cursive;background:#D56989;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:15px}
-        .frame{max-width:1300px;width:100%;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
-        .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
+        body{font-family:'Poiret One',cursive;background:#D56989;padding:15px}
+        .frame{max-width:1300px;margin:0 auto;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
+        .header{display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
         .header::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
         .logo,.nav,.bottom-block>*{position:relative;z-index:1}
-        .logo{font-size:28px;font-weight:600;color:#C2DC80;text-decoration:none;text-shadow:0 2px 6px rgba(0,0,0,0.5)}
-        .nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+        .logo{font-size:28px;font-weight:600;color:#C2DC80;text-decoration:none}
+        .nav{display:flex;flex-wrap:wrap;gap:8px}
         .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 10px}
         .line{height:2px;background:#C2DC80;margin:20px 0;opacity:.5}
-        .page-title{font-size:28px;color:#D56989;margin-bottom:20px;text-align:center}
+        .page-title{font-size:28px;color:#D56989;text-align:center;margin-bottom:20px}
         .profile-card{background:#C2DC80;border:1px solid #D56989;padding:25px;text-align:center;margin-bottom:25px}
-        .avatar{font-size:60px;margin-bottom:10px}
+        .avatar{font-size:60px}
         .profile-name{font-size:24px;font-weight:600;color:#D56989}
-        .profile-email,.profile-phone{font-size:16px;color:#5b3b45;margin:5px 0}
+        .profile-email,.profile-phone{font-size:16px;color:#5b3b45}
         .profile-buttons{display:flex;justify-content:center;gap:10px;margin-top:15px;flex-wrap:wrap}
-        button{background:#D56989;border:none;padding:8px 20px;font-family:inherit;font-size:14px;cursor:pointer;color:#F3EEF1}
+        button{background:#D56989;border:none;padding:8px 20px;font-family:inherit;cursor:pointer;color:#F3EEF1}
         button:hover{background:#b84d6e}
         .logout-btn{background:#b84d6e}
         .admin-btn{background:#1f5437}
-        .auth-card{background:#C2DC80;border:1px solid #D56989;padding:25px;max-width:400px;margin:0 auto 25px}
-        .auth-card h3{font-size:24px;color:#D56989;text-align:center;margin-bottom:15px}
-        .input-group{position:relative;margin:10px 0}
-        .auth-input{width:100%;padding:10px;padding-right:40px;border:1px solid #D56989;background:#F3EEF1;font-family:inherit;font-size:14px;color:#D56989}
-        .toggle-password{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:#D56989}
+        .auth-card{background:#C2DC80;border:1px solid #D56989;padding:25px;max-width:400px;margin:0 auto}
+        .auth-card h3{font-size:24px;color:#D56989;text-align:center}
+        .input-group{margin:10px 0}
+        .auth-input{width:100%;padding:10px;border:1px solid #D56989;background:#F3EEF1;font-family:inherit}
         .auth-btn{width:100%;font-size:16px;margin-top:10px}
-        .switch-auth{margin-top:10px;text-align:center;font-size:12px;cursor:pointer;text-decoration:underline;color:#D56989}
+        .switch-auth{text-align:center;font-size:12px;cursor:pointer;text-decoration:underline;color:#D56989;margin-top:10px}
         .tabs{display:flex;gap:5px;margin-bottom:15px;border-bottom:1px solid #C2DC80}
-        .tab{flex:1;text-align:center;padding:10px;background:none;border:none;font-family:inherit;font-size:16px;cursor:pointer;color:#D56989}
+        .tab{flex:1;text-align:center;padding:10px;background:none;border:none;font-family:inherit;cursor:pointer;color:#D56989}
         .tab.active{background:#C2DC80;color:#D56989}
         .tab-content{display:none}
         .tab-content.active{display:block}
         .order-item{background:#F3EEF1;border:1px solid #C2DC80;padding:12px;margin-bottom:10px}
-        .order-header{display:flex;justify-content:space-between;margin-bottom:5px;font-weight:bold;color:#D56989}
+        .order-header{display:flex;justify-content:space-between;font-weight:bold;color:#D56989}
         .order-status{background:#D56989;color:#F3EEF1;padding:2px 8px;font-size:11px}
         .order-details{font-size:12px;color:#5b3b45}
-        .empty{text-align:center;padding:40px;color:#D56989;font-size:16px}
-        .address-item{background:#F3EEF1;border:1px solid #C2DC80;padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between}
-        .add-addr,.remove-btn{background:#D56989;color:#F3EEF1;border:none;padding:6px 15px;cursor:pointer}
-        .remove-btn{padding:4px 10px;font-size:11px}
+        .empty{text-align:center;padding:40px;color:#D56989}
+        .address-item{background:#F3EEF1;border:1px solid #C2DC80;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between}
+        .add-addr{background:#D56989;color:#F3EEF1;border:none;padding:6px 15px;cursor:pointer}
         .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:20px 15px 15px;position:relative}
-        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 15px;font-size:12px;text-align:center}
-        .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:12px}
-        .social-link{color:#C2DC80;text-decoration:none;font-size:13px;padding:5px 10px}
-        .social-link:hover{background:rgba(193,130,146,0.35)}
+        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;font-size:12px}
+        .social-links{display:flex;justify-content:center;gap:15px;margin-bottom:12px}
+        .social-link{color:#C2DC80;text-decoration:none}
         .copyright{text-align:center;font-size:10px;color:#C2DC80}
-        @media(max-width:700px){.frame{padding:15px}.header{flex-direction:column;text-align:center}.profile-buttons{flex-direction:column;align-items:center}.footer-info{flex-direction:column;gap:8px}}
+        @media(max-width:700px){.frame{padding:15px}.header{flex-direction:column;text-align:center}}
     </style>
 </head>
 <body>
 <div class="frame">
-    <div class="header"><a href="index.html" class="logo">Estética</a><div class="nav"><a href="index.html">ГЛАВНАЯ</a><a href="index2.html">КАТАЛОГ</a><a href="index5.html">КОНТАКТЫ</a><a href="index3.html">КОРЗИНА</a><a href="index4.html">КАБИНЕТ</a></div></div>
+    <div class="header">
+        <a href="index.html" class="logo">Estética</a>
+        <div class="nav">
+            <a href="index.html">ГЛАВНАЯ</a>
+            <a href="index2.html">КАТАЛОГ</a>
+            <a href="index5.html">КОНТАКТЫ</a>
+            <a href="index3.html">КОРЗИНА</a>
+            <a href="index4.html">КАБИНЕТ</a>
+        </div>
+    </div>
     <div class="line"></div>
     <h1 class="page-title">Личный кабинет</h1>
     <div id="authBlock"></div>
@@ -66,94 +72,56 @@
         <div id="tab-orders" class="tab-content active"><div id="ordersList"></div></div>
         <div id="tab-addresses" class="tab-content"><div id="addressesList"></div><button class="add-addr" onclick="addAddress()">+ Добавить адрес</button></div>
     </div>
-    <div class="bottom-block"><div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div><div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div><div class="copyright">2026 Estética Цветочная мастерская</div></div>
+    <div class="bottom-block">
+        <div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div>
+        <div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div>
+        <div class="copyright">2026 Estética Цветочная мастерская</div>
+    </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://nmbxiqanaeqmelxhczdu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tYnhpcWFuYWVxbWVseGhjemR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDM2MDYsImV4cCI6MjA5NTM3OTYwNn0.Tthpbmnys_e4B13bZ1mt0t4t4QRYwzxDqu_83vuSks8';
-
+const API_URL = 'https://functions.yandexcloud.net/d4en7rg8osirq7m9ukq5';
 let currentUser = null;
 
-async function supabaseGet(table, filter = null) {
-    let url = `${SUPABASE_URL}/rest/v1/${table}?select=*`;
-    if (filter) url += `&${filter}`;
-    const res = await fetch(url, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-    });
-    return await res.json();
-}
-
-async function supabasePost(table, data) {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+async function callApi(action, data = {}) {
+    const res = await fetch(API_URL, {
         method: 'POST',
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, data })
     });
     return await res.json();
 }
 
-async function supabasePut(table, id, data) {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
-        method: 'PATCH',
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-    return await res.json();
-}
+function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
+// Регистрация
 async function register(email, password, name) {
-    const users = await supabaseGet('users');
-    if (users.find(u => u.email === email)) {
-        alert('Пользователь с таким email уже существует');
+    const res = await callApi('register', { email, password, name });
+    if (res?.success) {
+        currentUser = res.user;
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        alert(currentUser.isadmin ? 'Вы зарегистрировались как администратор' : 'Регистрация успешна');
+        renderAuthScreen();
+        return true;
+    } else {
+        alert(res?.error || 'Ошибка регистрации');
         return false;
     }
-    
-    const isAdmin = (email === 'ancord51217@gmail.com' && password === 'ananasik051217');
-    
-    const newUser = {
-        email: email,
-        password: password,
-        name: name || email.split('@')[0],
-        phone: 'не указан',
-        addresses: [],
-        orders: [],
-        cart: [],
-        isadmin: isAdmin
-    };
-    
-    const result = await supabasePost('users', newUser);
-    if (result && result.id) {
-        currentUser = result;
-        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
-        alert(isAdmin ? 'Вы зарегистрировались как администратор' : 'Регистрация успешна');
-        renderAuthScreen();
-        return true;
-    }
-    return false;
 }
 
+// Вход
 async function login(email, password) {
-    const users = await supabaseGet('users');
-    const user = users.find(u => u.email === email && u.password === password);
-    
-    if (user) {
-        currentUser = user;
+    const res = await callApi('login', { email, password });
+    if (res?.success) {
+        currentUser = res.user;
         localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
-        alert(`Добро пожаловать, ${user.name}!`);
+        alert(`Добро пожаловать, ${currentUser.name}!`);
         renderAuthScreen();
         return true;
+    } else {
+        alert(res?.error || 'Неверный email или пароль');
+        return false;
     }
-    alert('Неверный email или пароль');
-    return false;
 }
 
 function logout() {
@@ -163,44 +131,32 @@ function logout() {
     alert('Вы вышли из аккаунта');
 }
 
-async function updateUserData(updates) {
-    if (!currentUser) return;
-    
-    const result = await supabasePut('users', currentUser.id, updates);
-    if (result) {
-        currentUser = { ...currentUser, ...updates };
-        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
-        renderAuthScreen();
-        alert('Профиль обновлён');
-    }
-}
-
+// Заказы
 async function loadOrders() {
     if (!currentUser) return;
-    const orders = currentUser.orders || [];
+    const res = await callApi('getOrders', { user_id: currentUser.id });
     const container = document.getElementById('ordersList');
-    
-    if (!orders.length) {
+    if (res?.success && res.orders?.length) {
+        container.innerHTML = res.orders.map(order => `
+            <div class="order-item">
+                <div class="order-header"><span>${escapeHtml(order.date)}</span><span class="order-status">${escapeHtml(order.status || 'Новый')}</span></div>
+                <div class="order-details">${order.items?.map(i => `${escapeHtml(i.name)} x ${i.quantity}`).join(', ') || ''}</div>
+                <div class="order-details">${order.total} ₽ | ${escapeHtml(order.address || '')}</div>
+            </div>
+        `).join('');
+    } else {
         container.innerHTML = '<div class="empty">Заказов пока нет<br><a href="index2.html" style="color:#D56989;">Перейти в каталог</a></div>';
-        return;
     }
-    
-    container.innerHTML = orders.map(order => `
-        <div class="order-item">
-            <div class="order-header"><span>${order.date}</span><span class="order-status">${order.status || 'Новый'}</span></div>
-            <div class="order-details">${order.items?.map(i => `${i.name} x ${i.quantity}`).join(', ') || ''}</div>
-            <div class="order-details">${order.total} ₽ | ${order.address || ''}</div>
-        </div>
-    `).join('');
 }
 
+// Адреса
 function loadAddresses() {
     const container = document.getElementById('addressesList');
     const addresses = currentUser?.addresses || ['Москва, ул. Нансена, 1'];
     container.innerHTML = addresses.map((addr, i) => `
         <div class="address-item">
-            <span>${addr}</span>
-            <button class="remove-btn" onclick="deleteAddress(${i})">Удалить</button>
+            <span>${escapeHtml(addr)}</span>
+            <button class="remove-btn" onclick="deleteAddress(${i})" style="background:#D56989;color:#F3EEF1;border:none;padding:4px 10px;cursor:pointer">Удалить</button>
         </div>
     `).join('');
 }
@@ -221,20 +177,20 @@ async function deleteAddress(index) {
     loadAddresses();
 }
 
-function togglePassword(inputId) {
-    const input = document.getElementById(inputId);
-    input.type = input.type === 'password' ? 'text' : 'password';
+async function updateUserData(updates) {
+    if (!currentUser) return;
+    // Пока обновляем только локально, т.к. API требует расширения
+    currentUser = { ...currentUser, ...updates };
+    localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+    renderAuthScreen();
+    alert('Профиль обновлён');
 }
 
+// Отображение экрана
 function renderAuthScreen() {
-    const savedUser = localStorage.getItem('estetica_current_user');
-    if (savedUser && !currentUser) {
-        try {
-            currentUser = JSON.parse(savedUser);
-        } catch(e) {
-            console.error('Ошибка парсинга пользователя:', e);
-            currentUser = null;
-        }
+    const saved = localStorage.getItem('estetica_current_user');
+    if (saved && !currentUser) {
+        try { currentUser = JSON.parse(saved); } catch(e) { currentUser = null; }
     }
     
     const authBlock = document.getElementById('authBlock');
@@ -246,7 +202,7 @@ function renderAuthScreen() {
                 <div id="authForm">
                     <h3>Вход</h3>
                     <div class="input-group"><input type="email" id="loginEmail" class="auth-input" placeholder="Email"></div>
-                    <div class="input-group"><input type="password" id="loginPassword" class="auth-input" placeholder="Пароль"><button class="toggle-password" onclick="togglePassword('loginPassword')">👁</button></div>
+                    <div class="input-group"><input type="password" id="loginPassword" class="auth-input" placeholder="Пароль"></div>
                     <button class="auth-btn" onclick="doLogin()">Войти</button>
                     <div class="switch-auth" onclick="showRegisterForm()">Нет аккаунта? Зарегистрироваться</div>
                 </div>
@@ -254,11 +210,7 @@ function renderAuthScreen() {
         `;
         userPanel.style.display = 'none';
     } else {
-        const isUserAdmin = currentUser.isadmin || currentUser.isAdmin || currentUser.is_admin;
-        const adminButtons = isUserAdmin ? `
-            <button class="admin-btn" onclick="location.href='admin.html'">Админ-панель</button>
-        ` : '';
-        
+        const isAdmin = currentUser.isadmin || currentUser.isAdmin;
         authBlock.innerHTML = `
             <div class="profile-card">
                 <div class="avatar">🌸</div>
@@ -268,7 +220,7 @@ function renderAuthScreen() {
                 <div class="profile-buttons">
                     <button onclick="editProfile()">Редактировать</button>
                     <button class="logout-btn" onclick="logout()">Выйти</button>
-                    ${adminButtons}
+                    ${isAdmin ? '<button class="admin-btn" onclick="location.href=\'admin.html\'">Админ-панель</button>' : ''}
                 </div>
             </div>
         `;
@@ -278,11 +230,23 @@ function renderAuthScreen() {
     }
 }
 
-function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+function editProfile() {
+    if (!currentUser) return;
+    const newName = prompt('Новое имя:', currentUser.name);
+    const newPhone = prompt('Новый телефон:', currentUser.phone || '');
+    const updates = {};
+    if (newName) updates.name = newName;
+    if (newPhone) updates.phone = newPhone;
+    if (Object.keys(updates).length) updateUserData(updates);
+}
+
+function showTab(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+    if (tabName === 'orders') loadOrders();
+    if (tabName === 'addresses') loadAddresses();
 }
 
 window.showRegisterForm = function() {
@@ -290,7 +254,7 @@ window.showRegisterForm = function() {
         <h3>Регистрация</h3>
         <div class="input-group"><input type="text" id="regName" class="auth-input" placeholder="Ваше имя"></div>
         <div class="input-group"><input type="email" id="regEmail" class="auth-input" placeholder="Email"></div>
-        <div class="input-group"><input type="password" id="regPassword" class="auth-input" placeholder="Пароль"><button class="toggle-password" onclick="togglePassword('regPassword')">👁</button></div>
+        <div class="input-group"><input type="password" id="regPassword" class="auth-input" placeholder="Пароль"></div>
         <button class="auth-btn" onclick="doRegister()">Зарегистрироваться</button>
         <div class="switch-auth" onclick="showLoginForm()">Уже есть аккаунт? Войти</div>
     `;
@@ -300,7 +264,7 @@ window.showLoginForm = function() {
     document.getElementById('authForm').innerHTML = `
         <h3>Вход</h3>
         <div class="input-group"><input type="email" id="loginEmail" class="auth-input" placeholder="Email"></div>
-        <div class="input-group"><input type="password" id="loginPassword" class="auth-input" placeholder="Пароль"><button class="toggle-password" onclick="togglePassword('loginPassword')">👁</button></div>
+        <div class="input-group"><input type="password" id="loginPassword" class="auth-input" placeholder="Пароль"></div>
         <button class="auth-btn" onclick="doLogin()">Войти</button>
         <div class="switch-auth" onclick="showRegisterForm()">Нет аккаунта? Зарегистрироваться</div>
     `;
@@ -309,43 +273,16 @@ window.showLoginForm = function() {
 window.doLogin = async function() {
     const email = document.getElementById('loginEmail')?.value;
     const password = document.getElementById('loginPassword')?.value;
-    if (email && password) {
-        await login(email, password);
-    } else {
-        alert('Заполните все поля');
-    }
+    if (email && password) await login(email, password);
+    else alert('Заполните все поля');
 };
 
 window.doRegister = async function() {
     const name = document.getElementById('regName')?.value;
     const email = document.getElementById('regEmail')?.value;
     const password = document.getElementById('regPassword')?.value;
-    if (name && email && password) {
-        await register(email, password, name);
-    } else {
-        alert('Заполните все поля');
-    }
-};
-
-window.editProfile = function() {
-    if (!currentUser) return;
-    const newName = prompt('Новое имя:', currentUser.name);
-    const newPhone = prompt('Новый телефон:', currentUser.phone || '');
-    const updates = {};
-    if (newName) updates.name = newName;
-    if (newPhone) updates.phone = newPhone;
-    if (Object.keys(updates).length) {
-        updateUserData(updates);
-    }
-};
-
-window.showTab = function(tabName) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById(`tab-${tabName}`).classList.add('active');
-    if (tabName === 'orders') loadOrders();
-    if (tabName === 'addresses') loadAddresses();
+    if (name && email && password) await register(email, password, name);
+    else alert('Заполните все поля');
 };
 
 renderAuthScreen();
