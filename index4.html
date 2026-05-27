@@ -70,13 +70,11 @@
 </div>
 
 <script>
-// ==================== НАСТРОЙКИ SUPABASE (НОВЫЙ ПРОЕКТ) ====================
 const SUPABASE_URL = 'https://nmbxiqanaeqmelxhczdu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tYnhpcWFuYWVxbWVseGhjemR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDM2MDYsImV4cCI6MjA5NTM3OTYwNn0.Tthpbmnys_e4B13bZ1mt0t4t4QRYwzxDqu_83vuSks8';
 
 let currentUser = null;
 
-// ==================== ФУНКЦИИ SUPABASE ====================
 async function supabaseGet(table, filter = null) {
     let url = `${SUPABASE_URL}/rest/v1/${table}?select=*`;
     if (filter) url += `&${filter}`;
@@ -112,7 +110,6 @@ async function supabasePut(table, id, data) {
     return await res.json();
 }
 
-// ==================== АВТОРИЗАЦИЯ ====================
 async function register(email, password, name) {
     const users = await supabaseGet('users');
     if (users.find(u => u.email === email)) {
@@ -178,7 +175,6 @@ async function updateUserData(updates) {
     }
 }
 
-// ==================== ЗАКАЗЫ И АДРЕСА ====================
 async function loadOrders() {
     if (!currentUser) return;
     const orders = currentUser.orders || [];
@@ -225,13 +221,11 @@ async function deleteAddress(index) {
     loadAddresses();
 }
 
-// ==================== ПОКАЗ/СКРЫТИЕ ПАРОЛЯ ====================
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
     input.type = input.type === 'password' ? 'text' : 'password';
 }
 
-// ==================== ОТОБРАЖЕНИЕ ====================
 function renderAuthScreen() {
     const savedUser = localStorage.getItem('estetica_current_user');
     if (savedUser && !currentUser) {
@@ -263,7 +257,6 @@ function renderAuthScreen() {
         const isUserAdmin = currentUser.isadmin || currentUser.isAdmin || currentUser.is_admin;
         const adminButtons = isUserAdmin ? `
             <button class="admin-btn" onclick="location.href='admin.html'">Админ-панель</button>
-            <button class="admin-btn" onclick="location.href='database.html'" style="background:#1f5437; margin-left:5px;">База данных</button>
         ` : '';
         
         authBlock.innerHTML = `
@@ -355,7 +348,6 @@ window.showTab = function(tabName) {
     if (tabName === 'addresses') loadAddresses();
 };
 
-// ==================== ЗАПУСК ====================
 renderAuthScreen();
 </script>
 </body>
