@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta http-equiv="Cache-Control" content="max-age=3600">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Estética | Цветочная мастерская</title>
@@ -20,131 +19,40 @@
         .hero h1{font-size:32px;color:#C2DC80;margin-bottom:10px}
         .hero p{font-size:16px;color:#C2DC80}
         .line{height:2px;background:#C2DC80;margin:20px 0;opacity:.5}
-        
         .about{text-align:center;padding:30px 20px;background:#F3EEF1;margin:20px 0}
         .about h2{font-size:32px;color:#D56989;margin-bottom:15px;letter-spacing:1px}
         .about p{font-size:18px;color:#D56989;max-width:800px;margin:0 auto;line-height:1.6}
-        
-        .promo-block{background:#D56989;padding:20px;margin:20px 0;text-align:center}
-        .promo-title{font-size:28px;color:#C2DC80;margin-bottom:15px}
-        .promo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-        .promo-card{background:#F3EEF1;padding:20px;transition:.3s;cursor:pointer}
-        .promo-card:hover{transform:translateY(-5px);background:#C2DC80}
-        .promo-name{font-size:22px;font-weight:600;color:#D56989;margin-bottom:5px}
-        .promo-category{font-size:14px;color:#5b3b45;margin-bottom:10px}
-        .promo-discount{font-size:30px;font-weight:bold;color:#D56989;margin:10px 0}
-        .apply-promo-btn{background:#D56989;color:#F3EEF1;border:none;padding:8px 20px;font-family:inherit;font-size:14px;cursor:pointer;margin-top:10px}
-        .apply-promo-btn:hover{background:#b84d6e}
-        
-        /* ЗАГОЛОВКИ ПО ЦЕНТРУ И УВЕЛИЧЕННЫЙ ШРИФТ */
-        .section-title{
-            text-align:center;
-            font-size:36px;
-            color:#D56989;
-            margin-bottom:25px;
-            font-weight:600;
-            letter-spacing:2px;
-        }
-        
+        .section-title{text-align:center;font-size:32px;color:#D56989;margin-bottom:20px;font-weight:600}
         .grid{display:grid;gap:25px}
         .card{background:transparent;padding:20px;text-align:center;transition:.3s;display:flex;flex-direction:column;align-items:center}
         .card:hover{transform:translateY(-5px);background:#C2DC80}
         .card img{width:100%;max-width:300px;height:300px;object-fit:cover;margin-bottom:15px}
         .price{font-size:24px;font-weight:bold;color:#D56989;margin:10px 0}
-        
-        .reviews-block{background:#D56989;padding:20px;margin:20px 0}
-        .reviews-title{font-size:28px;color:#C2DC80;text-align:center;margin-bottom:20px}
-        .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
-        .review-card{background:#F3EEF1;padding:20px;transition:.3s}
-        .review-card:hover{transform:translateY(-5px);background:#C2DC80}
-        .review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap}
-        .review-name{font-size:18px;font-weight:600;color:#D56989}
-        .review-rating{color:#D56989;font-size:14px;letter-spacing:2px}
-        .review-text{font-size:14px;color:#5b3b45;line-height:1.5;margin-bottom:12px}
-        .review-date{font-size:11px;color:#5b3b45;text-align:right}
-        .star{color:#D56989;font-size:14px}
-        
-        .review-form-block{background:#F3EEF1;padding:25px;margin:20px 0;border:1px solid #C2DC80}
-        .review-form-title{font-size:24px;color:#D56989;text-align:center;margin-bottom:20px}
-        .review-form{display:flex;flex-direction:column;gap:15px}
-        .review-form input,.review-form textarea,.review-form select{padding:12px;border:1px solid #C2DC80;background:#F3EEF1;font-family:inherit;font-size:14px;color:#D56989}
-        .review-form textarea{min-height:100px;resize:vertical}
-        .rating-select{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-        .rating-select label{margin-right:10px;color:#D56989}
-        .star-input{font-size:24px;cursor:pointer;color:#D56989;opacity:0.6}
-        .star-input.selected{opacity:1}
-        .submit-review{background:#D56989;color:#F3EEF1;border:none;padding:12px;font-family:inherit;font-size:16px;cursor:pointer;width:200px;margin:0 auto}
-        .submit-review:hover{background:#b84d6e}
-        
-        /* КОНТАКТЫ - ЗАГОЛОВОК ПО ЦЕНТРУ */
-        .contact-cards{display:grid;gap:20px}
+        .contact-cards{display:grid;gap:20px;grid-template-columns:repeat(3,1fr)}
         .contact-card{background:transparent;padding:15px;text-align:center;transition:.3s}
         .contact-card:hover{transform:translateY(-5px);background:#C2DC80}
         .contact-label{font-size:18px;color:#D56989;margin-bottom:8px;font-weight:600}
         .contact-value{font-size:18px;color:#D56989}
         .contact-value a{color:#D56989;text-decoration:none}
-        
         .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:25px 15px 15px;position:relative}
         .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 20px;font-size:14px;text-align:center}
         .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:15px}
         .social-link{color:#C2DC80;text-decoration:none;font-size:15px;padding:6px 12px;transition:.2s}
         .social-link:hover{background:rgba(193,130,146,0.35)}
         .copyright{text-align:center;font-size:11px;color:#C2DC80}
-        
-        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:12px;text-align:center;font-family:system-ui;font-size:13px;z-index:1001;animation:slideIn .3s ease}
-        @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-        
-        @media (max-width:480px){
-            .frame{padding:12px}
-            .logo{font-size:22px}
-            .nav a{font-size:11px;padding:4px 6px}
-            .hero{padding:30px 10px}
-            .hero h1{font-size:24px}
-            .hero p{font-size:13px}
-            .about h2{font-size:24px}
-            .about p{font-size:14px}
-            .section-title{font-size:28px}
-            .grid{gap:15px;grid-template-columns:1fr}
-            .card img{max-width:250px;height:250px}
-            .reviews-grid{grid-template-columns:1fr}
-            .review-card{padding:15px}
+        @media (max-width:700px){
+            .grid{grid-template-columns:1fr}
             .contact-cards{grid-template-columns:1fr}
-            .promo-grid{grid-template-columns:1fr}
-            .price{font-size:20px}
-            .footer-info{gap:8px;font-size:11px;flex-direction:column}
-            .review-form-block{padding:15px}
-            .contact-label{font-size:16px}
-            .contact-value{font-size:16px}
+            .hero h1{font-size:24px}
+            .card img{max-width:250px;height:250px}
         }
-        @media (min-width:481px) and (max-width:768px){
+        @media (min-width:701px) and (max-width:1024px){
             .grid{grid-template-columns:repeat(2,1fr)}
-            .card img{max-width:220px;height:220px}
-            .reviews-grid{grid-template-columns:repeat(2,1fr)}
             .contact-cards{grid-template-columns:repeat(3,1fr)}
-            .hero h1{font-size:28px}
-            .promo-grid{grid-template-columns:repeat(2,1fr)}
-            .section-title{font-size:32px}
-        }
-        @media (min-width:769px) and (max-width:1024px){
-            .grid{grid-template-columns:repeat(3,1fr)}
-            .card img{max-width:280px;height:280px}
-            .reviews-grid{grid-template-columns:repeat(2,1fr)}
-            .contact-cards{grid-template-columns:repeat(3,1fr)}
-            .hero h1{font-size:38px}
-            .nav a{font-size:16px}
-            .section-title{font-size:34px}
         }
         @media (min-width:1025px){
             .grid{grid-template-columns:repeat(3,1fr)}
-            .card img{max-width:300px;height:300px}
-            .reviews-grid{grid-template-columns:repeat(3,1fr)}
             .contact-cards{grid-template-columns:repeat(3,1fr)}
-            .hero h1{font-size:54px}
-            .hero p{font-size:22px}
-            .nav a{font-size:18px}
-            .about h2{font-size:36px}
-            .about p{font-size:20px}
-            .section-title{font-size:38px}
         }
     </style>
 </head>
@@ -160,279 +68,46 @@
             <a href="index4.html">КАБИНЕТ</a>
         </div>
     </div>
-
     <div class="hero">
         <h1>Создаём любовь через цветы</h1>
         <p>Цветы, которые не забываются</p>
     </div>
-
     <div class="line"></div>
-
     <div class="about">
         <h2>Больше чем просто цветы</h2>
         <p><strong>Estética</strong> - не просто цветочный магазин<br>Цветочная мастерская поможет реализовать ваши самые смелые флористические пожелания</p>
     </div>
-
     <div class="line"></div>
-
-    <div class="promo-block">
-        <div class="promo-title">Акции и скидки</div>
-        <div class="promo-grid" id="promoGrid">
-            <div class="promo-card">Загрузка...</div>
-        </div>
-    </div>
-
-    <div class="line"></div>
-
-    <!-- ЗАГОЛОВОК ПО ЦЕНТРУ, УВЕЛИЧЕННЫЙ ШРИФТ -->
     <div class="section-title">Наши товары</div>
     <div class="grid">
         <div class="card"><img src="https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg" alt="Страсть"><div class="price">2500 ₽</div></div>
         <div class="card"><img src="https://i.pinimg.com/1200x/4e/e6/72/4ee672c55ef157043075a4a79112d337.jpg" alt="Вопреки канонам"><div class="price">3000 ₽</div></div>
         <div class="card"><img src="https://i.pinimg.com/736x/11/3a/01/113a012a6475e2ccdd0146aa0567915b.jpg" alt="Обещание любви"><div class="price">2000 ₽</div></div>
     </div>
-
     <div class="line"></div>
-
-    <div class="reviews-block">
-        <div class="reviews-title">Отзывы наших клиентов</div>
-        <div class="reviews-grid" id="reviewsGrid">
-            <div class="review-card">Загрузка отзывов...</div>
-        </div>
-    </div>
-
-    <div class="review-form-block">
-        <div class="review-form-title">Оставить отзыв</div>
-        <div class="review-form">
-            <input type="text" id="reviewName" placeholder="Ваше имя" required>
-            <div class="rating-select">
-                <label>Оценка:</label>
-                <div id="starRating" style="display:flex; gap:5px;">
-                    <span class="star-input" data-rating="1">☆</span>
-                    <span class="star-input" data-rating="2">☆</span>
-                    <span class="star-input" data-rating="3">☆</span>
-                    <span class="star-input" data-rating="4">☆</span>
-                    <span class="star-input" data-rating="5">☆</span>
-                </div>
-            </div>
-            <textarea id="reviewText" placeholder="Ваш отзыв" required></textarea>
-            <button class="submit-review" onclick="submitReview()">Отправить отзыв</button>
-        </div>
-    </div>
-
-    <div class="line"></div>
-
-    <!-- ЗАГОЛОВОК ПО ЦЕНТРУ, УВЕЛИЧЕННЫЙ ШРИФТ -->
     <div class="section-title">Контакты</div>
     <div class="contact-cards">
         <div class="contact-card"><div class="contact-label">Адрес</div><div class="contact-value">Темерницкая ул. 93/33</div></div>
         <div class="contact-card"><div class="contact-label">Часы работы</div><div class="contact-value">Ежедневно, 09:00–21:00</div></div>
         <div class="contact-card"><div class="contact-label">Телефон</div><div class="contact-value"><a href="tel:+79381112274">+7 (938) 111-22-74</a></div></div>
     </div>
-
     <div class="line"></div>
-
     <div class="bottom-block">
         <div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div>
         <div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div>
         <div class="copyright">2026 Estética Цветочная мастерская</div>
     </div>
 </div>
-
 <script>
-const SUPABASE_URL = 'https://nmbxiqanaeqmelxhczdu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tYnhpcWFuYWVxbWVseGhjemR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDM2MDYsImV4cCI6MjA5NTM3OTYwNn0.Tthpbmnys_e4B13bZ1mt0t4t4QRYwzxDqu_83vuSks8';
-let categories = [];
-let selectedRating = 5;
-
-async function loadCategories() {
-    try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/categories?is_active=eq.true&select=*`, {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        categories = await res.json();
-        await loadPromotions();
-    } catch(e) { console.error(e); }
+// Инициализация тестовых данных
+if (!localStorage.getItem('estetica_cart')) {
+    localStorage.setItem('estetica_cart', JSON.stringify([]));
 }
-
-async function loadPromotions() {
-    try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/promotions?select=*`, {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        const promotions = await res.json();
-        renderPromoCards(promotions);
-    } catch(e) { console.error(e); }
+if (!localStorage.getItem('estetica_users')) {
+    localStorage.setItem('estetica_users', JSON.stringify([
+        { id: 1, email: 'admin@estetica.ru', password: 'admin123', name: 'Администратор', isAdmin: true, orders: [] }
+    ]));
 }
-
-function renderPromoCards(promotions) {
-    const container = document.getElementById('promoGrid');
-    if (!promotions || promotions.length === 0) {
-        container.innerHTML = '<div class="promo-card">Нет активных акций</div>';
-        return;
-    }
-    
-    container.innerHTML = promotions.map(promo => {
-        const category = categories.find(c => c.id == promo.category_id);
-        const categoryName = category ? category.name : 'Все товары';
-        return `
-            <div class="promo-card" data-category-id="${promo.category_id || 'all'}">
-                <div class="promo-name">${promo.name}</div>
-                <div class="promo-category">${promo.description || `Скидка на ${categoryName}`}</div>
-                <div class="promo-discount">-${promo.discount_percent}%</div>
-                <button class="apply-promo-btn" onclick="applyPromoToDB(${promo.category_id || 'null'}, ${promo.discount_percent}, '${promo.name}')">Применить скидку</button>
-            </div>
-        `;
-    }).join('');
-}
-
-async function applyPromoToDB(categoryId, percent, name) {
-    try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/promotions?select=*`, {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        const allPromos = await res.json();
-        
-        for (let promo of allPromos) {
-            await fetch(`${SUPABASE_URL}/rest/v1/promotions?id=eq.${promo.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ is_active: false })
-            });
-        }
-        
-        const targetPromo = allPromos.find(p => p.category_id == categoryId || (categoryId === null && p.category_id === null));
-        if (targetPromo) {
-            await fetch(`${SUPABASE_URL}/rest/v1/promotions?id=eq.${targetPromo.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ is_active: true })
-            });
-        }
-        
-        showToast(`Акция применена! Скидка ${percent}% на ${name}`);
-        
-        document.querySelectorAll('.promo-card').forEach(card => {
-            card.style.background = '#F3EEF1';
-        });
-        const activeCard = document.querySelector(`.promo-card[data-category-id="${categoryId || 'all'}"]`);
-        if (activeCard) {
-            activeCard.style.background = '#C2DC80';
-        }
-    } catch(e) {
-        console.error(e);
-        showToast('Ошибка применения акции');
-    }
-}
-
-async function loadActivePromo() {
-    try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/promotions?is_active=eq.true&select=*`, {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        const activePromos = await res.json();
-        if (activePromos && activePromos.length > 0) {
-            const active = activePromos[0];
-            const activeCard = document.querySelector(`.promo-card[data-category-id="${active.category_id || 'all'}"]`);
-            if (activeCard) {
-                activeCard.style.background = '#C2DC80';
-            }
-        }
-    } catch(e) { console.error(e); }
-}
-
-function initStarRating() {
-    const stars = document.querySelectorAll('.star-input');
-    stars.forEach(star => {
-        star.addEventListener('click', () => {
-            const rating = parseInt(star.dataset.rating);
-            selectedRating = rating;
-            stars.forEach(s => {
-                const r = parseInt(s.dataset.rating);
-                if (r <= rating) {
-                    s.textContent = '★';
-                    s.style.opacity = '1';
-                } else {
-                    s.textContent = '☆';
-                    s.style.opacity = '0.6';
-                }
-            });
-        });
-    });
-    stars.forEach(s => {
-        if (parseInt(s.dataset.rating) <= 5) {
-            s.textContent = '★';
-            s.style.opacity = '1';
-        }
-    });
-}
-
-async function loadReviews() {
-    try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?is_approved=eq.true&order=created_at.desc`, {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        const reviews = await res.json();
-        const reviewsGrid = document.getElementById('reviewsGrid');
-        if (!reviews || reviews.length === 0) {
-            reviewsGrid.innerHTML = '<div class="review-card">Пока нет отзывов. Будьте первым!</div>';
-            return;
-        }
-        reviewsGrid.innerHTML = reviews.map(review => `
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-name">${escapeHtml(review.name)}</span>
-                    <span class="review-rating">${renderStars(review.rating)}</span>
-                </div>
-                <div class="review-text">${escapeHtml(review.text)}</div>
-                <div class="review-date">${review.date || review.created_at?.split('T')[0] || ''}</div>
-            </div>
-        `).join('');
-    } catch(e) { console.error(e); }
-}
-
-async function submitReview() {
-    const name = document.getElementById('reviewName')?.value.trim();
-    const text = document.getElementById('reviewText')?.value.trim();
-    if (!name) { showToast('Введите ваше имя'); return; }
-    if (!text) { showToast('Введите текст отзыва'); return; }
-    if (text.length < 5) { showToast('Отзыв слишком короткий'); return; }
-    const today = new Date().toISOString().split('T')[0];
-    try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
-            method: 'POST',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, rating: selectedRating, text, date: today, is_approved: false })
-        });
-        if (res.ok) {
-            showToast('Спасибо за отзыв! После модерации он появится на сайте.');
-            document.getElementById('reviewName').value = '';
-            document.getElementById('reviewText').value = '';
-            selectedRating = 5;
-            const stars = document.querySelectorAll('.star-input');
-            stars.forEach(s => { s.textContent = '★'; s.style.opacity = '1'; });
-        } else {
-            showToast('Ошибка при отправке');
-        }
-    } catch(e) { showToast('Ошибка соединения'); }
-}
-
-function renderStars(rating) { let stars = ''; for (let i = 1; i <= 5; i++) stars += i <= rating ? '★' : '☆'; return `<span class="star">${stars}</span>`; }
-function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
-function showToast(message) { let t = document.querySelector('.toast'); if (t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = message; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
-
-initStarRating();
-loadCategories();
-loadReviews();
-loadActivePromo();
 </script>
 </body>
 </html>

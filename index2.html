@@ -24,7 +24,6 @@
         .category-cards{display:grid;gap:12px}
         .category-item{background:#C2DC80;border:1px solid #D56989;padding:15px;text-align:center;cursor:pointer;transition:.3s}
         .category-item:hover{transform:translateY(-3px);background:#b8d16e}
-        .category-icon{font-size:32px;margin-bottom:8px}
         .category-name{font-size:16px;font-weight:600;color:#D56989}
         .category-count{font-size:12px;color:#5b3b45;margin-top:4px}
         .filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;padding:15px;background:#F3EEF1;border:1px solid #C2DC80;align-items:flex-end}
@@ -35,7 +34,7 @@
         .price-range input{width:80px}
         .filter-btn{background:#D56989;border:none;padding:8px 15px;font-family:inherit;font-size:14px;cursor:pointer;color:#F3EEF1}
         .reset-btn{background:#b84d6e}
-        .catalog-grid{display:grid;gap:15px}
+        .catalog-grid{display:grid;gap:15px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
         .product-card{background:#C2DC80;border:1px solid #D56989;padding:15px;text-align:center;transition:.3s}
         .product-card:hover{transform:translateY(-3px);background:#b8d16e}
         .product-card img{width:80%;height:200px;object-fit:cover;margin-bottom:12px}
@@ -70,25 +69,16 @@
             .logo{font-size:22px}
             .nav a{font-size:11px;padding:4px 6px}
             .hero h1{font-size:24px}
-            .categories-title{font-size:20px}
-            .category-cards{grid-template-columns:repeat(2,1fr);gap:8px}
-            .category-item{padding:10px}
-            .category-icon{font-size:28px}
-            .category-name{font-size:13px}
             .filters{flex-direction:column}
             .catalog-grid{grid-template-columns:1fr}
-            .product-card img{width:70%;height:180px}
         }
         @media (min-width:481px) and (max-width:768px){
-            .category-cards{grid-template-columns:repeat(4,1fr)}
             .catalog-grid{grid-template-columns:repeat(2,1fr)}
         }
         @media (min-width:769px) and (max-width:1024px){
-            .category-cards{grid-template-columns:repeat(4,1fr)}
             .catalog-grid{grid-template-columns:repeat(3,1fr)}
         }
         @media (min-width:1025px){
-            .category-cards{grid-template-columns:repeat(4,1fr)}
             .catalog-grid{grid-template-columns:repeat(4,1fr)}
             .nav a{font-size:18px}
         }
@@ -96,13 +86,13 @@
 </head>
 <body>
 <div class="frame">
-    <div class="header"><a href="index.html" class="logo">Estética</a><div class="nav"><a href="index.html">ГЛАВНАЯ</a><a href="index2.html">КАТАЛОГ</a><a href="index5.html">КОНТАКТЫ</a><a href="index3.html">КОРЗИНА</a><a href="index4.html">КАБИНЕТ</a></div></div>
+    <div class="header"><a href="index.html" class="logo">Estética</a><div class="nav"><a href="index.html">ГЛАВNAЯ</a><a href="index2.html">КАТАЛОГ</a><a href="index5.html">КОНТАКТЫ</a><a href="index3.html">КОРЗИНА</a><a href="index4.html">КАБИНЕТ</a></div></div>
     <div class="hero"><h1>ESTÉTICA</h1><p>Создаём любовь через цветы</p></div>
     <div class="line"></div>
     <div class="categories-block"><div class="categories-title">Выберите категорию</div><div class="category-cards" id="categoryCards"></div></div>
     <div class="line"></div>
     <div class="filters">
-        <div class="filter-group"><label>Категория</label><select id="categoryFilter"><option value="all">Все букеты</option></select></div>
+        <div class="filter-group"><label>Категория</label><select id="categoryFilter"><option value="all">Все букеты</option><option value="bright">Яркие</option><option value="gentle">Нежные</option><option value="minimalism">Минимализм</option><option value="single">Единичные</option></select></div>
         <div class="filter-group"><label>Цена</label><div class="price-range"><input type="number" id="priceMin" placeholder="от" value="0"><span>—</span><input type="number" id="priceMax" placeholder="до" value="10000"></div></div>
         <button class="filter-btn" onclick="applyFilters()">Применить</button>
         <button class="filter-btn reset-btn" onclick="resetFilters()">Сбросить</button>
@@ -124,77 +114,54 @@
 </div>
 
 <script>
-const SUPABASE_URL = 'https://nmbxiqanaeqmelxhczdu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tYnhpcWFuYWVxbWVseGhjemR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDM2MDYsImV4cCI6MjA5NTM3OTYwNn0.Tthpbmnys_e4B13bZ1mt0t4t4QRYwzxDqu_83vuSks8';
+const BIN_ID = '6a0e46146877513b27a708ce';
+const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 let products = [];
 let filteredProducts = [];
-let categories = [];
 let currentModalProduct = null;
 
-async function loadData() {
+async function loadProducts() {
     try {
-        const [productsRes, categoriesRes] = await Promise.all([
-            fetch(`${SUPABASE_URL}/rest/v1/products?select=*`, {
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            }),
-            fetch(`${SUPABASE_URL}/rest/v1/categories?select=*`, {
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            })
-        ]);
-        
-        products = await productsRes.json();
-        categories = await categoriesRes.json();
-        
-        if (products.length === 0) {
+        const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+        const data = await res.json();
+        const serverProducts = data.record?.products || [];
+        if (serverProducts.length > 0) {
+            products = serverProducts;
+        } else {
             products = [
-                { id: 1, name: "Марсала", price: 3500, img: "https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg", short_desc: "Роскошные гортензии", category_id: 1, full_desc: "Букет из крупных гортензий..." },
-                { id: 2, name: "Пламя страсти", price: 4200, img: "https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg", short_desc: "Ярко-красные розы", category_id: 1, full_desc: "Букет из 25 алых роз..." }
+                { id: 1, name: "Марсала", price: 3500, img: "https://i.pinimg.com/736x/5b/0b/38/5b0b384a0c616035419d72aa8151d57a.jpg", short_desc: "Роскошные гортензии", cat: "bright", full_desc: "Букет из крупных гортензий..." },
+                { id: 2, name: "Пламя страсти", price: 4200, img: "https://i.pinimg.com/736x/fa/69/ff/fa69ffefce4cd78c786bc101cffdabcd.jpg", short_desc: "Ярко-красные розы", cat: "bright", full_desc: "Букет из 25 алых роз..." },
+                { id: 3, name: "Лавандовый бриз", price: 1800, img: "https://i.pinimg.com/736x/ef/4c/c6/ef4cc6a6d26b8101ce392e7d2af4541a.jpg", short_desc: "Ароматная композиция", cat: "gentle", full_desc: "Успокаивающий букет..." },
+                { id: 4, name: "Утренняя роса", price: 2800, img: "https://i.pinimg.com/736x/70/51/fe/7051fe3381836ef00bed9e04b139dc1f.jpg", short_desc: "Кремово-белые пионы", cat: "gentle", full_desc: "Идеальный выбор для свадебного букета..." },
+                { id: 5, name: "Монохром", price: 2200, img: "https://i.pinimg.com/736x/8c/60/b6/8c60b634acfd355e793aa8550d14ee4b.jpg", short_desc: "Сила в простоте", cat: "minimalism", full_desc: "Лаконичный букет..." },
+                { id: 6, name: "Одна роза", price: 500, img: "https://i.pinimg.com/1200x/59/5e/26/595e26df6c21b9d5bd535b96c21ed0ed.jpg", short_desc: "Классическая роза", cat: "single", full_desc: "Элегантный вариант для быстрого комплимента..." }
             ];
         }
-        
         filteredProducts = [...products];
-        renderCategories();
         renderCatalog();
-    } catch(e) { console.error('Ошибка загрузки:', e); }
-}
-
-function getCategoryName(categoryId) {
-    const cat = categories.find(c => c.id == categoryId);
-    return cat ? cat.name : 'Без категории';
+    } catch(e) { console.error(e); }
 }
 
 function getCart() { return JSON.parse(localStorage.getItem('estetica_cart') || '[]'); }
 function saveCart(c) { localStorage.setItem('estetica_cart', JSON.stringify(c)); updateCartCount(); }
 function updateCartCount() { let t = getCart().reduce((s,i)=>s+i.quantity,0); let l = document.querySelector('.nav a[href="index3.html"]'); if(l) l.innerHTML = t > 0 ? `КОРЗИНА (${t})` : `КОРЗИНА`; }
 function showToast(m) { let t = document.querySelector('.toast'); if(t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(()=>t.remove(),2000); }
-function addToCart(id) { let cart = getCart(), item = cart.find(i=>i.id===id), p = products.find(p=>p.id===id); if(item) item.quantity++; else cart.push({id:p.id,name:p.name,price:p.price,img:p.img,quantity:1, category_id: p.category_id}); saveCart(cart); showToast(`${p.name} добавлен в корзину!`); }
+function addToCart(id) { let cart = getCart(), item = cart.find(i=>i.id===id), p = products.find(p=>p.id===id); if(item) item.quantity++; else cart.push({id:p.id,name:p.name,price:p.price,img:p.img,quantity:1}); saveCart(cart); showToast(`${p.name} добавлен в корзину!`); }
 function addToCartFromModal() { if(currentModalProduct) addToCart(currentModalProduct.id); closeModal(); }
-function showDetails(product) { currentModalProduct = product; document.getElementById('modalImg').src = product.img; document.getElementById('modalName').innerText = product.name; document.getElementById('modalPrice').innerText = `${product.price} ₽`; document.getElementById('modalCat').innerHTML = `Категория: ${getCategoryName(product.category_id)}`; document.getElementById('modalDesc').innerHTML = product.full_desc || product.short_desc || 'Красивый букет от Estética.'; document.getElementById('productModal').style.display = 'flex'; }
+function showDetails(product) { currentModalProduct = product; document.getElementById('modalImg').src = product.img; document.getElementById('modalName').innerText = product.name; document.getElementById('modalPrice').innerText = `${product.price} ₽`; document.getElementById('modalCat').innerHTML = `Категория: ${product.cat === 'bright' ? 'Яркие' : product.cat === 'gentle' ? 'Нежные' : product.cat === 'minimalism' ? 'Минимализм' : 'Единичные'}`; document.getElementById('modalDesc').innerHTML = product.full_desc || product.short_desc; document.getElementById('productModal').style.display = 'flex'; }
 function closeModal() { document.getElementById('productModal').style.display = 'none'; currentModalProduct = null; }
 
 function applyFilters() {
-    let catId = document.getElementById('categoryFilter').value;
+    let cat = document.getElementById('categoryFilter').value;
     let min = +document.getElementById('priceMin').value || 0;
     let max = +document.getElementById('priceMax').value || 10000;
-    filteredProducts = products.filter(p => {
-        let matchCategory = (catId === 'all' || p.category_id == catId);
-        let matchPrice = (p.price >= min && p.price <= max);
-        return matchCategory && matchPrice;
-    });
+    filteredProducts = products.filter(p => (cat === 'all' || p.cat === cat) && p.price >= min && p.price <= max);
     renderCatalog();
 }
-function resetFilters() {
-    document.getElementById('categoryFilter').value = 'all';
-    document.getElementById('priceMin').value = 0;
-    document.getElementById('priceMax').value = 10000;
-    filteredProducts = [...products];
-    renderCatalog();
-}
-function filterByCat(catId) {
-    document.getElementById('categoryFilter').value = catId;
-    applyFilters();
-}
+function resetFilters() { document.getElementById('categoryFilter').value = 'all'; document.getElementById('priceMin').value = 0; document.getElementById('priceMax').value = 10000; filteredProducts = [...products]; renderCatalog(); }
+function filterByCat(cat) { document.getElementById('categoryFilter').value = cat; applyFilters(); }
 
 function renderCatalog() {
     const grid = document.getElementById('catalogGrid');
@@ -213,28 +180,8 @@ function renderCatalog() {
     `).join('');
 }
 
-function renderCategories() {
-    const categorySelect = document.getElementById('categoryFilter');
-    let selectHtml = '<option value="all">Все букеты</option>';
-    let cardsHtml = '';
-    
-    for (let cat of categories) {
-        selectHtml += `<option value="${cat.id}">${cat.name}</option>`;
-        const count = products.filter(p => p.category_id == cat.id).length;
-        cardsHtml += `
-            <div class="category-item" onclick="filterByCat(${cat.id})">
-                <div class="category-name">${cat.name}</div>
-                <div class="category-count">${count} товаров</div>
-            </div>
-        `;
-    }
-    
-    categorySelect.innerHTML = selectHtml;
-    document.getElementById('categoryCards').innerHTML = cardsHtml;
-}
-
 document.addEventListener('click', function(e) { if(e.target === document.getElementById('productModal')) closeModal(); });
-loadData();
+loadProducts();
 updateCartCount();
 </script>
 </body>
