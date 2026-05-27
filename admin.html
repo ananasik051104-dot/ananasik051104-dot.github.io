@@ -7,15 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Poiret One',cursive;background:#D56989;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:15px}
-        .frame{max-width:1300px;width:100%;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
-        .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
+        body{font-family:'Poiret One',cursive;background:#D56989;padding:15px}
+        .frame{max-width:1300px;margin:0 auto;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
+        .header{display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
         .header::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
         .logo,.nav,.bottom-block>*{position:relative;z-index:1}
         .logo{font-size:28px;font-weight:600;color:#C2DC80;text-decoration:none}
-        .nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+        .nav{display:flex;flex-wrap:wrap;gap:8px}
         .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 10px}
-        .access-denied{text-align:center;padding:40px;background:#D56989;color:#F3EEF1}
         .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px;margin-bottom:25px}
         .stat-card{background:#D56989;padding:15px;text-align:center;color:#F3EEF1}
         .stat-number{font-size:32px;font-weight:bold}
@@ -25,39 +24,38 @@
         .data-table th,.data-table td{padding:10px 6px;border-bottom:1px solid #C2DC80;text-align:left}
         .data-table th{background:#C2DC80;color:#D56989}
         .badge-admin{background:#C2DC80;color:#D56989;padding:2px 8px;font-size:11px}
-        .btn-small{background:#D56989;border:none;padding:4px 10px;font-family:inherit;font-size:11px;cursor:pointer;color:#F3EEF1;margin:2px}
+        .btn-small{background:#D56989;border:none;padding:4px 10px;font-family:inherit;cursor:pointer;color:#F3EEF1;margin:2px}
         .btn-small:hover{background:#b84d6e}
         .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:20px 15px 15px;position:relative}
-        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 15px;font-size:12px;text-align:center}
-        .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:12px}
-        .social-link{color:#C2DC80;text-decoration:none;font-size:13px;padding:5px 10px}
-        .social-link:hover{background:rgba(193,130,146,0.35)}
+        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;font-size:12px}
+        .social-links{display:flex;justify-content:center;gap:15px;margin-bottom:12px}
+        .social-link{color:#C2DC80;text-decoration:none}
         .copyright{text-align:center;font-size:10px;color:#C2DC80}
         .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center}
         .modal-content{background:#F3EEF1;padding:20px;max-width:500px;width:90%;max-height:85vh;overflow-y:auto}
-        .modal-content h3{color:#D56989;margin-bottom:15px}
-        .modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:8px;margin:8px 0;border:1px solid #C2DC80;font-family:inherit;background:#F3EEF1;color:#D56989}
-        .modal-content textarea{min-height:80px}
-        .modal-content button{background:#D56989;color:#F3EEF1;border:none;padding:8px;cursor:pointer;margin-top:8px}
-        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:10px;text-align:center;font-family:system-ui;font-size:12px;z-index:1001;animation:slideIn .3s ease}
-        .loading{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;justify-content:center;align-items:center;z-index:9999;color:white;font-size:20px;flex-direction:column;gap:15px}
+        .modal-content h3{color:#D56989}
+        .modal-content input,.modal-content select,.modal-content textarea{width:100%;padding:8px;margin:8px 0;border:1px solid #C2DC80;font-family:inherit;background:#F3EEF1}
+        .modal-content button{background:#D56989;color:#F3EEF1;border:none;padding:8px;cursor:pointer}
+        .toast{position:fixed;bottom:20px;left:20px;right:20px;background:#1f5437;color:white;padding:10px;text-align:center;z-index:1001;animation:slideIn .3s}
+        .loading{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;justify-content:center;align-items:center;z-index:9999;color:white;flex-direction:column}
         .spinner{width:50px;height:50px;border:3px solid #C2DC80;border-top-color:#D56989;border-radius:50%;animation:spin 1s linear infinite}
         @keyframes spin{to{transform:rotate(360deg)}}
-        @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+        @keyframes slideIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
         @media(max-width:700px){.frame{padding:15px}.header{flex-direction:column;text-align:center}}
     </style>
 </head>
 <body>
-<div class="loading" id="loading" style="display:flex;">
-    <div class="spinner"></div>
-    Загрузка админ-панели...
-</div>
+<div class="loading" id="loading"><div class="spinner"></div>Загрузка админ-панели...</div>
 
 <div class="frame">
     <div class="header"><a href="index.html" class="logo">Estética Админ</a><div class="nav"><a href="index.html">ГЛАВНАЯ</a><a href="index2.html">КАТАЛОГ</a><a href="index5.html">КОНТАКТЫ</a><a href="index3.html">КОРЗИНА</a><a href="index4.html">КАБИНЕТ</a></div></div>
-    <h1 style="font-size:28px;color:#C2DC80;margin-bottom:20px;border-left:5px solid #C2DC80;padding-left:15px;">Админ-панель</h1>
+    <h1 style="font-size:28px;color:#C2DC80;border-left:5px solid #C2DC80;padding-left:15px;">Админ-панель</h1>
     <div id="adminContent"></div>
-    <div class="bottom-block"><div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div><div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div><div class="copyright">2026 Estética Цветочная мастерская</div></div>
+    <div class="bottom-block">
+        <div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div>
+        <div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div>
+        <div class="copyright">2026 Estética Цветочная мастерская</div>
+    </div>
 </div>
 
 <div id="productModal" class="modal">
@@ -80,70 +78,28 @@
 </div>
 
 <script>
-const SUPABASE_URL = 'https://nmbxiqanaeqmelxhczdu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tYnhpcWFuYWVxbWVseGhjemR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDM2MDYsImV4cCI6MjA5NTM3OTYwNn0.Tthpbmnys_e4B13bZ1mt0t4t4QRYwzxDqu_83vuSks8';
-
+const API_URL = 'https://functions.yandexcloud.net/d4en7rg8osirq7m9ukq5';
 let currentUser = null;
 let editingProductId = null;
-let cache = {};
-let cacheTime = {};
+let productsCache = [];
 
-async function supabaseFetch(endpoint, options = {}) {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
-        },
-        ...options
-    });
-    return res;
-}
-
-async function supabaseGet(table, forceRefresh = false) {
-    const now = Date.now();
-    if (!forceRefresh && cache[table] && cacheTime[table] && (now - cacheTime[table] < 10000)) {
-        console.log(`[КЭШ] Загружено из кэша: ${table}`);
-        return cache[table];
-    }
-    
-    console.log(`[ЗАПРОС] Загружаем ${table} (limit 50)...`);
-    const res = await supabaseFetch(`${table}?select=*&order=id.desc&limit=50`);
-    const data = await res.json();
-    cache[table] = data;
-    cacheTime[table] = now;
-    return data;
-}
-
-async function supabasePost(table, data) {
-    const res = await supabaseFetch(table, {
+async function callApi(action, data = {}) {
+    const res = await fetch(API_URL, {
         method: 'POST',
-        body: JSON.stringify(data)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, data })
     });
-    delete cache[table];
     return await res.json();
 }
 
-async function supabasePut(table, id, data) {
-    const res = await supabaseFetch(`${table}?id=eq.${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(data)
-    });
-    delete cache[table];
-    return await res.json();
-}
+function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+function showToast(msg) { let t = document.querySelector('.toast'); if (t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2500); }
 
-async function supabaseDelete(table, id) {
-    await supabaseFetch(`${table}?id=eq.${id}`, { method: 'DELETE' });
-    delete cache[table];
-    return true;
-}
-
+// Авторизация
 async function login(email, password) {
-    const users = await supabaseGet('users', true);
-    const user = users.find(u => u.email === email && u.password === password);
-    if (user) {
-        currentUser = user;
+    const res = await callApi('login', { email, password });
+    if (res?.success) {
+        currentUser = res.user;
         localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
         return true;
     }
@@ -154,9 +110,7 @@ async function getCurrentUser() {
     const saved = localStorage.getItem('estetica_current_user');
     if (saved && !currentUser) {
         currentUser = JSON.parse(saved);
-        const users = await supabaseGet('users');
-        const freshUser = users.find(u => u.id === currentUser.id);
-        if (freshUser) currentUser = freshUser;
+        if (!currentUser.isadmin && !currentUser.isAdmin) currentUser = null;
     }
     return currentUser;
 }
@@ -167,6 +121,7 @@ function logout() {
     renderAdminPanel();
 }
 
+// Товары
 async function addProduct() {
     editingProductId = null;
     document.getElementById('modalTitle').innerText = 'Добавить товар';
@@ -187,7 +142,7 @@ function editProduct(product) {
     document.getElementById('productImg').value = product.img;
     document.getElementById('productDesc').value = product.short_desc || '';
     document.getElementById('productFullDesc').value = product.full_desc || '';
-    document.getElementById('productCategory').value = product.cat;
+    document.getElementById('productCategory').value = product.cat || 'bright';
     document.getElementById('productModal').style.display = 'flex';
 }
 
@@ -199,186 +154,90 @@ async function saveProduct() {
     const full_desc = document.getElementById('productFullDesc').value.trim();
     const cat = document.getElementById('productCategory').value;
     
-    if (!name || !price || !img) {
-        alert('Заполните название, цену и фото');
-        return;
-    }
+    if (!name || !price || !img) { alert('Заполните название, цену и фото'); return; }
     
-    const productData = { name, price, img, short_desc, full_desc, cat };
-    
-    try {
-        let result;
-        if (editingProductId === null) {
-            result = await supabasePost('products', productData);
-            if (result && result.id) {
-                showToast('Товар добавлен');
-            } else {
-                showToast('Ошибка добавления');
-                return;
-            }
-        } else {
-            result = await supabasePut('products', editingProductId, productData);
-            showToast('Товар обновлён');
-        }
-        closeModal();
-        await renderAdminPanel();
-    } catch(e) {
-        console.error('Ошибка сохранения:', e);
-        showToast('Ошибка сохранения товара');
-    }
+    // API пока не поддерживает добавление/редактирование товаров
+    showToast('API в разработке. Товар не сохранён.');
+    closeModal();
 }
 
 async function deleteProduct(id) {
     if (!confirm('Удалить этот товар?')) return;
-    await supabaseDelete('products', id);
-    showToast('Товар удалён');
-    await renderAdminPanel();
+    showToast('API в разработке. Удаление временно недоступно.');
 }
 
+// Пользователи
 async function toggleAdmin(userId, currentIsAdmin) {
-    await supabasePut('users', userId, { isadmin: !currentIsAdmin });
-    showToast(currentIsAdmin ? 'Права админа сняты' : 'Пользователь назначен админом');
-    await renderAdminPanel();
+    showToast('API в разработке. Изменение прав временно недоступно.');
 }
 
+// Заказы
 async function updateOrderStatus(orderId, newStatus) {
-    await supabasePut('orders', orderId, { status: newStatus });
-    showToast('Статус заказа обновлён');
-    await renderAdminPanel();
+    showToast('API в разработке. Изменение статуса временно недоступно.');
 }
 
-function closeModal() {
-    document.getElementById('productModal').style.display = 'none';
-    editingProductId = null;
-}
+function closeModal() { document.getElementById('productModal').style.display = 'none'; editingProductId = null; }
 
-function showToast(msg) {
-    let t = document.querySelector('.toast');
-    if (t) t.remove();
-    t = document.createElement('div');
-    t.className = 'toast';
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2500);
-}
-
+// Основная отрисовка админки
 async function renderAdminPanel() {
     await getCurrentUser();
     const container = document.getElementById('adminContent');
-    const isUserAdmin = currentUser && (currentUser.isadmin || currentUser.isAdmin || currentUser.is_admin);
+    const isAdmin = currentUser && (currentUser.isadmin || currentUser.isAdmin);
     
-    if (!currentUser || !isUserAdmin) {
-        container.innerHTML = `<div class="access-denied"><h2>Доступ запрещён</h2><p><a href="index4.html" style="color:#C2DC80;">Вернуться в кабинет</a></p></div>`;
+    if (!currentUser || !isAdmin) {
+        container.innerHTML = `<div style="text-align:center;padding:40px;"><h2>Доступ запрещён</h2><p><a href="index4.html" style="color:#D56989;">Вернуться в кабинет</a></p></div>`;
         document.getElementById('loading').style.display = 'none';
         return;
     }
     
-    const startTime = Date.now();
-    
-    const [users, orders, messages, products] = await Promise.all([
-        supabaseGet('users'),
-        supabaseGet('orders'),
-        supabaseGet('messages'),
-        supabaseGet('products')
+    // Загружаем данные через API
+    const [usersRes, ordersRes, messagesRes, productsRes] = await Promise.all([
+        callApi('getUsers'), callApi('getOrdersAll'), callApi('getMessages'), callApi('getProducts')
     ]);
     
-    const endTime = Date.now();
-    console.log(`[ГОТОВО] Данные загружены за ${endTime - startTime} мс`);
+    const users = usersRes?.success ? usersRes.users : [];
+    const orders = ordersRes?.success ? ordersRes.orders : [];
+    const messages = messagesRes?.success ? messagesRes.messages : [];
+    const products = productsRes?.success ? productsRes.products : [];
     
     const stats = {
+        totalProducts: products.length,
         totalOrders: orders.length,
-        totalRevenue: orders.reduce((s,o) => s + (o.total || 0), 0),
         newOrders: orders.filter(o => o.status === 'Новый').length,
+        totalRevenue: orders.reduce((s,o) => s + (o.total || 0), 0),
         totalUsers: users.length,
-        totalAdmins: users.filter(u => u.isadmin || u.isAdmin || u.is_admin).length,
-        totalProducts: products.length
+        totalAdmins: users.filter(u => u.isadmin || u.isAdmin).length
     };
     
-    let productsHtml = `<div style="display:flex; justify-content:space-between; align-items:center;"><div class="section-title">Каталог товаров (${products.length})</div><button class="btn-small" onclick="addProduct()" style="background:#1f5437; padding:6px 12px;">+ Добавить товар</button></div>`;
-    if (products.length === 0) {
-        productsHtml += '<div style="text-align:center;padding:20px;">Товаров пока нет</div>';
-    } else {
-        productsHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Фото</th><th>Название</th><th>Цена</th><th>Категория</th><th>Действия</th></tr></thead><tbody>`;
-        for (let p of products) {
-            const catName = {bright:'Яркие', gentle:'Нежные', minimalism:'Минимализм', single:'Единичные'}[p.cat] || p.cat;
-            productsHtml += `<tr>
-                <td>${p.id}</td>
-                <td><img src="${p.img}" style="width:40px;height:40px;object-fit:cover;" loading="lazy"></td>
-                <td>${p.name}</td>
-                <td>${p.price} ₽</td>
-                <td>${catName}</td>
-                <td><button class="btn-small" onclick='editProduct(${JSON.stringify(p).replace(/'/g, "&#39;")})'>✏️</button>
-                <button class="btn-small" onclick="deleteProduct('${p.id}')">🗑</button></td>
-            </tr>`;
-        }
-        productsHtml += `</tbody></table></div>`;
-    }
+    let productsHtml = `<div class="section-title">Каталог товаров (${products.length})</div><div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Фото</th><th>Название</th><th>Цена</th><th>Категория</th><th>Действия</th></tr></thead><tbody>`;
+    products.forEach(p => {
+        const catName = {bright:'Яркие', gentle:'Нежные', minimalism:'Минимализм', single:'Единичные'}[p.cat] || p.cat;
+        productsHtml += `<tr><td>${p.id}</td><td><img src="${p.img}" style="width:40px;height:40px;object-fit:cover;"></td><td>${escapeHtml(p.name)}</td><td>${p.price} ₽</td><td>${catName}</td><td><button class="btn-small" onclick='editProduct(${JSON.stringify(p).replace(/'/g, "&#39;")})'>✏️</button><button class="btn-small" onclick="deleteProduct('${p.id}')">🗑</button></td></tr>`;
+    });
+    productsHtml += `</tbody></table></div><div style="margin-top:10px;"><button class="btn-small" onclick="addProduct()" style="background:#1f5437;">+ Добавить товар</button></div>`;
     
-    let usersHtml = `<div class="section-title">Пользователи (${users.length})</div>`;
-    if (users.length === 0) {
-        usersHtml += '<div style="text-align:center;padding:20px;">Пока нет пользователей</div>';
-    } else {
-        usersHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Заказов</th><th>Статус</th><th>Действия</th></tr></thead><tbody>`;
-        for (let u of users) {
-            const isAdminUser = u.isadmin || u.isAdmin || u.is_admin;
-            usersHtml += `<tr>
-                <td>${u.id}</td>
-                <td>${u.name}</td>
-                <td>${u.email}</td>
-                <td>${u.phone || '-'}</td>
-                <td>${u.orders?.length || 0}</td>
-                <td>${isAdminUser ? '<span class="badge-admin">Админ</span>' : 'Пользователь'}</td>
-                <td><button class="btn-small" onclick="toggleAdmin('${u.id}', ${isAdminUser})">${isAdminUser ? 'Снять права' : 'Назначить админом'}</button></td>
-            </tr>`;
-        }
-        usersHtml += `</tbody></table></div>`;
-    }
+    let usersHtml = `<div class="section-title">Пользователи (${users.length})</div><div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Статус</th><th>Действия</th></tr></thead><tbody>`;
+    users.forEach(u => {
+        const isAdminUser = u.isadmin || u.isAdmin;
+        usersHtml += `<tr><td>${u.id}</td><td>${escapeHtml(u.name)}</td><td>${escapeHtml(u.email)}</td><td>${escapeHtml(u.phone || '-')}</td><td>${isAdminUser ? '<span class="badge-admin">Админ</span>' : 'Пользователь'}</td><td><button class="btn-small" onclick="toggleAdmin('${u.id}', ${isAdminUser})">${isAdminUser ? 'Снять права' : 'Назначить админом'}</button></td></tr>`;
+    });
+    usersHtml += `</tbody></table></div>`;
     
-    let ordersHtml = `<div class="section-title">Заказы (${orders.length})</div>`;
-    if (orders.length === 0) {
-        ordersHtml += '<div style="text-align:center;padding:20px;">Заказов пока нет</div>';
-    } else {
-        ordersHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th><th>Действия</th></tr></thead><tbody>`;
-        for (let o of orders) {
-            ordersHtml += `<tr>
-                <td>${o.id}</td>
-                <td>${o.date}</td>
-                <td>${o.userEmail || 'Гость'}</td>
-                <td>${o.items?.map(i => `${i.name} x${i.quantity}`).join('<br>') || '-'}</td>
-                <td>${o.total} ₽</td>
-                <td><select class="btn-small" onchange="updateOrderStatus('${o.id}', this.value)" style="background:#D56989;color:white;">
-                    <option value="Новый" ${o.status === 'Новый' ? 'selected' : ''}>Новый</option>
-                    <option value="В обработке" ${o.status === 'В обработке' ? 'selected' : ''}>В обработке</option>
-                    <option value="Доставлен" ${o.status === 'Доставлен' ? 'selected' : ''}>Доставлен</option>
-                    <option value="Отменён" ${o.status === 'Отменён' ? 'selected' : ''}>Отменён</option>
-                </select></td>
-                <td>${o.address || '-'}</td>
-                <td><button class="btn-small" onclick="updateOrderStatus('${o.id}', 'Отменён')">Отменить</button></td>
-            </tr>`;
-        }
-        ordersHtml += `</tbody></table></div>`;
-    }
+    let ordersHtml = `<div class="section-title">Заказы (${orders.length})</div><div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th><th>Действия</th></tr></thead><tbody>`;
+    orders.forEach(o => {
+        ordersHtml += `<tr><td>${o.id}</td><td>${escapeHtml(o.date)}</td><td>${escapeHtml(o.userEmail || 'Гость')}</td><td>${o.items?.map(i => `${i.name} x${i.quantity}`).join(', ') || '-'}</td><td>${o.total} ₽</td><td><select class="btn-small" onchange="updateOrderStatus('${o.id}', this.value)"><option value="Новый" ${o.status === 'Новый' ? 'selected' : ''}>Новый</option><option value="В обработке" ${o.status === 'В обработке' ? 'selected' : ''}>В обработке</option><option value="Доставлен" ${o.status === 'Доставлен' ? 'selected' : ''}>Доставлен</option><option value="Отменён" ${o.status === 'Отменён' ? 'selected' : ''}>Отменён</option></select></td><td>${escapeHtml(o.address || '-')}</td><td><button class="btn-small" onclick="updateOrderStatus('${o.id}', 'Отменён')">Отменить</button></td></tr>`;
+    });
+    ordersHtml += `</tbody></table></div>`;
     
-    let messagesHtml = `<div class="section-title">Сообщения (${messages.length})</div>`;
-    if (messages.length === 0) {
-        messagesHtml += '<div style="text-align:center;padding:20px;">Сообщений пока нет</div>';
-    } else {
-        messagesHtml += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>Дата</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Сообщение</th></tr></thead><tbody>`;
-        for (let m of messages) {
-            messagesHtml += `<tr>
-                <td>${m.date}</td>
-                <td>${m.name}</td>
-                <td>${m.email}</td>
-                <td>${m.phone || '-'}</td>
-                <td style="max-width:300px;">${m.message}</td>
-            </tr>`;
-        }
-        messagesHtml += `</tbody></table></div>`;
-    }
+    let messagesHtml = `<div class="section-title">Сообщения (${messages.length})</div><div class="table-wrapper"><table class="data-table"><thead><tr><th>Дата</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Сообщение</th></tr></thead><tbody>`;
+    messages.forEach(m => {
+        messagesHtml += `<tr><td>${escapeHtml(m.date)}</td><td>${escapeHtml(m.name)}</td><td>${escapeHtml(m.email)}</td><td>${escapeHtml(m.phone || '-')}</td><td style="max-width:300px;">${escapeHtml(m.message)}</td></tr>`;
+    });
+    messagesHtml += `</tbody></table></div>`;
     
     container.innerHTML = `
         <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-            <span style="color:#D56989;">${currentUser.name} (${currentUser.email}) <span class="badge-admin">Администратор</span></span>
+            <span>${escapeHtml(currentUser.name)} (${escapeHtml(currentUser.email)}) <span class="badge-admin">Администратор</span></span>
             <button onclick="logout()" style="background:#D56989;color:white;border:none;padding:6px 15px;">Выйти</button>
         </div>
         <div class="stats-grid">
@@ -389,10 +248,7 @@ async function renderAdminPanel() {
             <div class="stat-card"><div class="stat-number">${stats.totalUsers}</div><div>Пользователей</div></div>
             <div class="stat-card"><div class="stat-number">${stats.totalAdmins}</div><div>Админов</div></div>
         </div>
-        ${productsHtml}
-        ${usersHtml}
-        ${ordersHtml}
-        ${messagesHtml}
+        ${productsHtml}${usersHtml}${ordersHtml}${messagesHtml}
     `;
     document.getElementById('loading').style.display = 'none';
 }
@@ -401,22 +257,12 @@ async function init() {
     const saved = localStorage.getItem('estetica_current_user');
     if (saved) {
         currentUser = JSON.parse(saved);
-        const users = await supabaseGet('users');
-        const freshUser = users.find(u => u.id === currentUser.id);
-        if (freshUser && (freshUser.isadmin || freshUser.isAdmin || freshUser.is_admin)) {
-            currentUser = freshUser;
+        if (currentUser.isadmin || currentUser.isAdmin) {
             renderAdminPanel();
             return;
         }
     }
-    document.getElementById('adminContent').innerHTML = `
-        <div class="access-denied" style="padding:40px;">
-            <h3>Вход в админ-панель</h3>
-            <input type="email" id="loginEmail" placeholder="Email" style="padding:8px; margin:10px 0; width:100%; max-width:300px;">
-            <input type="password" id="loginPassword" placeholder="Пароль" style="padding:8px; margin:10px 0; width:100%; max-width:300px;">
-            <button onclick="doLogin()" style="background:#D56989;color:white;border:none;padding:8px 20px;">Войти</button>
-        </div>
-    `;
+    document.getElementById('adminContent').innerHTML = `<div style="text-align:center;padding:40px;"><h3>Вход в админ-панель</h3><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Пароль"><button onclick="doLogin()">Войти</button></div>`;
     document.getElementById('loading').style.display = 'none';
 }
 
@@ -424,12 +270,8 @@ window.doLogin = async function() {
     document.getElementById('loading').style.display = 'flex';
     const email = document.getElementById('loginEmail')?.value;
     const password = document.getElementById('loginPassword')?.value;
-    if (await login(email, password)) {
-        renderAdminPanel();
-    } else {
-        alert('Неверный email или пароль!');
-        document.getElementById('loading').style.display = 'none';
-    }
+    if (await login(email, password)) renderAdminPanel();
+    else { alert('Неверный email или пароль!'); document.getElementById('loading').style.display = 'none'; }
 };
 
 init();
