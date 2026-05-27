@@ -86,19 +86,28 @@
 </div>
 
 <script>
-const API_URL = 'https://functions.yandexcloud.net/d4en7rg8osirq7m9ukq5';
-let productsFromDB = [];
+// ==================== НАСТРОЙКИ JSONBin.io ====================
+const JSONBIN_BIN_ID = '6a0e46146877513b27a708ce';
+const JSONBIN_API_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
 
-async function callApi(action, data = {}) {
-    const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, data })
+let products = [];
+
+async function getBin() {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_API_KEY }
     });
-    return await res.json();
+    const data = await res.json();
+    return data.record;
 }
 
-function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+async function updateBin(data) {
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+        body: JSON.stringify(data)
+    });
+}
+
 function showToast(m) { let t = document.querySelector('.toast'); if (t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
 
 // Корзина
@@ -116,25 +125,9 @@ function updateQuantity(id, delta) {
 }
 function removeItem(id) { saveCart(getCart().filter(i => i.id !== id)); }
 
-// Загрузка данных
-async function loadProducts() {
-    const res = await callApi('getProducts');
-    if (res?.success) productsFromDB = res.products;
-}
-
-async function getActivePromoFromDB() {
-    const res = await callApi('getPromotions');
-    if (res?.success && res.promotions?.length) {
-        const active = res.promotions.find(p => p.is_active === true);
-        if (active) return { category_id: active.category_id, percent: active.discount_percent, name: active.name };
-    }
-    return { category_id: null, percent: 0, name: null };
-}
-
-// Отображение корзины
 async function renderCart() {
-    if (!productsFromDB.length) await loadProducts();
-    const activePromo = await getActivePromoFromDB();
+    const data = await getBin();
+    products = data.products || [];
     const cart = getCart();
     const container = document.getElementById('cartContent');
     const orderSec = document.getElementById('orderSection');
@@ -150,30 +143,27 @@ async function renderCart() {
     let rows = '';
     
     for (let item of cart) {
-        const productInfo = productsFromDB.find(p => p.id == item.id);
-        const itemCategoryId = productInfo ? productInfo.category_id : null;
-        let originalPrice = item.price * item.quantity;
-        let showDiscount = (activePromo.category_id && activePromo.category_id === itemCategoryId);
-        let finalPrice = showDiscount ? originalPrice * (1 - activePromo.percent / 100) : originalPrice;
-        total += finalPrice;
+        const product = products.find(p => p.id == item.id);
+        const price = product ? product.price : item.price;
+        const itemTotal = price * item.quantity;
+        total += itemTotal;
         
         rows += `<tr>
             <td><img src="${item.img}" class="cart-product-img" loading="lazy"></td>
-            <td><div class="product-name">${escapeHtml(item.name)}</div>${showDiscount ? `<span class="discount-badge">Скидка ${activePromo.percent}%</span>` : ''}</td>
-            <td>${Math.round(originalPrice)} ₽</td>
-            <td><div class="quantity-control"><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button><span class="quantity-value">${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></div></td>
-            <td>${showDiscount ? `<s style="color:#999">${Math.round(originalPrice)} ₽</s><br><b style="color:#1f5437">${Math.round(finalPrice)} ₽</b>` : `${Math.round(originalPrice)} ₽`}</td>
+            <td><div class="product-name">${item.name}</div></td>
+            <td>${price} ₽</div></td>
+            <td><div class="quantity-control"><button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button><span>${item.quantity}</span><button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button></div></td>
+            <td>${itemTotal} ₽</div></td>
             <td><button class="remove-btn" onclick="removeItem(${item.id})">✕</button></td>
         </tr>`;
     }
     
     container.innerHTML = `
         <div class="table-wrapper"><table class="cart-table"><thead><tr><th>Товар</th><th>Название</th><th>Цена</th><th>Кол-во</th><th>Сумма</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
-        <div class="cart-summary">Итого: ${Math.round(total)} ₽${activePromo.percent ? `<small>Применена акция: скидка ${activePromo.percent}%</small>` : ''}</div>
+        <div class="cart-summary">Итого: ${Math.round(total)} ₽</div>
     `;
 }
 
-// Оформление заказа
 async function submitOrder() {
     const cart = getCart();
     if (!cart.length) return alert('Корзина пуста');
@@ -183,17 +173,10 @@ async function submitOrder() {
     const address = document.getElementById('address')?.value.trim();
     if (!name || !phone || !address) return alert('Заполните имя, телефон и адрес!');
     
-    const activePromo = await getActivePromoFromDB();
     let total = 0;
-    const itemsWithDiscount = [];
-    
     for (let item of cart) {
-        const productInfo = productsFromDB.find(p => p.id == item.id);
-        const itemCategoryId = productInfo ? productInfo.category_id : null;
-        let originalPrice = item.price * item.quantity;
-        let discountAmount = (activePromo.category_id && activePromo.category_id === itemCategoryId) ? originalPrice * (activePromo.percent / 100) : 0;
-        total += originalPrice - discountAmount;
-        itemsWithDiscount.push({ ...item, category_id: itemCategoryId, originalPrice, discountAmount });
+        const product = products.find(p => p.id == item.id);
+        total += (product ? product.price : item.price) * item.quantity;
     }
     
     const savedUser = localStorage.getItem('estetica_current_user');
@@ -202,29 +185,31 @@ async function submitOrder() {
         try { const u = JSON.parse(savedUser); userId = u.id; userEmail = u.email; } catch(e) {}
     }
     
-    const result = await callApi('createOrder', {
+    const data = await getBin();
+    const newOrder = {
+        id: Date.now(),
         user_id: userId,
-        items: itemsWithDiscount,
+        userEmail: userEmail,
+        date: new Date().toLocaleString('ru-RU'),
+        items: cart,
         total: Math.round(total),
+        status: 'Новый',
         address: address,
-        deliveryTime: '',
         comment: document.getElementById('comment')?.value || ''
-    });
+    };
+    if (!data.orders) data.orders = [];
+    data.orders.push(newOrder);
+    await updateBin(data);
     
-    if (result?.success) {
-        localStorage.removeItem('estetica_cart');
-        renderCart();
-        updateCartCount();
-        document.querySelectorAll('#orderSection input').forEach(i => i.value = '');
-        alert(`Заказ оформлен!\nСумма: ${Math.round(total)} ₽\nСкоро с вами свяжутся!`);
-        showToast(`Заказ на ${Math.round(total)} ₽ оформлен!`);
-    } else {
-        alert('Ошибка оформления заказа. Попробуйте позже.');
-    }
+    localStorage.removeItem('estetica_cart');
+    renderCart();
+    updateCartCount();
+    document.querySelectorAll('#orderSection input').forEach(i => i.value = '');
+    alert(`Заказ оформлен!\nСумма: ${Math.round(total)} ₽\nСкоро с вами свяжутся!`);
+    showToast(`Заказ на ${Math.round(total)} ₽ оформлен!`);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadProducts();
     await renderCart();
     document.getElementById('submitOrderBtn')?.addEventListener('click', submitOrder);
 });

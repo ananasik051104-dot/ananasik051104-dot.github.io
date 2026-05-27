@@ -22,7 +22,7 @@
         .categories-title{font-size:24px;color:#D56989;text-align:center;margin-bottom:15px}
         .category-cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
         .category-item{background:#C2DC80;border:1px solid #D56989;padding:15px;text-align:center;cursor:pointer;transition:.3s}
-        .category-item:hover{transform:translateY(-3px);background:#b8d16e}
+        .category-item:hover{background:#b8d16e}
         .category-name{font-size:16px;font-weight:600;color:#D56989}
         .category-count{font-size:12px;color:#5b3b45}
         .filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;padding:15px;background:#F3EEF1;border:1px solid #C2DC80}
@@ -35,7 +35,7 @@
         .reset-btn{background:#b84d6e}
         .catalog-grid{display:grid;gap:15px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
         .product-card{background:#C2DC80;border:1px solid #D56989;padding:15px;text-align:center;transition:.3s}
-        .product-card:hover{transform:translateY(-3px);background:#b8d16e}
+        .product-card:hover{background:#b8d16e}
         .product-card img{width:80%;height:200px;object-fit:cover}
         .product-card h3{font-size:18px;color:#D56989}
         .price{font-size:18px;font-weight:bold;color:#D56989;margin:10px 0}
@@ -47,15 +47,15 @@
         .modal-content{background:#F3EEF1;max-width:550px;width:90%;max-height:85vh;overflow-y:auto;padding:20px;border:2px solid #C2DC80}
         .modal-content img{width:100%;height:350px;object-fit:cover}
         .modal-content h3{font-size:24px;color:#D56989}
-        .modal-price{font-size:22px;font-weight:bold;color:#D56989;margin:10px 0}
+        .modal-price{font-size:22px;font-weight:bold;color:#D56989}
         .modal-close{position:absolute;top:10px;right:20px;font-size:30px;cursor:pointer;color:#D56989}
         .modal-add-btn{background:#D56989;color:#F3EEF1;border:none;padding:12px;width:100%;cursor:pointer}
-        .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:25px 15px 15px;position:relative}
-        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;font-size:13px}
-        .social-links{display:flex;justify-content:center;gap:15px;margin:15px 0}
+        .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:20px 15px 15px;position:relative}
+        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;font-size:12px}
+        .social-links{display:flex;justify-content:center;gap:15px;margin-bottom:12px}
         .social-link{color:#C2DC80;text-decoration:none}
-        .copyright{text-align:center;font-size:11px;color:#C2DC80}
-        .toast{position:fixed;bottom:20px;left:20px;right:20px;background:#1f5437;color:white;padding:12px;text-align:center;z-index:1001;animation:slideIn .3s}
+        .copyright{text-align:center;font-size:10px;color:#C2DC80}
+        .toast{position:fixed;bottom:20px;left:20px;right:20px;background:#1f5437;color:white;padding:10px;text-align:center;z-index:1001;animation:slideIn .3s}
         @keyframes slideIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
         @media (max-width:480px){.frame{padding:12px}.logo{font-size:22px}.catalog-grid{grid-template-columns:1fr}.filters{flex-direction:column}}
     </style>
@@ -106,19 +106,29 @@
 </div>
 
 <script>
-const API_URL = 'https://functions.yandexcloud.net/d4en7rg8osirq7m9ukq5';
+// ==================== НАСТРОЙКИ JSONBin.io ====================
+const JSONBIN_BIN_ID = '6a0e46146877513b27a708ce';
+const JSONBIN_API_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+
 let products = [];
 let categories = [];
 let filteredProducts = [];
 let currentModalProduct = null;
 
-async function callApi(action, data = {}) {
-    const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, data })
+async function getBin() {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_API_KEY }
     });
-    return await res.json();
+    const data = await res.json();
+    return data.record;
+}
+
+async function updateBin(data) {
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+        body: JSON.stringify(data)
+    });
 }
 
 function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
@@ -128,23 +138,21 @@ function showToast(m) { let t = document.querySelector('.toast'); if (t) t.remov
 function getCart() { return JSON.parse(localStorage.getItem('estetica_cart') || '[]'); }
 function saveCart(c) { localStorage.setItem('estetica_cart', JSON.stringify(c)); updateCartCount(); }
 function updateCartCount() { let t = getCart().reduce((s,i)=>s+i.quantity,0); let l = document.querySelector('.nav a[href="index3.html"]'); if(l) l.innerHTML = t > 0 ? `КОРЗИНА (${t})` : `КОРЗИНА`; }
-function addToCart(id) { let cart = getCart(), item = cart.find(i=>i.id===id), p = products.find(p=>p.id===id); if(!p) return; if(item) item.quantity++; else cart.push({id:p.id, name:p.name, price:p.price, img:p.img, quantity:1, category_id: p.category_id}); saveCart(cart); showToast(`${p.name} добавлен в корзину!`); }
+function addToCart(id) { let cart = getCart(), item = cart.find(i=>i.id===id), p = products.find(p=>p.id===id); if(!p) return; if(item) item.quantity++; else cart.push({id:p.id, name:p.name, price:p.price, img:p.img, quantity:1}); saveCart(cart); showToast(`${p.name} добавлен в корзину!`); }
 function addToCartFromModal() { if(currentModalProduct) addToCart(currentModalProduct.id); closeModal(); }
 
-// Модальное окно
 function showDetails(product) { 
     currentModalProduct = product; 
     document.getElementById('modalImg').src = product.img; 
     document.getElementById('modalName').innerText = product.name; 
-    document.getElementById('modalPrice').innerText = `${product.price} ₽`; 
+    document.getElementById('modalPrice').innerText = `${product.price} ₽`;
     const cat = categories.find(c => c.id == product.category_id);
-    document.getElementById('modalCat').innerHTML = `Категория: ${cat ? cat.name : 'Без категории'}`; 
-    document.getElementById('modalDesc').innerHTML = product.full_desc || product.short_desc || 'Красивый букет от Estética.'; 
+    document.getElementById('modalCat').innerHTML = `Категория: ${cat ? cat.name : ''}`;
+    document.getElementById('modalDesc').innerHTML = product.full_desc || product.short_desc || '';
     document.getElementById('productModal').style.display = 'flex'; 
 }
 function closeModal() { document.getElementById('productModal').style.display = 'none'; currentModalProduct = null; }
 
-// Фильтрация
 function applyFilters() {
     let catId = document.getElementById('categoryFilter').value;
     let min = +document.getElementById('priceMin').value || 0;
@@ -168,13 +176,12 @@ function filterByCat(catId) {
     applyFilters();
 }
 
-// Отображение
 function renderCatalog() {
     const grid = document.getElementById('catalogGrid');
     if (!filteredProducts.length) { grid.innerHTML = '<div style="text-align:center;padding:40px;">Ничего не найдено</div>'; return; }
     grid.innerHTML = filteredProducts.map(p => `
         <div class="product-card">
-            <img src="${p.img}" alt="${escapeHtml(p.name)}" loading="lazy">
+            <img src="${p.img}" loading="lazy">
             <h3>${escapeHtml(p.name)}</h3>
             <div class="price">${p.price} ₽</div>
             <div class="card-buttons">
@@ -198,19 +205,13 @@ function renderCategories() {
     document.getElementById('categoryCards').innerHTML = cardsHtml;
 }
 
-// Загрузка данных
 async function loadData() {
-    try {
-        const [prods, cats] = await Promise.all([
-            callApi('getProducts'),
-            callApi('getCategories')
-        ]);
-        if (prods?.success) products = prods.products;
-        if (cats?.success) categories = cats.categories;
-        filteredProducts = [...products];
-        renderCategories();
-        renderCatalog();
-    } catch(e) { console.error(e); document.getElementById('catalogGrid').innerHTML = '<div style="text-align:center;padding:40px;">Ошибка загрузки товаров</div>'; }
+    const data = await getBin();
+    products = data.products || [];
+    categories = data.categories || [];
+    filteredProducts = [...products];
+    renderCategories();
+    renderCatalog();
 }
 
 document.addEventListener('click', e => { if(e.target === document.getElementById('productModal')) closeModal(); });

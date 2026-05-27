@@ -80,48 +80,75 @@
 </div>
 
 <script>
-const API_URL = 'https://functions.yandexcloud.net/d4en7rg8osirq7m9ukq5';
+// ==================== НАСТРОЙКИ JSONBin.io ====================
+const JSONBIN_BIN_ID = '6a0e46146877513b27a708ce';
+const JSONBIN_API_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+
 let currentUser = null;
 
-async function callApi(action, data = {}) {
-    const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, data })
+async function getBin() {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_API_KEY }
     });
-    return await res.json();
+    const data = await res.json();
+    return data.record;
+}
+
+async function updateBin(data) {
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+        body: JSON.stringify(data)
+    });
 }
 
 function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
 // Регистрация
 async function register(email, password, name) {
-    const res = await callApi('register', { email, password, name });
-    if (res?.success) {
-        currentUser = res.user;
-        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
-        alert(currentUser.isadmin ? 'Вы зарегистрировались как администратор' : 'Регистрация успешна');
-        renderAuthScreen();
-        return true;
-    } else {
-        alert(res?.error || 'Ошибка регистрации');
+    const data = await getBin();
+    const users = data.users || [];
+    if (users.find(u => u.email === email)) {
+        alert('Пользователь с таким email уже существует');
         return false;
     }
+    
+    const isAdmin = (email === 'ancord51217@gmail.com' && password === 'ananasik051217');
+    const newUser = {
+        id: Date.now(),
+        email: email,
+        password: password,
+        name: name || email.split('@')[0],
+        phone: 'не указан',
+        addresses: ['Москва, ул. Нансена, 1'],
+        isAdmin: isAdmin
+    };
+    users.push(newUser);
+    data.users = users;
+    await updateBin(data);
+    
+    currentUser = newUser;
+    localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+    alert(isAdmin ? 'Вы зарегистрировались как администратор' : 'Регистрация успешна');
+    renderAuthScreen();
+    return true;
 }
 
 // Вход
 async function login(email, password) {
-    const res = await callApi('login', { email, password });
-    if (res?.success) {
-        currentUser = res.user;
+    const data = await getBin();
+    const users = data.users || [];
+    const user = users.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+        currentUser = user;
         localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
-        alert(`Добро пожаловать, ${currentUser.name}!`);
+        alert(`Добро пожаловать, ${user.name}!`);
         renderAuthScreen();
         return true;
-    } else {
-        alert(res?.error || 'Неверный email или пароль');
-        return false;
     }
+    alert('Неверный email или пароль');
+    return false;
 }
 
 function logout() {
@@ -134,19 +161,22 @@ function logout() {
 // Заказы
 async function loadOrders() {
     if (!currentUser) return;
-    const res = await callApi('getOrders', { user_id: currentUser.id });
+    const data = await getBin();
+    const orders = (data.orders || []).filter(o => o.user_id === currentUser.id || o.userEmail === currentUser.email);
     const container = document.getElementById('ordersList');
-    if (res?.success && res.orders?.length) {
-        container.innerHTML = res.orders.map(order => `
-            <div class="order-item">
-                <div class="order-header"><span>${escapeHtml(order.date)}</span><span class="order-status">${escapeHtml(order.status || 'Новый')}</span></div>
-                <div class="order-details">${order.items?.map(i => `${escapeHtml(i.name)} x ${i.quantity}`).join(', ') || ''}</div>
-                <div class="order-details">${order.total} ₽ | ${escapeHtml(order.address || '')}</div>
-            </div>
-        `).join('');
-    } else {
+    
+    if (!orders.length) {
         container.innerHTML = '<div class="empty">Заказов пока нет<br><a href="index2.html" style="color:#D56989;">Перейти в каталог</a></div>';
+        return;
     }
+    
+    container.innerHTML = orders.map(order => `
+        <div class="order-item">
+            <div class="order-header"><span>${escapeHtml(order.date)}</span><span class="order-status">${order.status || 'Новый'}</span></div>
+            <div class="order-details">${order.items?.map(i => `${i.name} x ${i.quantity}`).join(', ') || ''}</div>
+            <div class="order-details">${order.total} ₽ | ${escapeHtml(order.address || '')}</div>
+        </div>
+    `).join('');
 }
 
 // Адреса
@@ -179,14 +209,20 @@ async function deleteAddress(index) {
 
 async function updateUserData(updates) {
     if (!currentUser) return;
-    // Пока обновляем только локально, т.к. API требует расширения
-    currentUser = { ...currentUser, ...updates };
-    localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
-    renderAuthScreen();
-    alert('Профиль обновлён');
+    const data = await getBin();
+    const users = data.users || [];
+    const userIndex = users.findIndex(u => u.id === currentUser.id);
+    if (userIndex !== -1) {
+        users[userIndex] = { ...users[userIndex], ...updates };
+        data.users = users;
+        await updateBin(data);
+        currentUser = users[userIndex];
+        localStorage.setItem('estetica_current_user', JSON.stringify(currentUser));
+        renderAuthScreen();
+        alert('Профиль обновлён');
+    }
 }
 
-// Отображение экрана
 function renderAuthScreen() {
     const saved = localStorage.getItem('estetica_current_user');
     if (saved && !currentUser) {
@@ -210,7 +246,7 @@ function renderAuthScreen() {
         `;
         userPanel.style.display = 'none';
     } else {
-        const isAdmin = currentUser.isadmin || currentUser.isAdmin;
+        const isAdmin = currentUser.isAdmin;
         authBlock.innerHTML = `
             <div class="profile-card">
                 <div class="avatar">🌸</div>

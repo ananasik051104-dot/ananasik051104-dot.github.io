@@ -77,20 +77,24 @@
 </div>
 
 <script>
-const API_URL = 'https://functions.yandexcloud.net/d4en7rg8osirq7m9ukq5';
+// ==================== НАСТРОЙКИ JSONBin.io ====================
+const JSONBIN_BIN_ID = '6a0e46146877513b27a708ce';
+const JSONBIN_API_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
 
-async function callApi(action, data = {}) {
-    try {
-        const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action, data })
-        });
-        return await res.json();
-    } catch(e) {
-        console.error(e);
-        return null;
-    }
+async function getBin() {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_API_KEY }
+    });
+    const data = await res.json();
+    return data.record;
+}
+
+async function updateBin(data) {
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+        body: JSON.stringify(data)
+    });
 }
 
 function showToast(m) {
@@ -115,30 +119,22 @@ document.getElementById('contactForm')?.addEventListener('submit', async (e) => 
         return;
     }
     
-    // Отправляем сообщение через API (потребуется добавить action 'sendMessage' в функцию)
-    // Пока используем прямой POST к API (если action нет, добавим позже)
-    try {
-        const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: 'sendMessage',
-                data: { name, email, phone, message, date: new Date().toLocaleString('ru-RU') }
-            })
-        });
-        const result = await res.json();
-        
-        if (result?.success) {
-            alert(`Спасибо, ${name}! Ваше сообщение отправлено.`);
-            showToast('Сообщение отправлено!');
-            document.getElementById('contactForm').reset();
-        } else {
-            alert('Ошибка отправки. Попробуйте позже.');
-        }
-    } catch(e) {
-        console.error(e);
-        alert('Ошибка соединения. Попробуйте позже.');
-    }
+    const data = await getBin();
+    const newMessage = {
+        id: Date.now(),
+        date: new Date().toLocaleString('ru-RU'),
+        name: name,
+        email: email,
+        phone: phone,
+        message: message
+    };
+    if (!data.messages) data.messages = [];
+    data.messages.push(newMessage);
+    await updateBin(data);
+    
+    alert(`Спасибо, ${name}! Ваше сообщение отправлено.`);
+    showToast('Сообщение отправлено!');
+    document.getElementById('contactForm').reset();
 });
 </script>
 </body>

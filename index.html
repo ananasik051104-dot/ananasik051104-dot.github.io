@@ -9,7 +9,7 @@
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Poiret One',cursive;background:#D56989;padding:15px}
         .frame{max-width:1300px;margin:0 auto;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
-        .header{display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
+        .header{display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
         .header::before,.hero::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
         .logo,.nav,.hero h1,.hero p,.bottom-block>*{position:relative;z-index:1}
         .logo{font-size:28px;font-weight:600;color:#C2DC80;text-decoration:none}
@@ -19,7 +19,7 @@
         .hero h1{font-size:32px;color:#C2DC80}
         .hero p{font-size:16px;color:#C2DC80}
         .line{height:2px;background:#C2DC80;margin:20px 0;opacity:.5}
-        .about{text-align:center;padding:30px 20px;margin:20px 0}
+        .about{text-align:center;padding:30px 20px}
         .about h2{font-size:32px;color:#D56989}
         .about p{font-size:18px;color:#D56989}
         .promo-block{background:#D56989;padding:20px;margin:20px 0;text-align:center}
@@ -29,7 +29,6 @@
         .promo-card:hover{transform:translateY(-5px);background:#C2DC80}
         .promo-name{font-size:22px;font-weight:600;color:#D56989}
         .promo-discount{font-size:30px;font-weight:bold;color:#D56989;margin:10px 0}
-        .apply-promo-btn{background:#D56989;color:#F3EEF1;border:none;padding:8px 20px;font-family:inherit;cursor:pointer}
         .section-title{text-align:center;font-size:36px;color:#D56989;margin-bottom:25px}
         .grid{display:grid;gap:25px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
         .card{background:transparent;padding:20px;text-align:center;transition:.3s}
@@ -142,59 +141,76 @@
 </div>
 
 <script>
-const API_URL = 'https://functions.yandexcloud.net/d4en7rg8osirq7m9ukq5';
+// ==================== НАСТРОЙКИ JSONBin.io ====================
+const JSONBIN_BIN_ID = '6a0e46146877513b27a708ce';
+const JSONBIN_API_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
+
 let selectedRating = 5;
 
-async function callApi(action, data = {}) {
-    const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, data })
+async function getBin() {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_API_KEY }
     });
-    return await res.json();
+    const data = await res.json();
+    return data.record;
+}
+
+async function updateBin(data) {
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+        body: JSON.stringify(data)
+    });
+}
+
+function showToast(msg) {
+    let t = document.querySelector('.toast');
+    if (t) t.remove();
+    t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
 }
 
 function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-function showToast(m) { let t = document.querySelector('.toast'); if (t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
 function renderStars(r) { let s = ''; for (let i = 1; i <= 5; i++) s += i <= r ? '★' : '☆'; return `<span>${s}</span>`; }
 
-// Загрузка товаров
 async function loadProducts() {
-    const res = await callApi('getProducts');
+    const data = await getBin();
+    const products = data.products || [];
     const container = document.getElementById('productsGrid');
-    if (res?.success && res.products?.length) {
-        container.innerHTML = res.products.map(p => `
+    if (products.length) {
+        container.innerHTML = products.map(p => `
             <div class="card">
                 <img src="${p.img}" loading="lazy">
                 <div class="price">${p.price} ₽</div>
                 <div>${escapeHtml(p.name)}</div>
-                <div style="font-size:12px">${escapeHtml(p.short_desc || '')}</div>
             </div>
         `).join('');
     } else container.innerHTML = '<div class="card">Нет товаров</div>';
 }
 
-// Загрузка акций
 async function loadPromotions() {
-    const res = await callApi('getPromotions');
+    const data = await getBin();
+    const promotions = data.promotions || [];
     const container = document.getElementById('promoGrid');
-    if (res?.success && res.promotions?.length) {
-        container.innerHTML = res.promotions.map(p => `
+    if (promotions.length) {
+        container.innerHTML = promotions.map(p => `
             <div class="promo-card">
                 <div class="promo-name">${escapeHtml(p.name)}</div>
                 <div class="promo-discount">-${p.discount_percent}%</div>
-                <button class="apply-promo-btn" onclick="showToast('Акция ${escapeHtml(p.name)} (скидка ${p.discount_percent}%)')">Применить</button>
             </div>
         `).join('');
     } else container.innerHTML = '<div class="promo-card">Нет активных акций</div>';
 }
 
-// Загрузка отзывов
 async function loadReviews() {
-    const res = await callApi('getReviews');
+    const data = await getBin();
+    const reviews = data.reviews || [];
     const container = document.getElementById('reviewsGrid');
-    if (res?.success && res.reviews?.length) {
-        container.innerHTML = res.reviews.map(r => `
+    if (reviews.length) {
+        container.innerHTML = reviews.map(r => `
             <div class="review-card">
                 <div class="review-header"><span class="review-name">${escapeHtml(r.name)}</span>${renderStars(r.rating)}</div>
                 <div class="review-text">${escapeHtml(r.text)}</div>
@@ -204,30 +220,36 @@ async function loadReviews() {
     } else container.innerHTML = '<div class="review-card">Пока нет отзывов</div>';
 }
 
-// Отправка отзыва
 async function submitReview() {
     const name = document.getElementById('reviewName').value.trim();
     const text = document.getElementById('reviewText').value.trim();
     if (!name || !text) return showToast('Заполните имя и отзыв');
-    const res = await callApi('addReview', { name, rating: selectedRating, text, user_id: null });
-    if (res?.success) {
-        showToast('Спасибо за отзыв!');
-        document.getElementById('reviewName').value = '';
-        document.getElementById('reviewText').value = '';
-        document.querySelectorAll('.star-input').forEach(s => { s.textContent = '☆'; s.style.opacity = '0.6'; });
-        selectedRating = 5;
-        document.querySelector('.star-input[data-rating="5"]').textContent = '★';
-    } else showToast('Ошибка при отправке');
+    
+    const data = await getBin();
+    const newReview = {
+        id: Date.now(),
+        name: name,
+        rating: selectedRating,
+        text: text,
+        date: new Date().toISOString().split('T')[0],
+        is_approved: false
+    };
+    if (!data.reviews) data.reviews = [];
+    data.reviews.push(newReview);
+    await updateBin(data);
+    
+    showToast('Спасибо за отзыв!');
+    document.getElementById('reviewName').value = '';
+    document.getElementById('reviewText').value = '';
+    loadReviews();
 }
 
-// Звёздочки рейтинга
 document.querySelectorAll('.star-input').forEach(star => {
     star.addEventListener('click', () => {
         selectedRating = parseInt(star.dataset.rating);
         document.querySelectorAll('.star-input').forEach(s => {
             const r = parseInt(s.dataset.rating);
             s.textContent = r <= selectedRating ? '★' : '☆';
-            s.style.opacity = '1';
         });
     });
 });
