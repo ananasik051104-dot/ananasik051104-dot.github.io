@@ -8,70 +8,171 @@
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Poiret One',cursive;background:#D56989;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:15px}
-        .frame{max-width:1300px;width:100%;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
-        .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
-        .header::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
+        .frame{max-width:1300px;width:100%;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5);border-radius:24px}
+        .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative;border-radius:20px}
+        .header::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5);border-radius:20px}
         .logo,.nav,.bottom-block>*{position:relative;z-index:1}
         .logo{font-size:28px;font-weight:600;color:#C2DC80;text-decoration:none}
         .nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
         .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 10px}
-        .line{height:2px;background:#C2DC80;margin:20px 0;opacity:.5}
+        .line{height:2px;background:#C2DC80;margin:20px 0;opacity:.5;border-radius:2px}
         .section-title{text-align:center;font-size:28px;color:#D56989;margin-bottom:25px}
+        
+        /* КОНТАКТЫ - ЗАКРУГЛЁННЫЕ БЛОКИ */
         .contacts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin:15px 0 25px}
-        .contact-card{background:#C2DC80;border:1px solid #D56989;padding:20px;text-align:center;transition:.3s}
+        .contact-card{background:#C2DC80;border:1px solid #D56989;padding:20px;text-align:center;transition:.3s;border-radius:20px}
         .contact-card:hover{transform:translateY(-3px);background:#b8d16e}
         .contact-icon{font-size:36px;margin-bottom:10px}
         .contact-title{font-size:20px;font-weight:600;color:#D56989;margin-bottom:8px}
         .contact-info{font-size:16px;color:#5b3b45;line-height:1.4}
-        .contact-info a{color:#5b3b45}
-        .hours-card{background:#C2DC80;border:1px solid #D56989;padding:20px;text-align:center;margin:20px 0}
+        .contact-info a{color:#5b3b45;text-decoration:none}
+        
+        .hours-card{background:#C2DC80;border:1px solid #D56989;padding:20px;text-align:center;margin:20px 0;border-radius:20px}
         .hours-list{list-style:none;margin-top:10px}
         .hours-list li{padding:6px 0;font-size:16px;color:#5b3b45;border-bottom:1px solid rgba(213,105,137,0.2)}
-        .form-card{background:#C2DC80;border:1px solid #D56989;padding:25px;margin:20px 0}
+        
+        .form-card{background:#C2DC80;border:1px solid #D56989;padding:25px;margin:20px 0;border-radius:20px}
         .form-title{font-size:24px;font-weight:600;color:#D56989;text-align:center;margin-bottom:20px}
         .contact-form{display:flex;flex-direction:column;gap:12px}
-        .contact-input,.contact-textarea{padding:10px 15px;border:1px solid #D56989;background:#F3EEF1;font-family:inherit;font-size:14px;color:#D56989}
+        .contact-input,.contact-textarea{padding:10px 15px;border:1px solid #D56989;background:#F3EEF1;font-family:inherit;font-size:14px;color:#D56989;border-radius:12px;transition:.2s}
+        .contact-input:focus,.contact-textarea:focus{outline:none;border-color:#b84d6e;box-shadow:0 0 0 2px rgba(213,105,137,0.2)}
         .contact-textarea{min-height:90px;resize:vertical}
-        .submit-contact{background:#D56989;border:none;padding:10px 25px;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;color:#F3EEF1;width:fit-content;margin:0 auto}
-        .submit-contact:hover{background:#b84d6e}
-        .map-card{background:#C2DC80;border:1px solid #D56989;padding:20px;margin:20px 0;text-align:center}
-        .map-container{height:300px;border:1px solid #D56989;background:#F3EEF1}
+        .submit-contact{background:#D56989;border:none;padding:10px 25px;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;color:#F3EEF1;width:fit-content;margin:0 auto;border-radius:40px;transition:.2s}
+        .submit-contact:hover{background:#b84d6e;transform:scale(1.02)}
+        
+        .map-card{background:#C2DC80;border:1px solid #D56989;padding:20px;margin:20px 0;text-align:center;border-radius:20px}
+        .map-title{font-size:20px;font-weight:600;color:#D56989;margin-bottom:12px}
+        .map-container{height:300px;border:1px solid #D56989;background:#F3EEF1;border-radius:16px;overflow:hidden}
         .map-container iframe{width:100%;height:100%;border:none}
-        .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:20px 15px 15px;position:relative}
+        
+        .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:20px 15px 15px;position:relative;border-radius:20px}
         .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 15px;font-size:12px;text-align:center}
         .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:12px}
-        .social-link{color:#C2DC80;text-decoration:none;font-size:13px;padding:5px 10px}
+        .social-link{color:#C2DC80;text-decoration:none;font-size:13px;padding:5px 10px;border-radius:20px;transition:.2s}
         .social-link:hover{background:rgba(193,130,146,0.35)}
         .copyright{text-align:center;font-size:10px;color:#C2DC80}
-        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:10px;text-align:center;font-family:system-ui;font-size:12px;z-index:1001;animation:slideIn .3s ease}
+        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:10px;text-align:center;font-family:system-ui;font-size:12px;z-index:1001;animation:slideIn .3s ease;border-radius:30px}
         @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-        @media(max-width:700px){.frame{padding:15px}.header{flex-direction:column;text-align:center}.section-title{font-size:24px}.map-container{height:220px}.footer-info{flex-direction:column;gap:8px}}
+        
+        @media(max-width:700px){
+            .frame{padding:15px;border-radius:20px}
+            .header{flex-direction:column;text-align:center;border-radius:16px}
+            .section-title{font-size:24px}
+            .map-container{height:220px}
+            .footer-info{flex-direction:column;gap:8px}
+            .contact-card,.hours-card,.map-card,.form-card{border-radius:16px}
+        }
     </style>
 </head>
 <body>
 <div class="frame">
-    <div class="header"><a href="index.html" class="logo">Estética</a><div class="nav"><a href="index.html">ГЛАВНАЯ</a><a href="index2.html">КАТАЛОГ</a><a href="index5.html">КОНТАКТЫ</a><a href="index3.html">КОРЗИНА</a><a href="index4.html">КАБИНЕТ</a></div></div>
+    <div class="header">
+        <a href="index.html" class="logo">Estética</a>
+        <div class="nav">
+            <a href="index.html">ГЛАВНАЯ</a>
+            <a href="index2.html">КАТАЛОГ</a>
+            <a href="index5.html">КОНТАКТЫ</a>
+            <a href="index3.html">КОРЗИНА</a>
+            <a href="index4.html">КАБИНЕТ</a>
+        </div>
+    </div>
     <div class="line"></div>
     <h1 class="section-title">Контакты</h1>
+    
     <div class="contacts-grid">
-        <div class="contact-card"><div class="contact-icon">📍</div><div class="contact-title">Адрес</div><div class="contact-info">г. Ростов-на-Дону,<br>ул. Темерницкая, 93/33</div></div>
-        <div class="contact-card"><div class="contact-icon">📞</div><div class="contact-title">Телефон</div><div class="contact-info"><a href="tel:+79381112274">+7 (938) 111-22-74</a><br><small>Ежедневно 9:00–21:00</small></div></div>
-        <div class="contact-card"><div class="contact-icon">✉️</div><div class="contact-title">Email</div><div class="contact-info"><a href="mailto:info@estetica.ru">info@estetica.ru</a></div></div>
+        <div class="contact-card">
+            <div class="contact-icon">📍</div>
+            <div class="contact-title">Адрес</div>
+            <div class="contact-info">г. Ростов-на-Дону,<br>ул. Темерницкая, 93/33</div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-icon">📞</div>
+            <div class="contact-title">Телефон</div>
+            <div class="contact-info"><a href="tel:+79381112274">+7 (938) 111-22-74</a><br><small>Ежедневно 9:00–21:00</small></div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-icon">✉️</div>
+            <div class="contact-title">Email</div>
+            <div class="contact-info"><a href="mailto:info@estetica.ru">info@estetica.ru</a></div>
+        </div>
     </div>
-    <div class="hours-card"><div class="contact-icon">⏰</div><div class="contact-title">Режим работы</div><ul class="hours-list"><li>Пн—Пт: 9:00 — 21:00</li><li>Сб: 10:00 — 20:00</li><li>Вс: 10:00 — 18:00</li></ul></div>
-    <div class="map-card"><div class="map-title">Как нас найти</div><div class="map-container"><iframe src="https://yandex.ru/map-widget/v1/?ll=39.723300,47.222000&z=17&pt=39.723300,47.222000,pm2rdm&text=%D0%A0%D0%BE%D1%81%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D0%94%D0%BE%D0%BD%D1%83%2C%20%D0%A2%D0%B5%D0%BC%D0%B5%D1%80%D0%BD%D0%B8%D1%86%D0%BA%D0%B0%D1%8F%2093%2F33" allowfullscreen></iframe></div></div>
-    <div class="form-card"><div class="form-title">Написать нам</div><form id="contactForm" class="contact-form"><input type="text" id="contactName" class="contact-input" placeholder="Ваше имя" required><input type="email" id="contactEmail" class="contact-input" placeholder="Ваш email" required><input type="tel" id="contactPhone" class="contact-input" placeholder="Ваш телефон"><textarea id="contactMessage" class="contact-textarea" placeholder="Ваше сообщение" required></textarea><button type="submit" class="submit-contact">Отправить сообщение</button></form></div>
-    <div class="bottom-block"><div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div><div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div><div class="copyright">2026 Estética Цветочная мастерская</div></div>
+    
+    <div class="hours-card">
+        <div class="contact-icon">⏰</div>
+        <div class="contact-title">Режим работы</div>
+        <ul class="hours-list">
+            <li>Пн—Пт: 9:00 — 21:00</li>
+            <li>Сб: 10:00 — 20:00</li>
+            <li>Вс: 10:00 — 18:00</li>
+        </ul>
+    </div>
+    
+    <div class="map-card">
+        <div class="map-title">Как нас найти</div>
+        <div class="map-container">
+            <iframe src="https://yandex.ru/map-widget/v1/?ll=39.723300,47.222000&z=17&pt=39.723300,47.222000,pm2rdm&text=%D0%A0%D0%BE%D1%81%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D0%94%D0%BE%D0%BD%D1%83%2C%20%D0%A2%D0%B5%D0%BC%D0%B5%D1%80%D0%BD%D0%B8%D1%86%D0%BA%D0%B0%D1%8F%2093%2F33" allowfullscreen></iframe>
+        </div>
+    </div>
+    
+    <div class="form-card">
+        <div class="form-title">Написать нам</div>
+        <form id="contactForm" class="contact-form">
+            <input type="text" id="contactName" class="contact-input" placeholder="Ваше имя" required>
+            <input type="email" id="contactEmail" class="contact-input" placeholder="Ваш email" required>
+            <input type="tel" id="contactPhone" class="contact-input" placeholder="Ваш телефон">
+            <textarea id="contactMessage" class="contact-textarea" placeholder="Ваше сообщение" required></textarea>
+            <button type="submit" class="submit-contact">Отправить сообщение</button>
+        </form>
+    </div>
+    
+    <div class="bottom-block">
+        <div class="footer-info">
+            <span>🌸 Цветы, которых нет у других</span>
+            <span>✨ Эксклюзив в каждом стебле</span>
+            <span>💝 Скажут больше, чем слова</span>
+        </div>
+        <div class="social-links">
+            <a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a>
+            <a href="https://instagram.com" target="_blank" class="social-link">Instagram</a>
+            <a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a>
+        </div>
+        <div class="copyright">2026 Estética Цветочная мастерская</div>
+    </div>
 </div>
 
 <script>
 const BIN_ID = '6a0e46146877513b27a708ce';
 const MASTER_KEY = '$2a$10$HCH9Xf3UP6Dl1.e9yCDKeO2t9wmeo7tBLhtrewQUQb6YW2q5uQ.ju';
 const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-async function getData() { const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } }); const data = await res.json(); return data.record || { users: [], orders: [], messages: [], products: [] }; }
-async function saveData(data) { await fetch(API_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY }, body: JSON.stringify(data) }); }
-function showToast(m) { let t = document.querySelector('.toast'); if(t) t.remove(); t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
-document.getElementById('contactForm')?.addEventListener('submit', async (e) => { e.preventDefault(); const name = document.getElementById('contactName')?.value.trim(); const email = document.getElementById('contactEmail')?.value.trim(); const phone = document.getElementById('contactPhone')?.value.trim() || 'Не указан'; const message = document.getElementById('contactMessage')?.value.trim(); if (!name || !email || !message) return alert('Заполните имя, email и сообщение!'); const data = await getData(); data.messages = data.messages || []; data.messages.unshift({ id: Date.now(), date: new Date().toLocaleString('ru-RU'), name, email, phone, message }); await saveData(data); alert(`Спасибо, ${name}! Сообщение отправлено.`); showToast('Сообщение отправлено!'); document.getElementById('contactForm').reset(); });
+
+async function getData() { 
+    const res = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } }); 
+    const data = await res.json(); 
+    return data.record || { users: [], orders: [], messages: [], products: [] }; 
+}
+async function saveData(data) { 
+    await fetch(API_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY }, body: JSON.stringify(data) }); 
+}
+function showToast(m) { 
+    let t = document.querySelector('.toast'); if(t) t.remove(); 
+    t = document.createElement('div'); t.className = 'toast'; t.textContent = m; 
+    document.body.appendChild(t); setTimeout(()=>t.remove(),2500); 
+}
+document.getElementById('contactForm')?.addEventListener('submit', async (e) => { 
+    e.preventDefault(); 
+    const name = document.getElementById('contactName')?.value.trim(); 
+    const email = document.getElementById('contactEmail')?.value.trim(); 
+    const phone = document.getElementById('contactPhone')?.value.trim() || 'Не указан'; 
+    const message = document.getElementById('contactMessage')?.value.trim(); 
+    if (!name || !email || !message) return alert('Заполните имя, email и сообщение!'); 
+    const data = await getData(); 
+    data.messages = data.messages || []; 
+    data.messages.unshift({ id: Date.now(), date: new Date().toLocaleString('ru-RU'), name, email, phone, message }); 
+    await saveData(data); 
+    alert(`Спасибо, ${name}! Сообщение отправлено.`); 
+    showToast('Сообщение отправлено!'); 
+    document.getElementById('contactForm').reset(); 
+});
 </script>
 </body>
 </html>
