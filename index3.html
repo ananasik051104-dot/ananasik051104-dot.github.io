@@ -16,6 +16,8 @@
             font-family: 'Poiret One', cursive;
             background: #D56989;
             padding: 15px;
+            font-size: 16px;
+            color: #111111;
         }
 
         .frame {
@@ -24,10 +26,11 @@
             margin: 0 auto;
             background: #F3EEF1;
             padding: 25px;
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5);
+            border-radius: 32px;
+            border: 3px solid #C2DC80;
         }
 
-        /* ШАПКА */
+        /* ШАПКА — ПРОЗРАЧНАЯ */
         .header {
             display: flex;
             justify-content: space-between;
@@ -35,50 +38,43 @@
             flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 25px;
-            padding: 15px 20px;
-            background-image: url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');
-            background-size: cover;
+            padding: 20px 15px;
+            background: transparent;
             position: relative;
+            border-radius: 24px;
         }
-
-        .header::before,
-        .bottom-block::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(153, 86, 113, 0.5);
-        }
-
-        .logo,
-        .nav,
-        .bottom-block>* {
-            position: relative;
-            z-index: 1;
+        .header::before {
+            display: none;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: 600;
-            color: #C2DC80;
+            font-size: 32px;
+            font-weight: 800;
             text-decoration: none;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+            color: #111111 !important;
         }
 
         .nav {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 25px;
             justify-content: center;
         }
-
         .nav a {
-            color: #C2DC80;
             text-decoration: none;
-            font-size: 14px;
-            padding: 6px 10px;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 8px 0;
+            white-space: nowrap;
+            transition: 0.2s;
+            letter-spacing: 1px;
+            color: #111111 !important;
+        }
+        .nav a:hover {
+            background: rgba(0,0,0,0.05);
+            border-radius: 30px;
+            padding: 8px 12px;
         }
 
         .line {
@@ -86,11 +82,12 @@
             background: #C2DC80;
             margin: 20px 0;
             opacity: .5;
+            border-radius: 2px;
         }
 
         .cart-title {
             font-size: 32px;
-            color: #D56989;
+            color: #111111;
             margin-bottom: 25px;
             text-align: center;
             letter-spacing: 2px;
@@ -107,6 +104,8 @@
             min-width: 650px;
             border-collapse: collapse;
             background: #F3EEF1;
+            border-radius: 20px;
+            overflow: hidden;
         }
 
         .cart-table th,
@@ -119,46 +118,46 @@
 
         .cart-table th {
             background: #C2DC80;
-            color: #D56989;
+            color: #111111;
             font-size: 16px;
             font-weight: 600;
             letter-spacing: 1px;
         }
 
         .cart-table td {
-            font-size: 14px;
-            color: #5b3b45;
+            font-size: 15px;
+            color: #111111;
         }
 
         .cart-product-img {
             width: 60px;
             height: 60px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .product-name {
             font-weight: 600;
-            color: #D56989;
+            color: #111111;
             font-size: 16px;
         }
 
         .quantity-btn {
-            background: #D56989;
+            background: #C2DC80;
             border: none;
             width: 32px;
             height: 32px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 18px;
-            color: #F3EEF1;
+            color: #111111;
             transition: .2s;
             margin: 0 5px;
         }
 
         .quantity-btn:hover {
-            background: #b84d6e;
+            background: #b8d16e;
             transform: scale(1.05);
         }
 
@@ -168,6 +167,7 @@
             margin: 0 8px;
             display: inline-block;
             min-width: 24px;
+            color: #111111;
         }
 
         .remove-btn {
@@ -189,25 +189,25 @@
             padding: 20px;
             background: #C2DC80;
             margin: 20px 0;
-            border-radius: 12px;
+            border-radius: 20px;
         }
 
         .cart-summary .total-label {
             font-size: 18px;
-            color: #D56989;
+            color: #111111;
             margin-right: 15px;
         }
 
         .cart-summary .total-price {
             font-size: 32px;
             font-weight: bold;
-            color: #D56989;
+            color: #111111;
         }
 
         .empty-cart {
             text-align: center;
             padding: 60px 20px;
-            color: #D56989;
+            color: #111111;
             font-size: 22px;
         }
 
@@ -215,8 +215,8 @@
             display: inline-block;
             margin-top: 20px;
             padding: 12px 30px;
-            background: #D56989;
-            color: #F3EEF1;
+            background: #C2DC80;
+            color: #111111;
             text-decoration: none;
             border-radius: 40px;
             font-size: 16px;
@@ -224,21 +224,22 @@
         }
 
         .empty-cart .continue-btn:hover {
-            background: #b84d6e;
+            background: #b8d16e;
+            transform: scale(1.02);
         }
 
-        /* ФОРМА ОФОРМЛЕНИЯ (информация до оплаты) */
+        /* ФОРМА ОФОРМЛЕНИЯ */
         .form-section {
             margin-top: 30px;
             padding: 25px;
             background: #F3EEF1;
             border: 2px solid #C2DC80;
-            border-radius: 16px;
+            border-radius: 28px;
         }
 
         .form-title {
-            font-size: 26px;
-            color: #D56989;
+            font-size: 28px;
+            color: #111111;
             margin-bottom: 20px;
             text-align: center;
             font-weight: 600;
@@ -260,17 +261,17 @@
         .field-group label {
             font-size: 14px;
             font-weight: 600;
-            color: #D56989;
+            color: #111111;
         }
 
         .field-group input {
             padding: 12px;
             border: 1px solid #C2DC80;
-            border-radius: 8px;
+            border-radius: 16px;
             background: #F3EEF1;
             font-family: inherit;
-            font-size: 14px;
-            color: #D56989;
+            font-size: 15px;
+            color: #111111;
             transition: .2s;
         }
 
@@ -285,16 +286,15 @@
             padding: 15px;
             margin: 20px 0;
             text-align: center;
-            color: #D56989;
-            font-size: 14px;
-            border-radius: 8px;
+            color: #111111;
+            font-size: 15px;
+            border-radius: 20px;
         }
 
-        /* КНОПКА, КОТОРАЯ ВЫЗЫВАЕТ МОДАЛЬНОЕ ОКНО ОПЛАТЫ */
         .submit-order-btn {
-            background: #D56989;
+            background: #C2DC80;
             border: none;
-            color: #F3EEF1;
+            color: #111111;
             font-size: 18px;
             padding: 14px 35px;
             cursor: pointer;
@@ -307,31 +307,35 @@
         }
 
         .submit-order-btn:hover {
-            background: #b84d6e;
+            background: #b8d16e;
             transform: scale(1.02);
         }
 
         /* ПОДВАЛ */
         .bottom-block {
-            background-image: url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');
-            background-size: cover;
-            margin-top: 40px;
-            padding: 25px 15px 20px;
+            background: #F3EEF1;
+            margin-top: 35px;
+            padding: 25px 15px 15px;
             position: relative;
-            border-radius: 12px;
+            border-radius: 24px;
         }
-
+        .bottom-block::before {
+            display: none;
+        }
         .footer-info {
             display: flex;
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
-            color: #C2DC80;
             margin: 10px 0 20px;
-            font-size: 13px;
+            font-size: 15px;
             text-align: center;
         }
-
+        .footer-info span {
+            font-size: 15px;
+            font-weight: 500;
+            color: #111111;
+        }
         .social-links {
             display: flex;
             justify-content: center;
@@ -339,27 +343,26 @@
             flex-wrap: wrap;
             margin-bottom: 15px;
         }
-
         .social-link {
-            color: #C2DC80;
             text-decoration: none;
-            font-size: 14px;
-            padding: 6px 12px;
+            font-size: 15px;
+            padding: 6px 16px;
+            border-radius: 40px;
             transition: .2s;
+            font-weight: 500;
+            color: #111111;
         }
-
         .social-link:hover {
-            background: rgba(193, 130, 146, 0.35);
-            border-radius: 20px;
+            background: rgba(0,0,0,0.05);
         }
-
         .copyright {
             text-align: center;
-            font-size: 11px;
-            color: #C2DC80;
+            font-size: 13px;
+            margin-top: 8px;
+            color: #111111;
         }
 
-        /* МОДАЛЬНОЕ ОКНО (ОПЛАТА) */
+        /* МОДАЛЬНОЕ ОКНО ОПЛАТЫ */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -401,7 +404,7 @@
 
         .payment-modal h3 {
             font-size: 28px;
-            color: #D56989;
+            color: #111111;
             text-align: center;
             margin-bottom: 15px;
             letter-spacing: 1px;
@@ -414,7 +417,7 @@
             border-radius: 60px;
             font-size: 24px;
             font-weight: bold;
-            color: #D56989;
+            color: #111111;
             margin-bottom: 28px;
         }
 
@@ -426,7 +429,7 @@
             display: block;
             font-size: 14px;
             font-weight: 600;
-            color: #D56989;
+            color: #111111;
             margin-bottom: 6px;
         }
 
@@ -465,11 +468,11 @@
 
         .pay-btn {
             flex: 2;
-            background: #D56989;
+            background: #C2DC80;
             border: none;
             padding: 14px 0;
             border-radius: 60px;
-            color: white;
+            color: #111111;
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
@@ -478,17 +481,17 @@
         }
 
         .pay-btn:hover {
-            background: #b44c6a;
+            background: #b8d16e;
             transform: scale(1.02);
         }
 
         .cancel-pay-btn {
             flex: 1;
-            background: #e2cbd2;
+            background: #D56989;
             border: none;
             padding: 14px 0;
             border-radius: 60px;
-            color: #7a4d5e;
+            color: #F3EEF1;
             font-size: 18px;
             cursor: pointer;
             transition: 0.2s;
@@ -496,27 +499,25 @@
         }
 
         .cancel-pay-btn:hover {
-            background: #cfb3bd;
+            background: #b84d6e;
         }
 
-        /* УВЕДОМЛЕНИЕ (тост) */
         .toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(100%);
-            background: #2c6e49;
+            background: #1f5437;
             color: #F3EEF1;
             padding: 14px 28px;
             border-radius: 60px;
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
             z-index: 2100;
             font-family: system-ui, 'Poiret One', cursive;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
             text-align: center;
-            white-space: nowrap;
             pointer-events: none;
         }
 
@@ -526,15 +527,36 @@
 
         @media (max-width: 550px) {
             .toast {
-                font-size: 14px;
+                font-size: 13px;
                 white-space: normal;
                 width: 85%;
                 text-align: center;
                 padding: 12px 20px;
             }
-
             .row-fields {
                 flex-direction: column;
+                gap: 12px;
+            }
+            .cart-title {
+                font-size: 28px;
+            }
+            .form-title {
+                font-size: 24px;
+            }
+            .cart-summary .total-price {
+                font-size: 28px;
+            }
+        }
+        @media (max-width: 700px) {
+            .frame {
+                padding: 15px;
+                border-radius: 24px;
+            }
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav {
                 gap: 12px;
             }
         }
@@ -554,7 +576,7 @@
     </div>
 
     <div class="line"></div>
-    <h1 class="cart-title">🛒 Корзина</h1>
+    <h1 class="cart-title">Корзина</h1>
 
     <div id="cartContent"></div>
     <div id="orderSection" style="display:none;">
@@ -570,20 +592,19 @@
                 <div class="field-group"><label>Дата доставки</label><input type="text" id="deliveryDate" placeholder="27.05.2026"></div>
                 <div class="field-group"><label>Комментарий</label><input type="text" id="comment" placeholder="Пожелания к букету"></div>
             </div>
-            <div class="info-text">💐 После оформления заказа вы перейдете к безопасной оплате картой</div>
-            <button class="submit-order-btn" id="openPaymentModalBtn">💳 Оформить заказ и оплатить</button>
+            <div class="info-text">🌸 После оформления заказа вы перейдете к безопасной оплате картой</div>
+            <button class="submit-order-btn" id="openPaymentModalBtn">Оформить заказ и оплатить</button>
         </div>
     </div>
 
     <div class="bottom-block">
         <div class="footer-info">
-            <span>🌸 Цветы, которых нет у других</span>
-            <span>✨ Эксклюзив в каждом стебле</span>
-            <span>💝 Скажут больше, чем слова</span>
+            <span>Цветы, которых нет у других</span>
+            <span>Эксклюзив в каждом стебле</span>
+            <span>Скажут больше, чем слова</span>
         </div>
         <div class="social-links">
             <a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a>
-            <a href="https://instagram.com" target="_blank" class="social-link">Instagram</a>
             <a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a>
         </div>
         <div class="copyright">2026 Estética Цветочная мастерская</div>
@@ -593,7 +614,7 @@
 <!-- МОДАЛЬНОЕ ОКНО ОПЛАТЫ -->
 <div id="paymentModal" class="modal-overlay">
     <div class="payment-modal">
-        <h3>💳 Оплата заказа</h3>
+        <h3>Оплата заказа</h3>
         <div id="modalTotalAmount" class="payment-amount">0 ₽</div>
         <div class="card-field">
             <label>Номер карты</label>
@@ -665,7 +686,7 @@
         const orderSec = document.getElementById('orderSection');
 
         if (cart.length === 0) {
-            container.innerHTML = `<div class="empty-cart">🛍️ Корзина пуста<br><a href="index2.html" class="continue-btn">🌸 В каталог</a></div>`;
+            container.innerHTML = `<div class="empty-cart">Корзина пуста<br><a href="index2.html" class="continue-btn">В каталог</a></div>`;
             orderSec.style.display = 'none';
             return;
         }
@@ -706,7 +727,6 @@
                 <span class="total-price" id="cartTotalPrice">${total} ₽</span>
             </div>
         `;
-        // Сохраняем текущую сумму для модалки
         window.currentCartTotal = total;
     }
 
@@ -749,18 +769,16 @@
             showToastMessage("Корзина пуста, невозможно оформить заказ", false);
             return false;
         }
-        // Валидация полей доставки
         const name = document.getElementById('userName')?.value.trim();
         const phone = document.getElementById('userPhone')?.value.trim();
         const address = document.getElementById('address')?.value.trim();
         if (!name || !phone || !address) {
-            showToastMessage("❌ Заполните имя, телефон и адрес доставки", false);
+            showToastMessage("Заполните имя, телефон и адрес доставки", false);
             return false;
         }
 
         const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
         document.getElementById('modalTotalAmount').innerText = `${total} ₽`;
-        // Очищаем поля карты при каждом открытии
         document.getElementById('cardNumber').value = '';
         document.getElementById('cardExpiry').value = '';
         document.getElementById('cardCvv').value = '';
@@ -771,15 +789,12 @@
         return true;
     }
 
-    // ЗАКРЫТИЕ МОДАЛКИ
     function closePaymentModal() {
         const modal = document.getElementById('paymentModal');
         modal.classList.remove('active');
     }
 
-    // ОБРАБОТЧИК ОПЛАТЫ (кнопка "Оплатить" внутри модалки)
     async function processPaymentAndCompleteOrder() {
-        // 1. получаем данные карты (базовая клиентская проверка)
         const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
         const cardExpiry = document.getElementById('cardExpiry').value.trim();
         const cardCvv = document.getElementById('cardCvv').value.trim();
@@ -802,19 +817,15 @@
             return;
         }
 
-        // Имитация обработки платежа (успех всегда)
         const paymentSuccess = true;
 
         if (!paymentSuccess) {
-            showToastMessage("❌ Ошибка оплаты, попробуйте другую карту", false);
+            showToastMessage("Ошибка оплаты, попробуйте другую карту", false);
             return;
         }
 
-        // --- ОПЛАТА ПРОШЛА УСПЕШНО! ---
-        // Закрываем модальное окно
         closePaymentModal();
 
-        // Собираем финальные данные заказа
         const cart = getCart();
         if (cart.length === 0) {
             showToastMessage("Корзина стала пуста, повторите оформление", false);
@@ -848,33 +859,24 @@
             paymentMethod: 'card_online'
         };
 
-        // Сохраняем заказ в JSONBin (если ошибка — не страшно, но уведомим)
         let saved = await saveOrderToJSONBin(orderData);
         if (!saved) {
             console.warn("Не удалось синхронизировать с JSONBin, но заказ локально создан");
         }
 
-        // Очищаем корзину
         localStorage.removeItem('estetica_cart');
         renderCart();
         updateCartCount();
 
-        // Очищаем форму доставки
         const inputs = document.querySelectorAll('#orderSection input');
         inputs.forEach(inp => inp.value = '');
 
-        // ГЛАВНОЕ: УВЕДОМЛЕНИЕ ОТ САЙТА — ОПЛАТА ПРОШЛА
-        showToastMessage(`✅ Оплата прошла успешно! Сумма ${totalSum} ₽. Спасибо за покупку!`, true);
-
-        // Дополнительно можно отобразить красивое всплывающее уведомление, но тост уже есть
-        // (по требованию: "уведомление от сайта оплата прошла" выполнено)
+        showToastMessage(`Оплата прошла успешно! Сумма ${totalSum} ₽. Спасибо за покупку!`, true);
     }
 
-    // Блокируем стандартное оформление через старый alert, переназначаем кнопку на открытие модалки
     function attachModalTriggers() {
         const openBtn = document.getElementById('openPaymentModalBtn');
         if (openBtn) {
-            // убираем старые слушатели, если есть
             const newBtn = openBtn.cloneNode(true);
             openBtn.parentNode.replaceChild(newBtn, openBtn);
             newBtn.addEventListener('click', (e) => {
@@ -892,20 +894,15 @@
             confirmBtn.parentNode.replaceChild(cloned, confirmBtn);
             cloned.addEventListener('click', processPaymentAndCompleteOrder);
         }
-        // Клик по оверлею для закрытия (доп. комфорт)
         const overlay = document.getElementById('paymentModal');
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) closePaymentModal();
         });
     }
 
-    // Инициализация при загрузке страницы + подписка на изменения корзины
     document.addEventListener('DOMContentLoaded', () => {
         renderCart();
         attachModalTriggers();
-        // дополнительно, если нужно динамически обновлять сумму в модалке при перерисовке — но модалка открывается уже с актуальной суммой.
-        // чтобы сумма итоговая всегда свежая
-        window.renderCart = renderCart; // на всякий
     });
 </script>
 </body>

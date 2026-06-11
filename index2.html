@@ -7,62 +7,236 @@
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Poiret One',cursive;background:#D56989;padding:15px}
-        .frame{max-width:1300px;margin:0 auto;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
+        body{
+            font-family:'Poiret One',cursive;
+            background:#D56989;
+            padding:15px;
+            font-size:16px;
+            color:#111111;
+        }
+        .frame{
+            max-width:1300px;
+            margin:0 auto;
+            background:#F3EEF1;
+            padding:25px;
+            border-radius:32px;
+            border: 3px solid #C2DC80;
+        }
         
-        .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
-        .header::before,.hero::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
-        .logo,.nav,.hero h1,.hero p,.bottom-block>*{position:relative;z-index:1}
-        .logo{font-size:28px;font-weight:600;color:#C2DC80;text-decoration:none}
-        .nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-        .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 10px;white-space:nowrap}
+        /* ШАПКА — ПРОЗРАЧНАЯ */
+        .header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap:wrap;
+            gap:15px;
+            margin-bottom:25px;
+            padding:20px 15px;
+            background: transparent;
+            position:relative;
+            border-radius:24px;
+        }
+        .header::before {
+            display: none;
+        }
         
-        .hero{text-align:center;padding:40px 15px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin:15px 0;position:relative}
-        .hero h1{font-size:32px;color:#C2DC80;text-shadow:2px 2px 6px black}
-        .hero p{font-size:16px;color:#C2DC80;margin-top:8px}
-        .line{height:2px;background:#C2DC80;margin:20px 0;opacity:.5}
+        .logo{
+            font-size:32px;
+            font-weight:800;
+            text-decoration:none;
+            letter-spacing:2px;
+            color:#111111 !important;
+        }
         
-        .filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;padding:15px;background:#F3EEF1;border:1px solid #C2DC80;align-items:flex-end}
-        .filter-group{display:flex;flex-direction:column;gap:5px;min-width:140px;flex:1}
-        .filter-group label{font-size:12px;font-weight:600;color:#D56989;text-transform:uppercase}
-        .filter-group select,.filter-group input{padding:8px 10px;background:#F3EEF1;border:1px solid #C2DC80;font-family:inherit;font-size:14px;color:#D56989}
-        .price-range{display:flex;gap:8px;align-items:center}
-        .price-range input{width:80px}
-        .filter-btn{background:#D56989;border:none;padding:8px 15px;font-family:inherit;font-size:14px;cursor:pointer;color:#F3EEF1}
-        .reset-btn{background:#b84d6e}
+        .nav{
+            display:flex;
+            flex-wrap:wrap;
+            gap:25px;
+            justify-content:center;
+        }
+        .nav a{
+            text-decoration:none;
+            font-size:16px;
+            font-weight:600;
+            padding:8px 0;
+            white-space:nowrap;
+            transition:0.2s;
+            letter-spacing:1px;
+            color:#111111 !important;
+        }
+        .nav a:hover {
+            background: rgba(0,0,0,0.05);
+            border-radius:30px;
+            padding:8px 12px;
+        }
         
-        .catalog-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+        .hero{
+            text-align:center;
+            padding:30px 20px;
+            background:#F3EEF1;
+            margin:15px 0;
+            border-radius:24px;
+        }
+        .hero h1{
+            font-size:36px;
+            margin-bottom:10px;
+            letter-spacing:2px;
+            font-weight:700;
+            color:#111111;
+        }
+        .hero p{
+            font-size:18px;
+            color:#111111;
+            opacity:0.8;
+        }
+        .line{
+            height:2px;
+            background:#C2DC80;
+            margin:20px 0;
+            opacity:.5;
+            border-radius:2px;
+        }
+        
+        /* ФИЛЬТРЫ */
+        .filters{
+            display:flex;
+            flex-wrap:wrap;
+            gap:12px;
+            margin-bottom:20px;
+            padding:15px;
+            background:#F3EEF1;
+            border:1px solid #C2DC80;
+            align-items:flex-end;
+            border-radius:20px;
+        }
+        .filter-group{
+            display:flex;
+            flex-direction:column;
+            gap:5px;
+            min-width:140px;
+            flex:1;
+        }
+        .filter-group label{
+            font-size:12px;
+            font-weight:600;
+            color:#111111;
+            text-transform:uppercase;
+        }
+        .filter-group select,.filter-group input{
+            padding:8px 10px;
+            background:#F3EEF1;
+            border:1px solid #C2DC80;
+            font-family:inherit;
+            font-size:14px;
+            color:#111111;
+            border-radius:12px;
+        }
+        .price-range{
+            display:flex;
+            gap:8px;
+            align-items:center;
+        }
+        .price-range input{
+            width:80px;
+        }
+        .filter-btn{
+            background:#C2DC80;
+            border:none;
+            padding:8px 15px;
+            font-family:inherit;
+            font-size:14px;
+            cursor:pointer;
+            color:#111111;
+            border-radius:40px;
+            transition:.2s;
+        }
+        .reset-btn{
+            background:#D56989;
+            color:#F3EEF1;
+        }
+        .reset-btn:hover{
+            background:#b84d6e;
+        }
+        .filter-btn:hover{
+            transform:scale(1.02);
+        }
+        
+        /* КАТАЛОГ — ТОВАРЫ */
+        .catalog-grid{
+            display:grid;
+            gap:25px;
+            grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+        }
         
         .product-card{
-            background:#C2DC80;
-            border:1px solid #D56989;
+            background:#F3EEF1;
+            border:1px solid #C2DC80;
             padding:20px;
             text-align:center;
             transition:.3s;
             display:flex;
             flex-direction:column;
             position:relative;
+            border-radius:20px;
         }
-        .product-card:hover{transform:translateY(-5px);background:#b8d16e}
-        .product-card img{width:100%;height:220px;object-fit:cover;margin-bottom:15px}
-        .product-card h3{font-size:20px;color:#D56989;margin:10px 0 5px}
-        .price{font-size:24px;font-weight:bold;color:#D56989;margin:10px 0}
-        .card-buttons{display:flex;gap:12px;justify-content:center;margin-top:10px}
+        .product-card:hover{
+            transform:translateY(-5px);
+            background:#C2DC80;
+        }
+        .product-card img{
+            width:100%;
+            height:320px;
+            object-fit:cover;
+            margin-bottom:15px;
+            border-radius:16px;
+        }
+        .product-card h3{
+            font-size:22px;
+            color:#111111;
+            margin:10px 0 5px;
+            font-weight:600;
+        }
+        .price{
+            font-size:24px;
+            font-weight:bold;
+            color:#111111;
+            margin:10px 0;
+        }
+        .card-buttons{
+            display:flex;
+            gap:12px;
+            justify-content:center;
+            margin-top:10px;
+        }
         .card-buttons button{
             font-family:inherit;
             font-size:14px;
-            font-weight:bold;
+            font-weight:600;
             padding:8px 16px;
             cursor:pointer;
             border:none;
             border-radius:40px;
             transition:.2s;
         }
-        .cart-btn{background:#D56989;color:#F3EEF1}
-        .cart-btn:hover{background:#b84d6e;transform:scale(1.02)}
-        .details-btn{background:#F3EEF1;color:#D56989;border:1px solid #D56989}
-        .details-btn:hover{background:#D56989;color:#F3EEF1}
+        .cart-btn{
+            background:#C2DC80;
+            color:#111111;
+        }
+        .cart-btn:hover{
+            background:#b8d16e;
+            transform:scale(1.02);
+        }
+        .details-btn{
+            background:#D56989;
+            color:#F3EEF1;
+            border:1px solid #D56989;
+        }
+        .details-btn:hover{
+            background:#b84d6e;
+            transform:scale(1.02);
+        }
         
+        /* МОДАЛЬНОЕ ОКНО */
         .modal{
             display:none;
             position:fixed;
@@ -84,7 +258,7 @@
             padding:25px;
             border:2px solid #C2DC80;
             position:relative;
-            border-radius:0;
+            border-radius:32px;
         }
         .modal-close{
             position:absolute;
@@ -92,18 +266,45 @@
             right:18px;
             font-size:32px;
             cursor:pointer;
-            color:#D56989;
+            color:#111111;
             transition:.2s;
         }
-        .modal-close:hover{color:#b84d6e}
-        .modal-content img{width:100%;height:300px;object-fit:cover;margin-bottom:20px}
-        .modal-content h3{font-size:28px;color:#D56989;margin-bottom:10px}
-        .modal-price{font-size:26px;font-weight:bold;color:#D56989;margin:15px 0}
-        .modal-cat{font-size:14px;color:#D56989;margin:10px 0;padding-bottom:10px;border-bottom:1px solid #C2DC80}
-        .modal-desc{font-size:16px;color:#5b3b45;line-height:1.6;margin:15px 0}
+        .modal-close:hover{color:#D56989;}
+        .modal-content img{
+            width:100%;
+            height:300px;
+            object-fit:cover;
+            margin-bottom:20px;
+            border-radius:20px;
+        }
+        .modal-content h3{
+            font-size:28px;
+            color:#111111;
+            margin-bottom:10px;
+        }
+        .modal-price{
+            font-size:26px;
+            font-weight:bold;
+            color:#111111;
+            margin:15px 0;
+        }
+        .modal-cat{
+            font-size:14px;
+            color:#111111;
+            margin:10px 0;
+            padding-bottom:10px;
+            border-bottom:1px solid #C2DC80;
+        }
+        .modal-desc{
+            font-size:16px;
+            color:#111111;
+            line-height:1.6;
+            margin:15px 0;
+            opacity:0.8;
+        }
         .modal-add-btn{
-            background:#D56989;
-            color:#F3EEF1;
+            background:#C2DC80;
+            color:#111111;
             border:none;
             padding:14px;
             font-family:inherit;
@@ -112,30 +313,100 @@
             cursor:pointer;
             width:100%;
             margin-top:20px;
+            border-radius:40px;
             transition:.2s;
         }
-        .modal-add-btn:hover{background:#b84d6e}
+        .modal-add-btn:hover{
+            background:#b8d16e;
+            transform:scale(1.02);
+        }
         
-        .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:25px 15px 15px;position:relative}
-        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 20px;font-size:13px;text-align:center}
-        .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:15px}
-        .social-link{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 12px}
-        .social-link:hover{background:rgba(193,130,146,0.35)}
-        .copyright{text-align:center;font-size:11px;color:#C2DC80}
-        .toast{position:fixed;bottom:20px;right:20px;left:20px;background:#1f5437;color:white;padding:12px;text-align:center;font-family:system-ui;font-size:13px;z-index:1001;animation:slideIn .3s ease;border-radius:30px}
-        @keyframes slideIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+        /* ПОДВАЛ */
+        .bottom-block{
+            background:#F3EEF1;
+            margin-top:35px;
+            padding:25px 15px 15px;
+            position:relative;
+            border-radius:24px;
+        }
+        .bottom-block::before {
+            display: none;
+        }
+        .footer-info{
+            display:flex;
+            justify-content:center;
+            gap:20px;
+            flex-wrap:wrap;
+            margin:10px 0 20px;
+            font-size:15px;
+            text-align:center;
+        }
+        .footer-info span{
+            font-size: 15px;
+            font-weight: 500;
+            color:#111111;
+        }
+        .social-links{
+            display:flex;
+            justify-content:center;
+            gap:20px;
+            flex-wrap:wrap;
+            margin-bottom:15px;
+        }
+        .social-link{
+            text-decoration:none;
+            font-size:15px;
+            padding:6px 16px;
+            border-radius:40px;
+            transition:.2s;
+            font-weight: 500;
+            color:#111111;
+        }
+        .social-link:hover{
+            background:rgba(0,0,0,0.05);
+        }
+        .copyright{
+            text-align:center;
+            font-size:13px;
+            margin-top: 8px;
+            color:#111111;
+        }
+        .toast{
+            position:fixed;
+            bottom:20px;
+            right:20px;
+            left:20px;
+            background:#1f5437;
+            color:white;
+            padding:12px;
+            text-align:center;
+            font-family:system-ui;
+            font-size:13px;
+            z-index:1001;
+            animation:slideIn .3s ease;
+            border-radius:40px;
+        }
+        @keyframes slideIn{
+            from{transform:translateY(100%);opacity:0}
+            to{transform:translateY(0);opacity:1}
+        }
         
         @media (max-width:700px){
-            .frame{padding:15px}
+            .frame{padding:15px;border-radius:24px}
             .header{flex-direction:column;text-align:center}
             .catalog-grid{grid-template-columns:1fr}
-            .product-card img{height:200px}
+            .product-card img{height:280px}
             .modal-content img{height:220px}
             .card-buttons{flex-direction:column;align-items:center}
             .card-buttons button{width:100%}
+            .hero h1{font-size:28px}
+            .hero p{font-size:16px}
+            .filters{flex-direction:column}
+            .filter-group{width:100%}
         }
         @media (min-width:701px) and (max-width:1024px){
             .catalog-grid{grid-template-columns:repeat(2,1fr)}
+            .product-card img{height:280px}
         }
         @media (min-width:1025px){
             .catalog-grid{grid-template-columns:repeat(4,1fr)}
@@ -155,8 +426,12 @@
         </div>
     </div>
 
-    <div class="hero"><h1>ESTÉTICA</h1><p>Создаём любовь через цветы</p></div>
     <div class="line"></div>
+
+    <div class="hero">
+        <h1>Каталог</h1>
+        <p>Выберите цветы, которые скажут всё за вас</p>
+    </div>
 
     <div class="filters">
         <div class="filter-group"><label>Категория</label><select id="categoryFilter"><option value="all">Все букеты</option><option value="bright">Яркие</option><option value="gentle">Нежные</option><option value="minimalism">Минимализм</option><option value="single">Единичные</option></select></div>
@@ -167,9 +442,18 @@
 
     <div class="catalog-grid" id="catalogGrid"></div>
 
+    <div class="line"></div>
+
     <div class="bottom-block">
-        <div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div>
-        <div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div>
+        <div class="footer-info">
+            <span>Цветы, которых нет у других</span>
+            <span>Эксклюзив в каждом стебле</span>
+            <span>Скажут больше, чем слова</span>
+        </div>
+        <div class="social-links">
+            <a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a>
+            <a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a>
+        </div>
         <div class="copyright">2026 Estética Цветочная мастерская</div>
     </div>
 </div>
@@ -258,7 +542,7 @@ function resetFilters() {
 function renderCatalog(products = allProducts) {
     const grid = document.getElementById('catalogGrid');
     if(products.length === 0) {
-        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#D56989;">Ничего не найдено</div>';
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#111111;">Ничего не найдено</div>';
         return;
     }
     grid.innerHTML = products.map(p => `

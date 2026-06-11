@@ -7,66 +7,418 @@
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Poiret One',cursive;background:#D56989;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:15px}
-        .frame{max-width:1300px;width:100%;background:#F3EEF1;padding:25px;box-shadow:0 20px 35px rgba(0,0,0,0.5)}
-        .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px;padding:15px 20px;background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;position:relative}
-        .header::before,.bottom-block::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(153,86,113,0.5)}
-        .logo,.nav,.bottom-block>*{position:relative;z-index:1}
-        .logo{font-size:28px;font-weight:600;color:#C2DC80;text-decoration:none;text-shadow:0 2px 6px rgba(0,0,0,0.5)}
-        .nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-        .nav a{color:#C2DC80;text-decoration:none;font-size:14px;padding:6px 10px}
-        .line{height:2px;background:#C2DC80;margin:20px 0;opacity:.5}
-        .page-title{font-size:28px;color:#D56989;margin-bottom:20px;text-align:center}
-        .profile-card{background:#C2DC80;border:1px solid #D56989;padding:25px;text-align:center;margin-bottom:25px}
-        .avatar{font-size:60px;margin-bottom:10px}
-        .profile-name{font-size:24px;font-weight:600;color:#D56989}
-        .profile-email,.profile-phone{font-size:16px;color:#5b3b45;margin:5px 0}
-        .profile-buttons{display:flex;justify-content:center;gap:10px;margin-top:15px;flex-wrap:wrap}
-        button{background:#D56989;border:none;padding:8px 20px;font-family:inherit;font-size:14px;cursor:pointer;color:#F3EEF1}
-        button:hover{background:#b84d6e}
-        .logout-btn{background:#b84d6e}
-        .admin-btn{background:#1f5437}
-        .auth-card{background:#C2DC80;border:1px solid #D56989;padding:25px;max-width:400px;margin:0 auto 25px}
-        .auth-card h3{font-size:24px;color:#D56989;text-align:center;margin-bottom:15px}
-        .input-group{position:relative;margin:10px 0}
-        .auth-input{width:100%;padding:10px;padding-right:40px;border:1px solid #D56989;background:#F3EEF1;font-family:inherit;font-size:14px;color:#D56989}
-        .toggle-password{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:#D56989}
-        .auth-btn{width:100%;font-size:16px;margin-top:10px}
-        .switch-auth{margin-top:10px;text-align:center;font-size:12px;cursor:pointer;text-decoration:underline;color:#D56989}
-        .tabs{display:flex;gap:5px;margin-bottom:15px;border-bottom:1px solid #C2DC80}
-        .tab{flex:1;text-align:center;padding:10px;background:none;border:none;font-family:inherit;font-size:16px;cursor:pointer;color:#D56989}
-        .tab.active{background:#C2DC80;color:#D56989}
-        .tab-content{display:none}
-        .tab-content.active{display:block}
-        .order-item{background:#F3EEF1;border:1px solid #C2DC80;padding:12px;margin-bottom:10px}
-        .order-header{display:flex;justify-content:space-between;margin-bottom:5px;font-weight:bold;color:#D56989}
-        .order-status{background:#D56989;color:#F3EEF1;padding:2px 8px;font-size:11px}
-        .order-details{font-size:12px;color:#5b3b45}
-        .empty{text-align:center;padding:40px;color:#D56989;font-size:16px}
-        .address-item{background:#F3EEF1;border:1px solid #C2DC80;padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between}
-        .add-addr,.remove-btn{background:#D56989;color:#F3EEF1;border:none;padding:6px 15px;cursor:pointer}
-        .remove-btn{padding:4px 10px;font-size:11px}
-        .bottom-block{background-image:url('https://i.pinimg.com/1200x/c5/1d/bd/c51dbd218c0f906c8d31713dd398ebb5.jpg');background-size:cover;margin-top:30px;padding:20px 15px 15px;position:relative}
-        .footer-info{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;color:#C2DC80;margin:10px 0 15px;font-size:12px;text-align:center}
-        .social-links{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:12px}
-        .social-link{color:#C2DC80;text-decoration:none;font-size:13px;padding:5px 10px}
-        .social-link:hover{background:rgba(193,130,146,0.35)}
-        .copyright{text-align:center;font-size:10px;color:#C2DC80}
-        @media(max-width:700px){.frame{padding:15px}.header{flex-direction:column;text-align:center}.profile-buttons{flex-direction:column;align-items:center}.footer-info{flex-direction:column;gap:8px}}
+        body{
+            font-family:'Poiret One',cursive;
+            background:#D56989;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+            padding:15px;
+            font-size:16px;
+            color:#111111;
+        }
+        .frame{
+            max-width:1300px;
+            width:100%;
+            background:#F3EEF1;
+            padding:25px;
+            border-radius:32px;
+            border: 3px solid #C2DC80;
+        }
+        
+        /* ШАПКА — ПРОЗРАЧНАЯ */
+        .header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap:wrap;
+            gap:15px;
+            margin-bottom:25px;
+            padding:20px 15px;
+            background: transparent;
+            position:relative;
+            border-radius:24px;
+        }
+        .header::before {
+            display: none;
+        }
+        
+        .logo{
+            font-size:32px;
+            font-weight:800;
+            text-decoration:none;
+            letter-spacing:2px;
+            color:#111111 !important;
+        }
+        
+        .nav{
+            display:flex;
+            flex-wrap:wrap;
+            gap:25px;
+            justify-content:center;
+        }
+        .nav a{
+            text-decoration:none;
+            font-size:16px;
+            font-weight:600;
+            padding:8px 0;
+            white-space:nowrap;
+            transition:0.2s;
+            letter-spacing:1px;
+            color:#111111 !important;
+        }
+        .nav a:hover {
+            background: rgba(0,0,0,0.05);
+            border-radius:30px;
+            padding:8px 12px;
+        }
+        
+        .line{
+            height:2px;
+            background:#C2DC80;
+            margin:20px 0;
+            opacity:.5;
+            border-radius:2px;
+        }
+        
+        .page-title{
+            font-size:32px;
+            color:#111111;
+            margin-bottom:20px;
+            text-align:center;
+            letter-spacing:2px;
+        }
+        
+        /* ПРОФИЛЬ */
+        .profile-card{
+            background:#F3EEF1;
+            border:1px solid #C2DC80;
+            padding:25px;
+            text-align:center;
+            margin-bottom:25px;
+            border-radius:24px;
+        }
+        .avatar{
+            font-size:60px;
+            margin-bottom:10px;
+        }
+        .profile-name{
+            font-size:24px;
+            font-weight:600;
+            color:#111111;
+        }
+        .profile-email,.profile-phone{
+            font-size:16px;
+            color:#111111;
+            margin:5px 0;
+            opacity:0.8;
+        }
+        .profile-buttons{
+            display:flex;
+            justify-content:center;
+            gap:10px;
+            margin-top:15px;
+            flex-wrap:wrap;
+        }
+        button{
+            background:#C2DC80;
+            border:none;
+            padding:8px 20px;
+            font-family:inherit;
+            font-size:15px;
+            cursor:pointer;
+            color:#111111;
+            border-radius:40px;
+            transition:.2s;
+            font-weight:600;
+        }
+        button:hover{
+            background:#b8d16e;
+            transform:scale(1.02);
+        }
+        .logout-btn{
+            background:#D56989;
+            color:#F3EEF1;
+        }
+        .logout-btn:hover{
+            background:#b84d6e;
+        }
+        .admin-btn{
+            background:#1f5437;
+            color:#F3EEF1;
+        }
+        .admin-btn:hover{
+            background:#2a6e48;
+        }
+        
+        /* АВТОРИЗАЦИЯ */
+        .auth-card{
+            background:#F3EEF1;
+            border:1px solid #C2DC80;
+            padding:25px;
+            max-width:400px;
+            margin:0 auto 25px;
+            border-radius:24px;
+        }
+        .auth-card h3{
+            font-size:28px;
+            color:#111111;
+            text-align:center;
+            margin-bottom:15px;
+        }
+        .input-group{
+            position:relative;
+            margin:10px 0;
+        }
+        .auth-input{
+            width:100%;
+            padding:12px;
+            padding-right:40px;
+            border:1px solid #C2DC80;
+            background:#F3EEF1;
+            font-family:inherit;
+            font-size:15px;
+            color:#111111;
+            border-radius:16px;
+        }
+        .toggle-password{
+            position:absolute;
+            right:12px;
+            top:50%;
+            transform:translateY(-50%);
+            background:none;
+            border:none;
+            cursor:pointer;
+            font-size:16px;
+            color:#111111;
+            padding:0;
+        }
+        .auth-btn{
+            width:100%;
+            font-size:16px;
+            margin-top:10px;
+        }
+        .switch-auth{
+            margin-top:10px;
+            text-align:center;
+            font-size:13px;
+            cursor:pointer;
+            text-decoration:underline;
+            color:#111111;
+            opacity:0.7;
+        }
+        .switch-auth:hover{
+            opacity:1;
+        }
+        
+        /* ТАБЫ */
+        .tabs{
+            display:flex;
+            gap:5px;
+            margin-bottom:20px;
+            border-bottom:2px solid #C2DC80;
+        }
+        .tab{
+            flex:1;
+            text-align:center;
+            padding:10px;
+            background:none;
+            border:none;
+            font-family:inherit;
+            font-size:16px;
+            cursor:pointer;
+            color:#111111;
+            border-radius:30px 30px 0 0;
+            transition:.2s;
+        }
+        .tab.active{
+            background:#C2DC80;
+            color:#111111;
+        }
+        .tab-content{
+            display:none;
+        }
+        .tab-content.active{
+            display:block;
+        }
+        
+        /* ЗАКАЗЫ */
+        .order-item{
+            background:#F3EEF1;
+            border:1px solid #C2DC80;
+            padding:15px;
+            margin-bottom:12px;
+            border-radius:20px;
+        }
+        .order-header{
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:8px;
+            font-weight:bold;
+            color:#111111;
+        }
+        .order-status{
+            background:#D56989;
+            color:#F3EEF1;
+            padding:4px 12px;
+            font-size:12px;
+            border-radius:40px;
+        }
+        .order-details{
+            font-size:14px;
+            color:#111111;
+            opacity:0.8;
+        }
+        .empty{
+            text-align:center;
+            padding:40px;
+            color:#111111;
+            font-size:16px;
+        }
+        .empty a{
+            color:#D56989;
+            text-decoration:none;
+        }
+        .empty a:hover{
+            text-decoration:underline;
+        }
+        
+        /* АДРЕСА */
+        .address-item{
+            background:#F3EEF1;
+            border:1px solid #C2DC80;
+            padding:12px 15px;
+            margin-bottom:10px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-radius:20px;
+        }
+        .add-addr{
+            background:#C2DC80;
+            color:#111111;
+            border:none;
+            padding:8px 20px;
+            cursor:pointer;
+            border-radius:40px;
+            margin-top:10px;
+            font-size:15px;
+        }
+        .remove-btn{
+            background:#D56989;
+            color:#F3EEF1;
+            border:none;
+            padding:5px 15px;
+            cursor:pointer;
+            border-radius:40px;
+            font-size:12px;
+        }
+        .remove-btn:hover{
+            background:#b84d6e;
+        }
+        
+        /* ПОДВАЛ */
+        .bottom-block{
+            background:#F3EEF1;
+            margin-top:35px;
+            padding:25px 15px 15px;
+            position:relative;
+            border-radius:24px;
+        }
+        .bottom-block::before {
+            display: none;
+        }
+        .footer-info{
+            display:flex;
+            justify-content:center;
+            gap:20px;
+            flex-wrap:wrap;
+            margin:10px 0 20px;
+            font-size:15px;
+            text-align:center;
+        }
+        .footer-info span{
+            font-size: 15px;
+            font-weight: 500;
+            color:#111111;
+        }
+        .social-links{
+            display:flex;
+            justify-content:center;
+            gap:20px;
+            flex-wrap:wrap;
+            margin-bottom:15px;
+        }
+        .social-link{
+            text-decoration:none;
+            font-size:15px;
+            padding:6px 16px;
+            border-radius:40px;
+            transition:.2s;
+            font-weight: 500;
+            color:#111111;
+        }
+        .social-link:hover{
+            background:rgba(0,0,0,0.05);
+        }
+        .copyright{
+            text-align:center;
+            font-size:13px;
+            margin-top:8px;
+            color:#111111;
+        }
+        
+        @media(max-width:700px){
+            .frame{padding:15px;border-radius:24px}
+            .header{flex-direction:column;text-align:center}
+            .nav{gap:12px}
+            .profile-buttons{flex-direction:column;align-items:center}
+            .profile-buttons button{width:100%;max-width:200px}
+            .footer-info{flex-direction:column;gap:8px}
+            .page-title{font-size:28px}
+            .auth-card h3{font-size:24px}
+        }
     </style>
 </head>
 <body>
 <div class="frame">
-    <div class="header"><a href="index.html" class="logo">Estética</a><div class="nav"><a href="index.html">ГЛАВНАЯ</a><a href="index2.html">КАТАЛОГ</a><a href="index5.html">КОНТАКТЫ</a><a href="index3.html">КОРЗИНА</a><a href="index4.html">КАБИНЕТ</a></div></div>
+    <div class="header">
+        <a href="index.html" class="logo">Estética</a>
+        <div class="nav">
+            <a href="index.html">ГЛАВНАЯ</a>
+            <a href="index2.html">КАТАЛОГ</a>
+            <a href="index5.html">КОНТАКТЫ</a>
+            <a href="index3.html">КОРЗИНА</a>
+            <a href="index4.html">КАБИНЕТ</a>
+        </div>
+    </div>
     <div class="line"></div>
     <h1 class="page-title">Личный кабинет</h1>
     <div id="authBlock"></div>
     <div id="userPanel" style="display:none;">
-        <div class="tabs"><button class="tab active" onclick="showTab('orders')">Заказы</button><button class="tab" onclick="showTab('addresses')">Адреса</button></div>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('orders')">Заказы</button>
+            <button class="tab" onclick="showTab('addresses')">Адреса</button>
+        </div>
         <div id="tab-orders" class="tab-content active"><div id="ordersList"></div></div>
         <div id="tab-addresses" class="tab-content"><div id="addressesList"></div><button class="add-addr" onclick="addAddress()">+ Добавить адрес</button></div>
     </div>
-    <div class="bottom-block"><div class="footer-info"><span>Цветы, которых нет у других</span><span>Эксклюзив в каждом стебле</span><span>Скажут больше, чем слова</span></div><div class="social-links"><a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a><a href="https://instagram.com" target="_blank" class="social-link">Instagram</a><a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a></div><div class="copyright">2026 Estética Цветочная мастерская</div></div>
+    <div class="bottom-block">
+        
+        <div class="line"></div>
+        
+        <div class="footer-info">
+            <span>Цветы, которых нет у других</span>
+            <span>Эксклюзив в каждом стебле</span>
+            <span>Скажут больше, чем слова</span>
+        </div>
+        <div class="social-links">
+            <a href="https://vk.com" target="_blank" class="social-link">ВКонтакте</a>
+            <a href="https://wa.me/79381112274" target="_blank" class="social-link">WhatsApp</a>
+        </div>
+        <div class="copyright">2026 Estética Цветочная мастерская</div>
+    </div>
 </div>
 
 <script>
@@ -196,7 +548,7 @@ async function deleteAddress(i) {
     loadAddresses();
 }
 window.showTab = function(t) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     event.target.classList.add('active');
     document.getElementById(`tab-${t}`).classList.add('active');
