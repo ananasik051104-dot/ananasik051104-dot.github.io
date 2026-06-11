@@ -75,7 +75,7 @@
         }
         
         .admin-title{
-            font-size:32px;
+            font-size:28px;
             color:#111111;
             margin-bottom:20px;
             border-left:4px solid #C2DC80;
@@ -99,50 +99,54 @@
             text-decoration:underline;
         }
         
-        /* СТАТИСТИКА */
+        /* СТАТИСТИКА — УМЕНЬШЕННЫЕ БЛОКИ В ОДИН РЯД */
         .stats-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 12px;
             margin-bottom: 30px;
             margin-top: 10px;
+            padding-bottom: 5px;
         }
         .stat-card {
             background: #F3EEF1;
-            border-radius: 24px;
-            padding: 20px 12px;
+            border-radius: 20px;
+            padding: 14px 10px;
+            min-width: 110px;
             text-align: center;
             transition: transform 0.2s ease;
             border: 1px solid #C2DC80;
+            flex-shrink: 0;
         }
         .stat-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             background: #C2DC80;
         }
         .stat-card .stat-icon {
-            font-size: 34px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            margin-bottom: 6px;
             color: #D56989;
         }
         .stat-card .stat-label {
-            font-size: 14px;
-            letter-spacing: 1px;
+            font-size: 11px;
+            letter-spacing: 0.5px;
             color: #111111;
             text-transform: uppercase;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             opacity: 0.7;
         }
         .stat-card .stat-number {
-            font-size: 34px;
+            font-size: 22px;
             font-weight: 800;
             color: #D56989;
             line-height: 1.2;
         }
         .stat-card .stat-sub {
-            font-size: 12px;
+            font-size: 9px;
             color: #111111;
-            margin-top: 6px;
+            margin-top: 4px;
             opacity: 0.6;
         }
         
@@ -158,9 +162,9 @@
         .tab{
             background:none;
             border:none;
-            padding:10px 24px;
+            padding:8px 20px;
             font-family:inherit;
-            font-size:17px;
+            font-size:16px;
             font-weight:600;
             cursor:pointer;
             color:#111111;
@@ -184,13 +188,13 @@
         .data-table{
             width:100%;
             border-collapse:collapse;
-            font-size:15px;
+            font-size:14px;
             background:#F3EEF1;
             border-radius:20px;
             overflow:hidden;
         }
         .data-table th,.data-table td{
-            padding:12px 10px;
+            padding:10px 8px;
             border-bottom:1px solid #C2DC80;
             text-align:left;
             color:#111111;
@@ -199,7 +203,7 @@
             background:#C2DC80;
             color:#111111;
             font-weight:700;
-            font-size:16px;
+            font-size:14px;
         }
         .data-table tr:hover td{
             background:rgba(194,220,128,0.3);
@@ -209,16 +213,16 @@
         .badge-admin{
             background:#C2DC80;
             color:#111111;
-            padding:4px 12px;
-            font-size:12px;
+            padding:3px 10px;
+            font-size:11px;
             border-radius:40px;
         }
         .btn-small{
             background:#C2DC80;
             border:none;
-            padding:6px 14px;
+            padding:5px 12px;
             font-family:inherit;
-            font-size:13px;
+            font-size:12px;
             font-weight:600;
             cursor:pointer;
             color:#111111;
@@ -253,8 +257,8 @@
         }
         .modal-content{
             background:#F3EEF1;
-            padding:28px;
-            max-width:550px;
+            padding:25px;
+            max-width:500px;
             width:90%;
             max-height:85vh;
             overflow-y:auto;
@@ -263,34 +267,34 @@
         }
         .modal-content h3{
             color:#111111;
-            font-size:28px;
-            margin-bottom:20px;
+            font-size:24px;
+            margin-bottom:18px;
             text-align:center;
         }
         .modal-content input,.modal-content select,.modal-content textarea{
             width:100%;
-            padding:12px;
-            margin:10px 0;
+            padding:10px;
+            margin:8px 0;
             border:1px solid #C2DC80;
             font-family:inherit;
             background:#F3EEF1;
             color:#111111;
-            border-radius:16px;
-            font-size:16px;
+            border-radius:14px;
+            font-size:15px;
         }
         .modal-content textarea{
-            min-height:100px;
+            min-height:90px;
             resize:vertical;
         }
         .modal-content button{
             background:#C2DC80;
             color:#111111;
             border:none;
-            padding:12px;
+            padding:10px;
             cursor:pointer;
-            margin-top:10px;
+            margin-top:8px;
             border-radius:40px;
-            font-size:16px;
+            font-size:15px;
             font-weight:600;
             width:100%;
             transition:.2s;
@@ -303,8 +307,8 @@
         /* ПОДВАЛ */
         .bottom-block{
             background:#F3EEF1;
-            margin-top:40px;
-            padding:25px 15px 20px;
+            margin-top:35px;
+            padding:20px 15px 15px;
             position:relative;
             border-radius:24px;
         }
@@ -314,28 +318,28 @@
         .footer-info{
             display:flex;
             justify-content:center;
-            gap:25px;
+            gap:20px;
             flex-wrap:wrap;
-            margin:10px 0 22px;
-            font-size:16px;
+            margin:8px 0 18px;
+            font-size:14px;
             text-align:center;
         }
         .footer-info span{
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             color:#111111;
         }
         .social-links{
             display:flex;
             justify-content:center;
-            gap:25px;
+            gap:20px;
             flex-wrap:wrap;
-            margin-bottom:18px;
+            margin-bottom:15px;
         }
         .social-link{
             text-decoration:none;
-            font-size:16px;
-            padding:6px 16px;
+            font-size:14px;
+            padding:5px 14px;
             border-radius:40px;
             transition:.2s;
             font-weight: 500;
@@ -346,34 +350,34 @@
         }
         .copyright{
             text-align:center;
-            font-size:14px;
-            margin-top:10px;
+            font-size:12px;
+            margin-top:8px;
             color:#111111;
         }
         
         /* ВХОД В АДМИНКУ */
         .login-box{
-            max-width:400px;
+            max-width:360px;
             margin:0 auto;
             background:#F3EEF1;
             border:1px solid #C2DC80;
             border-radius:28px;
-            padding:30px;
+            padding:25px;
             text-align:center;
         }
         .login-box h3{
-            font-size:28px;
-            margin-bottom:20px;
+            font-size:24px;
+            margin-bottom:18px;
             color:#111111;
         }
         .login-box input{
             width:100%;
-            padding:14px;
-            margin:12px 0;
+            padding:12px;
+            margin:10px 0;
             border:1px solid #C2DC80;
             border-radius:40px;
             font-family:inherit;
-            font-size:16px;
+            font-size:15px;
             background:#F3EEF1;
             color:#111111;
         }
@@ -381,12 +385,12 @@
             background:#C2DC80;
             color:#111111;
             border:none;
-            padding:12px 30px;
+            padding:10px 25px;
             border-radius:40px;
-            font-size:17px;
+            font-size:16px;
             font-weight:600;
             cursor:pointer;
-            margin-top:15px;
+            margin-top:12px;
             transition:.2s;
         }
         .login-box button:hover{
@@ -401,10 +405,10 @@
             left:20px;
             background:#1f5437;
             color:white;
-            padding:14px;
+            padding:12px;
             text-align:center;
             font-family:system-ui;
-            font-size:14px;
+            font-size:13px;
             z-index:1001;
             animation:slideIn .3s ease;
             border-radius:40px;
@@ -419,12 +423,23 @@
             .header{flex-direction:column;text-align:center}
             .nav{gap:12px}
             .tabs{gap:5px}
-            .tab{padding:8px 16px;font-size:15px}
-            .stat-number{font-size:28px}
-            .admin-title{font-size:28px}
-            .footer-info{flex-direction:column;gap:12px}
-            .stats-dashboard{gap:12px}
-            body{font-size:16px}
+            .tab{padding:6px 14px;font-size:14px}
+            .admin-title{font-size:24px}
+            .footer-info{flex-direction:column;gap:10px}
+            body{font-size:15px}
+        }
+        @media(max-width:1100px){
+            .stats-dashboard{
+                flex-wrap: wrap;
+            }
+            .stat-card{
+                min-width: calc(33.33% - 10px);
+            }
+        }
+        @media(max-width:700px){
+            .stat-card{
+                min-width: calc(50% - 8px);
+            }
         }
     </style>
 </head>
@@ -552,7 +567,7 @@ function renderOrdersStatistics(orders) {
         statsContainer.style.display = 'none';
         return;
     }
-    statsContainer.style.display = 'grid';
+    statsContainer.style.display = 'flex';
     
     const totalOrders = orders.length;
     const totalRevenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
@@ -571,6 +586,25 @@ function renderOrdersStatistics(orders) {
         <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-label">Средний чек</div><div class="stat-number">${avgCheck.toLocaleString()} ₽</div><div class="stat-sub">на 1 заказ</div></div>
         ${cancelledOrders > 0 ? `<div class="stat-card"><div class="stat-icon">❌</div><div class="stat-label">Отменено</div><div class="stat-number">${cancelledOrders}</div><div class="stat-sub"></div></div>` : ''}
     `;
+}
+
+// ========== УДАЛЕНИЕ ЗАКАЗА (НОВАЯ ФУНКЦИЯ) ==========
+async function deleteOrder(orderId) {
+    if (!confirm('Вы уверены, что хотите полностью удалить этот заказ? Он будет удалён без возможности восстановления.')) return;
+    
+    const data = await getData();
+    const orders = data.orders || [];
+    const newOrders = orders.filter(o => o.id != orderId);
+    
+    if (newOrders.length === orders.length) {
+        showToast('Заказ не найден', false);
+        return;
+    }
+    
+    data.orders = newOrders;
+    await saveData(data);
+    showToast('Заказ успешно удалён');
+    renderMainContent();
 }
 
 // ========== ТОВАРЫ ==========
@@ -742,7 +776,7 @@ async function renderMainContent() {
     renderOrdersStatistics(orders);
     
     if (currentTab === 'products') {
-        let html = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><div style="font-size:22px; font-weight:600; color:#111111;">Каталог товаров (${products.length})</div><button class="btn-small" onclick="addProduct()" style="background:#1f5437; color:white;">+ Добавить товар</button></div>`;
+        let html = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><div style="font-size:20px; font-weight:600; color:#111111;">Каталог товаров (${products.length})</div><button class="btn-small" onclick="addProduct()" style="background:#1f5437; color:white;">+ Добавить товар</button></div>`;
         if (products.length === 0) html += '<div style="text-align:center;padding:40px;color:#111111;">Товаров пока нет</div>';
         else {
             html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Фото</th><th>Название</th><th>Цена</th><th>Категория</th><th>Действия</th></tr></thead><tbody>`;
@@ -750,7 +784,7 @@ async function renderMainContent() {
                 const catName = {bright:'Яркие', gentle:'Нежные', minimalism:'Минимализм', single:'Единичные'}[p.cat] || p.cat;
                 html += `<tr>
                     <td>${p.id}</td>
-                    <td><img src="${p.img}" style="width:45px;height:45px;object-fit:cover; border-radius:12px;"></td>
+                    <td><img src="${p.img}" style="width:40px;height:40px;object-fit:cover; border-radius:10px;"></td>
                     <td>${p.name}</td>
                     <td>${p.price} ₽</span></td>
                     <td>${catName}</td>
@@ -763,7 +797,7 @@ async function renderMainContent() {
         container.innerHTML = html;
     }
     else if (currentTab === 'promos') {
-        let html = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><div style="font-size:22px; font-weight:600; color:#111111;">Акции (${promos.length})</div><button class="btn-small" onclick="addPromo()" style="background:#1f5437; color:white;">+ Добавить акцию</button></div>`;
+        let html = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><div style="font-size:20px; font-weight:600; color:#111111;">Акции (${promos.length})</div><button class="btn-small" onclick="addPromo()" style="background:#1f5437; color:white;">+ Добавить акцию</button></div>`;
         if (promos.length === 0) html += '<div style="text-align:center;padding:40px;color:#111111;">Акций пока нет</div>';
         else {
             html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Название</th><th>Описание</th><th>Категория</th><th>Скидка</th><th>Действия</th></tr></thead><tbody>`;
@@ -783,7 +817,7 @@ async function renderMainContent() {
         container.innerHTML = html;
     }
     else if (currentTab === 'reviews') {
-        let html = `<div style="font-size:22px; font-weight:600; color:#111111; margin-bottom:20px;">Отзывы (${reviews.length})</div>`;
+        let html = `<div style="font-size:20px; font-weight:600; color:#111111; margin-bottom:20px;">Отзывы (${reviews.length})</div>`;
         if (reviews.length === 0) html += '<div style="text-align:center;padding:40px;color:#111111;">Отзывов пока нет</div>';
         else {
             html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>Дата</th><th>Имя</th><th>Оценка</th><th>Текст</th><th>Статус</th><th>Действия</th></tr></thead><tbody>`;
@@ -805,7 +839,7 @@ async function renderMainContent() {
         container.innerHTML = html;
     }
     else if (currentTab === 'orders') {
-        let html = `<div style="font-size:22px; font-weight:600; color:#111111; margin-bottom:20px;">Управление заказами (${orders.length})</div>`;
+        let html = `<div style="font-size:20px; font-weight:600; color:#111111; margin-bottom:20px;">Управление заказами (${orders.length})</div>`;
         if (orders.length === 0) html += '<div style="text-align:center;padding:40px;color:#111111;">Заказов пока нет</div>';
         else {
             html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Дата</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Адрес</th><th>Действия</th></tr></thead><tbody>`;
@@ -813,17 +847,20 @@ async function renderMainContent() {
                 html += `<tr>
                     <td>${o.id}</td>
                     <td>${o.date}</td>
-                    <td>${o.userEmail || 'Гость'}</td>
+                    <td>${o.userName || o.userEmail || 'Гость'}</td>
                     <td>${o.items?.map(i => `${i.name} x${i.quantity}`).join('<br>') || '-'}</td>
                     <td>${o.total} ₽</span></td>
-                    <td><select class="btn-small" onchange="updateOrderStatus(${o.id}, this.value)" style="background:#C2DC80; color:#111111; padding:6px 10px;">
+                    <td><select class="btn-small" onchange="updateOrderStatus(${o.id}, this.value)" style="background:#C2DC80; color:#111111; padding:5px 8px;">
                         <option value="Новый" ${o.status === 'Новый' ? 'selected' : ''}>Новый</option>
                         <option value="В обработке" ${o.status === 'В обработке' ? 'selected' : ''}>В обработке</option>
                         <option value="Доставлен" ${o.status === 'Доставлен' ? 'selected' : ''}>Доставлен</option>
                         <option value="Отменён" ${o.status === 'Отменён' ? 'selected' : ''}>Отменён</option>
                     </select></td>
                     <td>${o.address || '-'}</td>
-                    <td><button class="btn-small btn-danger" onclick="updateOrderStatus(${o.id}, 'Отменён')">Отменить</button></td>
+                    <td>
+                        <button class="btn-small btn-danger" onclick="updateOrderStatus(${o.id}, 'Отменён')">Отменить</button>
+                        <button class="btn-small btn-danger" onclick="deleteOrder(${o.id})" style="background:#b84d6e;">Удалить</button>
+                    </td>
                 </tr>`;
             }
             html += `</tbody></table></div>`;
@@ -831,7 +868,7 @@ async function renderMainContent() {
         container.innerHTML = html;
     }
     else if (currentTab === 'messages') {
-        let html = `<div style="font-size:22px; font-weight:600; color:#111111; margin-bottom:20px;">Сообщения (${messages.length})</div>`;
+        let html = `<div style="font-size:20px; font-weight:600; color:#111111; margin-bottom:20px;">Сообщения (${messages.length})</div>`;
         if (messages.length === 0) html += '<div style="text-align:center;padding:40px;color:#111111;">Сообщений пока нет</div>';
         else {
             html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>Дата</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Сообщение</th></tr></thead><tbody>`;
@@ -849,7 +886,7 @@ async function renderMainContent() {
         container.innerHTML = html;
     }
     else if (currentTab === 'users') {
-        let html = `<div style="font-size:22px; font-weight:600; color:#111111; margin-bottom:20px;">Пользователи (${users.length})</div>`;
+        let html = `<div style="font-size:20px; font-weight:600; color:#111111; margin-bottom:20px;">Пользователи (${users.length})</div>`;
         if (users.length === 0) html += '<div style="text-align:center;padding:40px;color:#111111;">Пока нет пользователей</div>';
         else {
             html += `<div class="table-wrapper"><table class="data-table"><thead><tr><th>ID</th><th>Имя</th><th>Email</th><th>Телефон</th><th>Заказов</th><th>Статус</th><th>Действия</th></tr></thead><tbody>`;
